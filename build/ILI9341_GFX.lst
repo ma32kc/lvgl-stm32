@@ -1,0 +1,1442 @@
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"ILI9341_GFX.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.ILI9341_DrawHollowRectangleCoord,"ax",%progbits
+  20              		.align	1
+  21              		.global	ILI9341_DrawHollowRectangleCoord
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	ILI9341_DrawHollowRectangleCoord:
+  27              	.LVL0:
+  28              	.LFB130:
+  29              		.file 1 "Core/Src/ILI9341_GFX.c"
+   1:Core/Src/ILI9341_GFX.c **** #include <stdbool.h>
+   2:Core/Src/ILI9341_GFX.c **** #include "ILI9341_STM32_Driver.h"
+   3:Core/Src/ILI9341_GFX.c **** #include "ILI9341_GFX.h"
+   4:Core/Src/ILI9341_GFX.c **** 
+   5:Core/Src/ILI9341_GFX.c **** #define __SWAP(a,b) { __typeof__(a) temp; temp = a; a = b; b = temp; }
+   6:Core/Src/ILI9341_GFX.c **** 
+   7:Core/Src/ILI9341_GFX.c **** void ILI9341_DrawHollowRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t 
+   8:Core/Src/ILI9341_GFX.c **** {
+  30              		.loc 1 8 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 4, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 8 1 is_stmt 0 view .LVU1
+  35 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 32
+  38              		.cfi_offset 4, -32
+  39              		.cfi_offset 5, -28
+  40              		.cfi_offset 6, -24
+  41              		.cfi_offset 7, -20
+  42              		.cfi_offset 8, -16
+  43              		.cfi_offset 9, -12
+  44              		.cfi_offset 10, -8
+  45              		.cfi_offset 14, -4
+  46 0004 0546     		mov	r5, r0
+  47 0006 0C46     		mov	r4, r1
+  48 0008 1646     		mov	r6, r2
+  49 000a 1F46     		mov	r7, r3
+  50 000c BDF820A0 		ldrh	r10, [sp, #32]
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 2
+
+
+   9:Core/Src/ILI9341_GFX.c **** 	uint16_t xLen = 0;
+  51              		.loc 1 9 2 is_stmt 1 view .LVU2
+  52              	.LVL1:
+  10:Core/Src/ILI9341_GFX.c **** 	uint16_t yLen = 0;
+  53              		.loc 1 10 2 view .LVU3
+  11:Core/Src/ILI9341_GFX.c **** 	uint8_t negX = 0;
+  54              		.loc 1 11 2 view .LVU4
+  12:Core/Src/ILI9341_GFX.c **** 	uint8_t negY = 0;
+  55              		.loc 1 12 2 view .LVU5
+  13:Core/Src/ILI9341_GFX.c **** 	float negCalc = 0;
+  56              		.loc 1 13 2 view .LVU6
+  14:Core/Src/ILI9341_GFX.c **** 
+  15:Core/Src/ILI9341_GFX.c **** 	negCalc = X1 - X0;
+  57              		.loc 1 15 2 view .LVU7
+  58              		.loc 1 15 15 is_stmt 0 view .LVU8
+  59 0010 131A     		subs	r3, r2, r0
+  60              	.LVL2:
+  61              		.loc 1 15 15 view .LVU9
+  62 0012 07EE903A 		vmov	s15, r3	@ int
+  63              		.loc 1 15 10 view .LVU10
+  64 0016 F8EEE77A 		vcvt.f32.s32	s15, s15
+  65              	.LVL3:
+  16:Core/Src/ILI9341_GFX.c **** 	if(negCalc < 0) negX = 1;
+  66              		.loc 1 16 2 is_stmt 1 view .LVU11
+  67              		.loc 1 16 4 is_stmt 0 view .LVU12
+  68 001a F5EEC07A 		vcmpe.f32	s15, #0
+  69 001e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  70 0022 3DD4     		bmi	.L10
+  11:Core/Src/ILI9341_GFX.c **** 	uint8_t negY = 0;
+  71              		.loc 1 11 10 view .LVU13
+  72 0024 0023     		movs	r3, #0
+  73              	.L2:
+  74              	.LVL4:
+  17:Core/Src/ILI9341_GFX.c **** 	negCalc = 0;
+  75              		.loc 1 17 2 is_stmt 1 view .LVU14
+  18:Core/Src/ILI9341_GFX.c **** 
+  19:Core/Src/ILI9341_GFX.c **** 	negCalc = Y1 - Y0;
+  76              		.loc 1 19 2 view .LVU15
+  77              		.loc 1 19 15 is_stmt 0 view .LVU16
+  78 0026 3A1B     		subs	r2, r7, r4
+  79              	.LVL5:
+  80              		.loc 1 19 15 view .LVU17
+  81 0028 07EE902A 		vmov	s15, r2	@ int
+  82              		.loc 1 19 10 view .LVU18
+  83 002c F8EEE77A 		vcvt.f32.s32	s15, s15
+  84              	.LVL6:
+  20:Core/Src/ILI9341_GFX.c **** 	if(negCalc < 0) negY = 1;
+  85              		.loc 1 20 2 is_stmt 1 view .LVU19
+  86              		.loc 1 20 4 is_stmt 0 view .LVU20
+  87 0030 F5EEC07A 		vcmpe.f32	s15, #0
+  88 0034 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  89 0038 34D4     		bmi	.L11
+  12:Core/Src/ILI9341_GFX.c **** 	float negCalc = 0;
+  90              		.loc 1 12 10 view .LVU21
+  91 003a 4FF00009 		mov	r9, #0
+  92              	.L3:
+  93              	.LVL7:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 3
+
+
+  21:Core/Src/ILI9341_GFX.c **** 
+  22:Core/Src/ILI9341_GFX.c **** 	//DRAW HORIZONTAL!
+  23:Core/Src/ILI9341_GFX.c **** 	if(!negX)
+  94              		.loc 1 23 2 is_stmt 1 view .LVU22
+  95              		.loc 1 23 4 is_stmt 0 view .LVU23
+  96 003e A3BB     		cbnz	r3, .L4
+  24:Core/Src/ILI9341_GFX.c **** 	{
+  25:Core/Src/ILI9341_GFX.c **** 		xLen = X1 - X0;
+  97              		.loc 1 25 3 is_stmt 1 view .LVU24
+  98              		.loc 1 25 8 is_stmt 0 view .LVU25
+  99 0040 A6EB0508 		sub	r8, r6, r5
+ 100 0044 1FFA88F8 		uxth	r8, r8
+ 101              	.LVL8:
+ 102              	.L5:
+  26:Core/Src/ILI9341_GFX.c **** 	}
+  27:Core/Src/ILI9341_GFX.c **** 	else
+  28:Core/Src/ILI9341_GFX.c **** 	{
+  29:Core/Src/ILI9341_GFX.c **** 		xLen = X0 - X1;
+  30:Core/Src/ILI9341_GFX.c **** 	}
+  31:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawHLine(X0, Y0, xLen, color);
+ 103              		.loc 1 31 2 is_stmt 1 view .LVU26
+ 104 0048 5346     		mov	r3, r10
+ 105              	.LVL9:
+ 106              		.loc 1 31 2 is_stmt 0 view .LVU27
+ 107 004a 4246     		mov	r2, r8
+ 108 004c 2146     		mov	r1, r4
+ 109              	.LVL10:
+ 110              		.loc 1 31 2 view .LVU28
+ 111 004e 2846     		mov	r0, r5
+ 112              	.LVL11:
+ 113              		.loc 1 31 2 view .LVU29
+ 114 0050 FFF7FEFF 		bl	ILI9341_DrawHLine
+ 115              	.LVL12:
+  32:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawHLine(X0, Y1, xLen, color);
+ 116              		.loc 1 32 2 is_stmt 1 view .LVU30
+ 117 0054 5346     		mov	r3, r10
+ 118 0056 4246     		mov	r2, r8
+ 119 0058 3946     		mov	r1, r7
+ 120 005a 2846     		mov	r0, r5
+ 121 005c FFF7FEFF 		bl	ILI9341_DrawHLine
+ 122              	.LVL13:
+  33:Core/Src/ILI9341_GFX.c **** 
+  34:Core/Src/ILI9341_GFX.c **** 	//DRAW VERTICAL!
+  35:Core/Src/ILI9341_GFX.c **** 	if(!negY)
+ 123              		.loc 1 35 2 view .LVU31
+ 124              		.loc 1 35 4 is_stmt 0 view .LVU32
+ 125 0060 B9F1000F 		cmp	r9, #0
+ 126 0064 26D1     		bne	.L6
+  36:Core/Src/ILI9341_GFX.c **** 	{
+  37:Core/Src/ILI9341_GFX.c **** 		yLen = Y1 - Y0;
+ 127              		.loc 1 37 3 is_stmt 1 view .LVU33
+ 128              		.loc 1 37 8 is_stmt 0 view .LVU34
+ 129 0066 A7EB0409 		sub	r9, r7, r4
+ 130              	.LVL14:
+ 131              		.loc 1 37 8 view .LVU35
+ 132 006a 1FFA89F9 		uxth	r9, r9
+ 133              	.LVL15:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 4
+
+
+ 134              	.L7:
+  38:Core/Src/ILI9341_GFX.c **** 	}
+  39:Core/Src/ILI9341_GFX.c **** 	else
+  40:Core/Src/ILI9341_GFX.c **** 	{
+  41:Core/Src/ILI9341_GFX.c **** 		yLen = Y0 - Y1;
+  42:Core/Src/ILI9341_GFX.c **** 	}
+  43:Core/Src/ILI9341_GFX.c **** 
+  44:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawVLine(X0, Y0, yLen, color);
+ 135              		.loc 1 44 2 is_stmt 1 view .LVU36
+ 136 006e 5346     		mov	r3, r10
+ 137 0070 4A46     		mov	r2, r9
+ 138 0072 2146     		mov	r1, r4
+ 139 0074 2846     		mov	r0, r5
+ 140 0076 FFF7FEFF 		bl	ILI9341_DrawVLine
+ 141              	.LVL16:
+  45:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawVLine(X1, Y0, yLen, color);
+ 142              		.loc 1 45 2 view .LVU37
+ 143 007a 5346     		mov	r3, r10
+ 144 007c 4A46     		mov	r2, r9
+ 145 007e 2146     		mov	r1, r4
+ 146 0080 3046     		mov	r0, r6
+ 147 0082 FFF7FEFF 		bl	ILI9341_DrawVLine
+ 148              	.LVL17:
+  46:Core/Src/ILI9341_GFX.c **** 
+  47:Core/Src/ILI9341_GFX.c **** 	if((xLen > 0)||(yLen > 0))
+ 149              		.loc 1 47 2 view .LVU38
+ 150              		.loc 1 47 4 is_stmt 0 view .LVU39
+ 151 0086 B8F1000F 		cmp	r8, #0
+ 152 008a 02D1     		bne	.L8
+ 153              		.loc 1 47 15 discriminator 1 view .LVU40
+ 154 008c B9F1000F 		cmp	r9, #0
+ 155 0090 04D0     		beq	.L1
+ 156              	.L8:
+  48:Core/Src/ILI9341_GFX.c **** 	{
+  49:Core/Src/ILI9341_GFX.c **** 		ILI9341_DrawPixel(X1, Y1, color);
+ 157              		.loc 1 49 3 is_stmt 1 view .LVU41
+ 158 0092 5246     		mov	r2, r10
+ 159 0094 3946     		mov	r1, r7
+ 160 0096 3046     		mov	r0, r6
+ 161 0098 FFF7FEFF 		bl	ILI9341_DrawPixel
+ 162              	.LVL18:
+ 163              	.L1:
+  50:Core/Src/ILI9341_GFX.c **** 	}
+  51:Core/Src/ILI9341_GFX.c **** }
+ 164              		.loc 1 51 1 is_stmt 0 view .LVU42
+ 165 009c BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 166              	.LVL19:
+ 167              	.L10:
+  16:Core/Src/ILI9341_GFX.c **** 	negCalc = 0;
+ 168              		.loc 1 16 23 view .LVU43
+ 169 00a0 0123     		movs	r3, #1
+ 170 00a2 C0E7     		b	.L2
+ 171              	.LVL20:
+ 172              	.L11:
+  20:Core/Src/ILI9341_GFX.c **** 
+ 173              		.loc 1 20 23 view .LVU44
+ 174 00a4 4FF00109 		mov	r9, #1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 5
+
+
+ 175 00a8 C9E7     		b	.L3
+ 176              	.LVL21:
+ 177              	.L4:
+  29:Core/Src/ILI9341_GFX.c **** 	}
+ 178              		.loc 1 29 3 is_stmt 1 view .LVU45
+  29:Core/Src/ILI9341_GFX.c **** 	}
+ 179              		.loc 1 29 8 is_stmt 0 view .LVU46
+ 180 00aa A5EB0608 		sub	r8, r5, r6
+ 181 00ae 1FFA88F8 		uxth	r8, r8
+ 182              	.LVL22:
+  29:Core/Src/ILI9341_GFX.c **** 	}
+ 183              		.loc 1 29 8 view .LVU47
+ 184 00b2 C9E7     		b	.L5
+ 185              	.LVL23:
+ 186              	.L6:
+  41:Core/Src/ILI9341_GFX.c **** 	}
+ 187              		.loc 1 41 3 is_stmt 1 view .LVU48
+  41:Core/Src/ILI9341_GFX.c **** 	}
+ 188              		.loc 1 41 8 is_stmt 0 view .LVU49
+ 189 00b4 A4EB0709 		sub	r9, r4, r7
+ 190              	.LVL24:
+  41:Core/Src/ILI9341_GFX.c **** 	}
+ 191              		.loc 1 41 8 view .LVU50
+ 192 00b8 1FFA89F9 		uxth	r9, r9
+ 193              	.LVL25:
+  41:Core/Src/ILI9341_GFX.c **** 	}
+ 194              		.loc 1 41 8 view .LVU51
+ 195 00bc D7E7     		b	.L7
+ 196              		.cfi_endproc
+ 197              	.LFE130:
+ 199              		.section	.text.ILI9341_DrawFilledRectangleCoord,"ax",%progbits
+ 200              		.align	1
+ 201              		.global	ILI9341_DrawFilledRectangleCoord
+ 202              		.syntax unified
+ 203              		.thumb
+ 204              		.thumb_func
+ 206              	ILI9341_DrawFilledRectangleCoord:
+ 207              	.LVL26:
+ 208              	.LFB131:
+  52:Core/Src/ILI9341_GFX.c **** 
+  53:Core/Src/ILI9341_GFX.c **** void ILI9341_DrawFilledRectangleCoord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t 
+  54:Core/Src/ILI9341_GFX.c **** {
+ 209              		.loc 1 54 1 is_stmt 1 view -0
+ 210              		.cfi_startproc
+ 211              		@ args = 4, pretend = 0, frame = 0
+ 212              		@ frame_needed = 0, uses_anonymous_args = 0
+ 213              		.loc 1 54 1 is_stmt 0 view .LVU53
+ 214 0000 10B5     		push	{r4, lr}
+ 215              	.LCFI1:
+ 216              		.cfi_def_cfa_offset 8
+ 217              		.cfi_offset 4, -8
+ 218              		.cfi_offset 14, -4
+ 219 0002 82B0     		sub	sp, sp, #8
+ 220              	.LCFI2:
+ 221              		.cfi_def_cfa_offset 16
+ 222 0004 9646     		mov	lr, r2
+ 223 0006 9C46     		mov	ip, r3
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 6
+
+
+  55:Core/Src/ILI9341_GFX.c **** 	uint16_t xLen = 0;
+ 224              		.loc 1 55 2 is_stmt 1 view .LVU54
+ 225              	.LVL27:
+  56:Core/Src/ILI9341_GFX.c **** 	uint16_t yLen = 0;
+ 226              		.loc 1 56 2 view .LVU55
+  57:Core/Src/ILI9341_GFX.c **** 	uint8_t negX = 0;
+ 227              		.loc 1 57 2 view .LVU56
+  58:Core/Src/ILI9341_GFX.c **** 	uint8_t negY = 0;
+ 228              		.loc 1 58 2 view .LVU57
+  59:Core/Src/ILI9341_GFX.c **** 	int32_t negCalc = 0;
+ 229              		.loc 1 59 2 view .LVU58
+  60:Core/Src/ILI9341_GFX.c **** 	uint16_t X0True = 0;
+ 230              		.loc 1 60 2 view .LVU59
+  61:Core/Src/ILI9341_GFX.c **** 	uint16_t Y0True = 0;
+ 231              		.loc 1 61 2 view .LVU60
+  62:Core/Src/ILI9341_GFX.c **** 
+  63:Core/Src/ILI9341_GFX.c **** 	negCalc = X1 - X0;
+ 232              		.loc 1 63 2 view .LVU61
+ 233              		.loc 1 63 10 is_stmt 0 view .LVU62
+ 234 0008 131A     		subs	r3, r2, r0
+ 235              	.LVL28:
+  64:Core/Src/ILI9341_GFX.c **** 	if(negCalc < 0) negX = 1;
+ 236              		.loc 1 64 2 is_stmt 1 view .LVU63
+ 237              		.loc 1 64 4 is_stmt 0 view .LVU64
+ 238 000a 002B     		cmp	r3, #0
+ 239 000c 16DB     		blt	.L20
+  57:Core/Src/ILI9341_GFX.c **** 	uint8_t negY = 0;
+ 240              		.loc 1 57 10 view .LVU65
+ 241 000e 0022     		movs	r2, #0
+ 242              	.LVL29:
+ 243              	.L14:
+  65:Core/Src/ILI9341_GFX.c **** 	negCalc = 0;
+ 244              		.loc 1 65 2 is_stmt 1 view .LVU66
+  66:Core/Src/ILI9341_GFX.c **** 
+  67:Core/Src/ILI9341_GFX.c **** 	negCalc = Y1 - Y0;
+ 245              		.loc 1 67 2 view .LVU67
+ 246              		.loc 1 67 10 is_stmt 0 view .LVU68
+ 247 0010 ACEB0103 		sub	r3, ip, r1
+ 248              	.LVL30:
+  68:Core/Src/ILI9341_GFX.c **** 	if(negCalc < 0) negY = 1;
+ 249              		.loc 1 68 2 is_stmt 1 view .LVU69
+ 250              		.loc 1 68 4 is_stmt 0 view .LVU70
+ 251 0014 002B     		cmp	r3, #0
+ 252 0016 13DB     		blt	.L21
+  58:Core/Src/ILI9341_GFX.c **** 	int32_t negCalc = 0;
+ 253              		.loc 1 58 10 view .LVU71
+ 254 0018 0023     		movs	r3, #0
+ 255              	.LVL31:
+ 256              	.L15:
+  69:Core/Src/ILI9341_GFX.c **** 
+  70:Core/Src/ILI9341_GFX.c **** 	if(!negX)
+ 257              		.loc 1 70 2 is_stmt 1 view .LVU72
+ 258              		.loc 1 70 4 is_stmt 0 view .LVU73
+ 259 001a 9AB9     		cbnz	r2, .L16
+  71:Core/Src/ILI9341_GFX.c **** 	{
+  72:Core/Src/ILI9341_GFX.c **** 		xLen = X1 - X0;
+ 260              		.loc 1 72 3 is_stmt 1 view .LVU74
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 7
+
+
+ 261              		.loc 1 72 8 is_stmt 0 view .LVU75
+ 262 001c AEEB000E 		sub	lr, lr, r0
+ 263 0020 1FFA8EF2 		uxth	r2, lr
+ 264              	.LVL32:
+  73:Core/Src/ILI9341_GFX.c **** 		X0True = X0;
+ 265              		.loc 1 73 3 is_stmt 1 view .LVU76
+ 266              	.L17:
+  74:Core/Src/ILI9341_GFX.c **** 	}
+  75:Core/Src/ILI9341_GFX.c **** 	else
+  76:Core/Src/ILI9341_GFX.c **** 	{
+  77:Core/Src/ILI9341_GFX.c **** 		xLen = X0 - X1;
+  78:Core/Src/ILI9341_GFX.c **** 		X0True = X1;
+  79:Core/Src/ILI9341_GFX.c **** 	}
+  80:Core/Src/ILI9341_GFX.c **** 
+  81:Core/Src/ILI9341_GFX.c **** 	if(!negY)
+ 267              		.loc 1 81 2 view .LVU77
+ 268              		.loc 1 81 4 is_stmt 0 view .LVU78
+ 269 0024 9BB9     		cbnz	r3, .L18
+  82:Core/Src/ILI9341_GFX.c **** 	{
+  83:Core/Src/ILI9341_GFX.c **** 		yLen = Y1 - Y0;
+ 270              		.loc 1 83 3 is_stmt 1 view .LVU79
+ 271              		.loc 1 83 8 is_stmt 0 view .LVU80
+ 272 0026 ACEB010C 		sub	ip, ip, r1
+ 273              	.LVL33:
+ 274              		.loc 1 83 8 view .LVU81
+ 275 002a 1FFA8CF3 		uxth	r3, ip
+ 276              	.LVL34:
+  84:Core/Src/ILI9341_GFX.c **** 		Y0True = Y0;
+ 277              		.loc 1 84 3 is_stmt 1 view .LVU82
+ 278              	.L19:
+  85:Core/Src/ILI9341_GFX.c **** 	}
+  86:Core/Src/ILI9341_GFX.c **** 	else
+  87:Core/Src/ILI9341_GFX.c **** 	{
+  88:Core/Src/ILI9341_GFX.c **** 		yLen = Y0 - Y1;
+  89:Core/Src/ILI9341_GFX.c **** 		Y0True = Y1;
+  90:Core/Src/ILI9341_GFX.c **** 	}
+  91:Core/Src/ILI9341_GFX.c **** 
+  92:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawRectangle(X0True, Y0True, xLen, yLen, color);
+ 279              		.loc 1 92 2 view .LVU83
+ 280 002e BDF81040 		ldrh	r4, [sp, #16]
+ 281 0032 0094     		str	r4, [sp]
+ 282 0034 FFF7FEFF 		bl	ILI9341_DrawRectangle
+ 283              	.LVL35:
+  93:Core/Src/ILI9341_GFX.c **** }
+ 284              		.loc 1 93 1 is_stmt 0 view .LVU84
+ 285 0038 02B0     		add	sp, sp, #8
+ 286              	.LCFI3:
+ 287              		.cfi_remember_state
+ 288              		.cfi_def_cfa_offset 8
+ 289              		@ sp needed
+ 290 003a 10BD     		pop	{r4, pc}
+ 291              	.LVL36:
+ 292              	.L20:
+ 293              	.LCFI4:
+ 294              		.cfi_restore_state
+  64:Core/Src/ILI9341_GFX.c **** 	negCalc = 0;
+ 295              		.loc 1 64 23 view .LVU85
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 8
+
+
+ 296 003c 0122     		movs	r2, #1
+ 297              	.LVL37:
+  64:Core/Src/ILI9341_GFX.c **** 	negCalc = 0;
+ 298              		.loc 1 64 23 view .LVU86
+ 299 003e E7E7     		b	.L14
+ 300              	.LVL38:
+ 301              	.L21:
+  68:Core/Src/ILI9341_GFX.c **** 
+ 302              		.loc 1 68 23 view .LVU87
+ 303 0040 0123     		movs	r3, #1
+ 304              	.LVL39:
+  68:Core/Src/ILI9341_GFX.c **** 
+ 305              		.loc 1 68 23 view .LVU88
+ 306 0042 EAE7     		b	.L15
+ 307              	.LVL40:
+ 308              	.L16:
+  77:Core/Src/ILI9341_GFX.c **** 		X0True = X1;
+ 309              		.loc 1 77 3 is_stmt 1 view .LVU89
+  77:Core/Src/ILI9341_GFX.c **** 		X0True = X1;
+ 310              		.loc 1 77 8 is_stmt 0 view .LVU90
+ 311 0044 A0EB0E00 		sub	r0, r0, lr
+ 312              	.LVL41:
+  77:Core/Src/ILI9341_GFX.c **** 		X0True = X1;
+ 313              		.loc 1 77 8 view .LVU91
+ 314 0048 82B2     		uxth	r2, r0
+ 315              	.LVL42:
+  78:Core/Src/ILI9341_GFX.c **** 	}
+ 316              		.loc 1 78 3 is_stmt 1 view .LVU92
+  78:Core/Src/ILI9341_GFX.c **** 	}
+ 317              		.loc 1 78 10 is_stmt 0 view .LVU93
+ 318 004a 7046     		mov	r0, lr
+ 319 004c EAE7     		b	.L17
+ 320              	.LVL43:
+ 321              	.L18:
+  88:Core/Src/ILI9341_GFX.c **** 		Y0True = Y1;
+ 322              		.loc 1 88 3 is_stmt 1 view .LVU94
+  88:Core/Src/ILI9341_GFX.c **** 		Y0True = Y1;
+ 323              		.loc 1 88 8 is_stmt 0 view .LVU95
+ 324 004e A1EB0C01 		sub	r1, r1, ip
+ 325              	.LVL44:
+  88:Core/Src/ILI9341_GFX.c **** 		Y0True = Y1;
+ 326              		.loc 1 88 8 view .LVU96
+ 327 0052 8BB2     		uxth	r3, r1
+ 328              	.LVL45:
+  89:Core/Src/ILI9341_GFX.c **** 	}
+ 329              		.loc 1 89 3 is_stmt 1 view .LVU97
+  89:Core/Src/ILI9341_GFX.c **** 	}
+ 330              		.loc 1 89 10 is_stmt 0 view .LVU98
+ 331 0054 6146     		mov	r1, ip
+ 332 0056 EAE7     		b	.L19
+ 333              		.cfi_endproc
+ 334              	.LFE131:
+ 336              		.section	.text.ILI9341_DrawChar,"ax",%progbits
+ 337              		.align	1
+ 338              		.global	ILI9341_DrawChar
+ 339              		.syntax unified
+ 340              		.thumb
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 9
+
+
+ 341              		.thumb_func
+ 343              	ILI9341_DrawChar:
+ 344              	.LVL46:
+ 345              	.LFB132:
+  94:Core/Src/ILI9341_GFX.c **** 
+  95:Core/Src/ILI9341_GFX.c **** void ILI9341_DrawChar(char ch, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t color, uint16
+  96:Core/Src/ILI9341_GFX.c **** {
+ 346              		.loc 1 96 1 is_stmt 1 view -0
+ 347              		.cfi_startproc
+ 348              		@ args = 8, pretend = 0, frame = 8
+ 349              		@ frame_needed = 0, uses_anonymous_args = 0
+ 350              		.loc 1 96 1 is_stmt 0 view .LVU100
+ 351 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 352              	.LCFI5:
+ 353              		.cfi_def_cfa_offset 36
+ 354              		.cfi_offset 4, -36
+ 355              		.cfi_offset 5, -32
+ 356              		.cfi_offset 6, -28
+ 357              		.cfi_offset 7, -24
+ 358              		.cfi_offset 8, -20
+ 359              		.cfi_offset 9, -16
+ 360              		.cfi_offset 10, -12
+ 361              		.cfi_offset 11, -8
+ 362              		.cfi_offset 14, -4
+ 363 0004 85B0     		sub	sp, sp, #20
+ 364              	.LCFI6:
+ 365              		.cfi_def_cfa_offset 56
+ 366 0006 9B46     		mov	fp, r3
+ 367 0008 BDF83830 		ldrh	r3, [sp, #56]
+ 368              	.LVL47:
+ 369              		.loc 1 96 1 view .LVU101
+ 370 000c 0293     		str	r3, [sp, #8]
+  97:Core/Src/ILI9341_GFX.c **** 	if ((ch < 31) || (ch > 127)) return;
+ 371              		.loc 1 97 2 is_stmt 1 view .LVU102
+ 372              		.loc 1 97 16 is_stmt 0 view .LVU103
+ 373 000e A0F11F03 		sub	r3, r0, #31
+ 374 0012 DBB2     		uxtb	r3, r3
+ 375              		.loc 1 97 5 view .LVU104
+ 376 0014 602B     		cmp	r3, #96
+ 377 0016 02D9     		bls	.L31
+ 378              	.LVL48:
+ 379              	.L23:
+  98:Core/Src/ILI9341_GFX.c **** 
+  99:Core/Src/ILI9341_GFX.c **** 	uint8_t fOffset, fWidth, fHeight, fBPL;
+ 100:Core/Src/ILI9341_GFX.c **** 	uint8_t *tempChar;
+ 101:Core/Src/ILI9341_GFX.c **** 
+ 102:Core/Src/ILI9341_GFX.c **** 	fOffset = font[0];
+ 103:Core/Src/ILI9341_GFX.c **** 	fWidth = font[1];
+ 104:Core/Src/ILI9341_GFX.c **** 	fHeight = font[2];
+ 105:Core/Src/ILI9341_GFX.c **** 	fBPL = font[3];
+ 106:Core/Src/ILI9341_GFX.c **** 
+ 107:Core/Src/ILI9341_GFX.c **** 	tempChar = (uint8_t*)&font[((ch - 0x20) * fOffset) + 4]; /* Current Character = Meta + (Character 
+ 108:Core/Src/ILI9341_GFX.c **** 
+ 109:Core/Src/ILI9341_GFX.c **** 	/* Clear background first */
+ 110:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawRectangle(X, Y, fWidth, fHeight, bgcolor);
+ 111:Core/Src/ILI9341_GFX.c **** 
+ 112:Core/Src/ILI9341_GFX.c **** 	for (int j=0; j < fHeight; j++)
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 10
+
+
+ 113:Core/Src/ILI9341_GFX.c **** 	{
+ 114:Core/Src/ILI9341_GFX.c **** 		for (int i=0; i < fWidth; i++)
+ 115:Core/Src/ILI9341_GFX.c **** 		{
+ 116:Core/Src/ILI9341_GFX.c **** 			uint8_t z =  tempChar[fBPL * i + ((j & 0xF8) >> 3) + 1]; /* (j & 0xF8) >> 3, increase one by 8-b
+ 117:Core/Src/ILI9341_GFX.c **** 			uint8_t b = 1 << (j & 0x07);
+ 118:Core/Src/ILI9341_GFX.c **** 			if (( z & b ) != 0x00)
+ 119:Core/Src/ILI9341_GFX.c **** 			{
+ 120:Core/Src/ILI9341_GFX.c **** 				ILI9341_DrawPixel(X+i, Y+j, color);
+ 121:Core/Src/ILI9341_GFX.c **** 			}
+ 122:Core/Src/ILI9341_GFX.c **** 		}
+ 123:Core/Src/ILI9341_GFX.c **** 	}
+ 124:Core/Src/ILI9341_GFX.c **** }
+ 380              		.loc 1 124 1 view .LVU105
+ 381 0018 05B0     		add	sp, sp, #20
+ 382              	.LCFI7:
+ 383              		.cfi_remember_state
+ 384              		.cfi_def_cfa_offset 36
+ 385              		@ sp needed
+ 386 001a BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 387              	.LVL49:
+ 388              	.L31:
+ 389              	.LCFI8:
+ 390              		.cfi_restore_state
+ 391              		.loc 1 124 1 view .LVU106
+ 392 001e 0F46     		mov	r7, r1
+ 393 0020 9246     		mov	r10, r2
+  99:Core/Src/ILI9341_GFX.c **** 	uint8_t *tempChar;
+ 394              		.loc 1 99 2 is_stmt 1 view .LVU107
+ 100:Core/Src/ILI9341_GFX.c **** 
+ 395              		.loc 1 100 2 view .LVU108
+ 102:Core/Src/ILI9341_GFX.c **** 	fWidth = font[1];
+ 396              		.loc 1 102 2 view .LVU109
+ 102:Core/Src/ILI9341_GFX.c **** 	fWidth = font[1];
+ 397              		.loc 1 102 10 is_stmt 0 view .LVU110
+ 398 0022 91F80080 		ldrb	r8, [r1]	@ zero_extendqisi2
+ 399              	.LVL50:
+ 103:Core/Src/ILI9341_GFX.c **** 	fHeight = font[2];
+ 400              		.loc 1 103 2 is_stmt 1 view .LVU111
+ 103:Core/Src/ILI9341_GFX.c **** 	fHeight = font[2];
+ 401              		.loc 1 103 9 is_stmt 0 view .LVU112
+ 402 0026 4E78     		ldrb	r6, [r1, #1]	@ zero_extendqisi2
+ 403              	.LVL51:
+ 104:Core/Src/ILI9341_GFX.c **** 	fBPL = font[3];
+ 404              		.loc 1 104 2 is_stmt 1 view .LVU113
+ 104:Core/Src/ILI9341_GFX.c **** 	fBPL = font[3];
+ 405              		.loc 1 104 10 is_stmt 0 view .LVU114
+ 406 0028 8A78     		ldrb	r2, [r1, #2]	@ zero_extendqisi2
+ 407              	.LVL52:
+ 104:Core/Src/ILI9341_GFX.c **** 	fBPL = font[3];
+ 408              		.loc 1 104 10 view .LVU115
+ 409 002a 0392     		str	r2, [sp, #12]
+ 410              	.LVL53:
+ 105:Core/Src/ILI9341_GFX.c **** 
+ 411              		.loc 1 105 2 is_stmt 1 view .LVU116
+ 105:Core/Src/ILI9341_GFX.c **** 
+ 412              		.loc 1 105 7 is_stmt 0 view .LVU117
+ 413 002c 91F80390 		ldrb	r9, [r1, #3]	@ zero_extendqisi2
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 11
+
+
+ 414              	.LVL54:
+ 107:Core/Src/ILI9341_GFX.c **** 
+ 415              		.loc 1 107 2 is_stmt 1 view .LVU118
+ 107:Core/Src/ILI9341_GFX.c **** 
+ 416              		.loc 1 107 34 is_stmt 0 view .LVU119
+ 417 0030 2038     		subs	r0, r0, #32
+ 418              	.LVL55:
+ 107:Core/Src/ILI9341_GFX.c **** 
+ 419              		.loc 1 107 42 view .LVU120
+ 420 0032 00FB08F0 		mul	r0, r0, r8
+ 107:Core/Src/ILI9341_GFX.c **** 
+ 421              		.loc 1 107 28 view .LVU121
+ 422 0036 00F10408 		add	r8, r0, #4
+ 423              	.LVL56:
+ 110:Core/Src/ILI9341_GFX.c **** 
+ 424              		.loc 1 110 2 is_stmt 1 view .LVU122
+ 425 003a BDF83C30 		ldrh	r3, [sp, #60]
+ 426 003e 0093     		str	r3, [sp]
+ 427              	.LVL57:
+ 110:Core/Src/ILI9341_GFX.c **** 
+ 428              		.loc 1 110 2 is_stmt 0 view .LVU123
+ 429 0040 1346     		mov	r3, r2
+ 430 0042 3246     		mov	r2, r6
+ 431              	.LVL58:
+ 110:Core/Src/ILI9341_GFX.c **** 
+ 432              		.loc 1 110 2 view .LVU124
+ 433 0044 5946     		mov	r1, fp
+ 434              	.LVL59:
+ 110:Core/Src/ILI9341_GFX.c **** 
+ 435              		.loc 1 110 2 view .LVU125
+ 436 0046 5046     		mov	r0, r10
+ 437 0048 FFF7FEFF 		bl	ILI9341_DrawRectangle
+ 438              	.LVL60:
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 439              		.loc 1 112 2 is_stmt 1 view .LVU126
+ 440              	.LBB2:
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 441              		.loc 1 112 7 view .LVU127
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 442              		.loc 1 112 11 is_stmt 0 view .LVU128
+ 443 004c 0025     		movs	r5, #0
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 444              		.loc 1 112 2 view .LVU129
+ 445 004e 1AE0     		b	.L25
+ 446              	.LVL61:
+ 447              	.L26:
+ 448              	.LBB3:
+ 114:Core/Src/ILI9341_GFX.c **** 		{
+ 449              		.loc 1 114 29 is_stmt 1 discriminator 2 view .LVU130
+ 114:Core/Src/ILI9341_GFX.c **** 		{
+ 450              		.loc 1 114 30 is_stmt 0 discriminator 2 view .LVU131
+ 451 0050 0134     		adds	r4, r4, #1
+ 452              	.LVL62:
+ 453              	.L28:
+ 114:Core/Src/ILI9341_GFX.c **** 		{
+ 454              		.loc 1 114 17 is_stmt 1 discriminator 1 view .LVU132
+ 114:Core/Src/ILI9341_GFX.c **** 		{
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 12
+
+
+ 455              		.loc 1 114 3 is_stmt 0 discriminator 1 view .LVU133
+ 456 0052 A642     		cmp	r6, r4
+ 457 0054 16DD     		ble	.L32
+ 458              	.LBB4:
+ 116:Core/Src/ILI9341_GFX.c **** 			uint8_t b = 1 << (j & 0x07);
+ 459              		.loc 1 116 4 is_stmt 1 view .LVU134
+ 116:Core/Src/ILI9341_GFX.c **** 			uint8_t b = 1 << (j & 0x07);
+ 460              		.loc 1 116 49 is_stmt 0 view .LVU135
+ 461 0056 C5F3C403 		ubfx	r3, r5, #3, #5
+ 116:Core/Src/ILI9341_GFX.c **** 			uint8_t b = 1 << (j & 0x07);
+ 462              		.loc 1 116 35 view .LVU136
+ 463 005a 04FB0933 		mla	r3, r4, r9, r3
+ 116:Core/Src/ILI9341_GFX.c **** 			uint8_t b = 1 << (j & 0x07);
+ 464              		.loc 1 116 25 view .LVU137
+ 465 005e 0133     		adds	r3, r3, #1
+ 466 0060 4344     		add	r3, r3, r8
+ 116:Core/Src/ILI9341_GFX.c **** 			uint8_t b = 1 << (j & 0x07);
+ 467              		.loc 1 116 12 view .LVU138
+ 468 0062 FA5C     		ldrb	r2, [r7, r3]	@ zero_extendqisi2
+ 469              	.LVL63:
+ 117:Core/Src/ILI9341_GFX.c **** 			if (( z & b ) != 0x00)
+ 470              		.loc 1 117 4 is_stmt 1 view .LVU139
+ 117:Core/Src/ILI9341_GFX.c **** 			if (( z & b ) != 0x00)
+ 471              		.loc 1 117 24 is_stmt 0 view .LVU140
+ 472 0064 05F00701 		and	r1, r5, #7
+ 117:Core/Src/ILI9341_GFX.c **** 			if (( z & b ) != 0x00)
+ 473              		.loc 1 117 18 view .LVU141
+ 474 0068 0123     		movs	r3, #1
+ 475 006a 8B40     		lsls	r3, r3, r1
+ 476              	.LVL64:
+ 118:Core/Src/ILI9341_GFX.c **** 			{
+ 477              		.loc 1 118 4 is_stmt 1 view .LVU142
+ 118:Core/Src/ILI9341_GFX.c **** 			{
+ 478              		.loc 1 118 7 is_stmt 0 view .LVU143
+ 479 006c 1342     		tst	r3, r2
+ 480 006e EFD0     		beq	.L26
+ 120:Core/Src/ILI9341_GFX.c **** 			}
+ 481              		.loc 1 120 5 is_stmt 1 view .LVU144
+ 482 0070 0BEB0501 		add	r1, fp, r5
+ 483 0074 0AEB0400 		add	r0, r10, r4
+ 484 0078 029A     		ldr	r2, [sp, #8]
+ 485              	.LVL65:
+ 120:Core/Src/ILI9341_GFX.c **** 			}
+ 486              		.loc 1 120 5 is_stmt 0 view .LVU145
+ 487 007a 89B2     		uxth	r1, r1
+ 488 007c 80B2     		uxth	r0, r0
+ 489 007e FFF7FEFF 		bl	ILI9341_DrawPixel
+ 490              	.LVL66:
+ 120:Core/Src/ILI9341_GFX.c **** 			}
+ 491              		.loc 1 120 5 view .LVU146
+ 492 0082 E5E7     		b	.L26
+ 493              	.LVL67:
+ 494              	.L32:
+ 120:Core/Src/ILI9341_GFX.c **** 			}
+ 495              		.loc 1 120 5 view .LVU147
+ 496              	.LBE4:
+ 497              	.LBE3:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 13
+
+
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 498              		.loc 1 112 29 is_stmt 1 discriminator 2 view .LVU148
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 499              		.loc 1 112 30 is_stmt 0 discriminator 2 view .LVU149
+ 500 0084 0135     		adds	r5, r5, #1
+ 501              	.LVL68:
+ 502              	.L25:
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 503              		.loc 1 112 16 is_stmt 1 discriminator 1 view .LVU150
+ 112:Core/Src/ILI9341_GFX.c **** 	{
+ 504              		.loc 1 112 2 is_stmt 0 discriminator 1 view .LVU151
+ 505 0086 039B     		ldr	r3, [sp, #12]
+ 506 0088 AB42     		cmp	r3, r5
+ 507 008a C5DD     		ble	.L23
+ 508              	.LBB5:
+ 114:Core/Src/ILI9341_GFX.c **** 		{
+ 509              		.loc 1 114 12 view .LVU152
+ 510 008c 0024     		movs	r4, #0
+ 511 008e E0E7     		b	.L28
+ 512              	.LBE5:
+ 513              	.LBE2:
+ 514              		.cfi_endproc
+ 515              	.LFE132:
+ 517              		.section	.text.ILI9341_DrawText,"ax",%progbits
+ 518              		.align	1
+ 519              		.global	ILI9341_DrawText
+ 520              		.syntax unified
+ 521              		.thumb
+ 522              		.thumb_func
+ 524              	ILI9341_DrawText:
+ 525              	.LVL69:
+ 526              	.LFB133:
+ 125:Core/Src/ILI9341_GFX.c **** 
+ 126:Core/Src/ILI9341_GFX.c **** void ILI9341_DrawText(const char* str, const uint8_t font[], uint16_t X, uint16_t Y, uint16_t color
+ 127:Core/Src/ILI9341_GFX.c **** {
+ 527              		.loc 1 127 1 is_stmt 1 view -0
+ 528              		.cfi_startproc
+ 529              		@ args = 8, pretend = 0, frame = 0
+ 530              		@ frame_needed = 0, uses_anonymous_args = 0
+ 531              		.loc 1 127 1 is_stmt 0 view .LVU154
+ 532 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 533              	.LCFI9:
+ 534              		.cfi_def_cfa_offset 36
+ 535              		.cfi_offset 4, -36
+ 536              		.cfi_offset 5, -32
+ 537              		.cfi_offset 6, -28
+ 538              		.cfi_offset 7, -24
+ 539              		.cfi_offset 8, -20
+ 540              		.cfi_offset 9, -16
+ 541              		.cfi_offset 10, -12
+ 542              		.cfi_offset 11, -8
+ 543              		.cfi_offset 14, -4
+ 544 0004 83B0     		sub	sp, sp, #12
+ 545              	.LCFI10:
+ 546              		.cfi_def_cfa_offset 48
+ 547 0006 0446     		mov	r4, r0
+ 548 0008 0E46     		mov	r6, r1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 14
+
+
+ 549 000a 1546     		mov	r5, r2
+ 550 000c 9846     		mov	r8, r3
+ 551 000e BDF830B0 		ldrh	fp, [sp, #48]
+ 552 0012 BDF834A0 		ldrh	r10, [sp, #52]
+ 128:Core/Src/ILI9341_GFX.c **** 	uint8_t charWidth;			/* Width of character */
+ 553              		.loc 1 128 2 is_stmt 1 view .LVU155
+ 129:Core/Src/ILI9341_GFX.c **** 	uint8_t fOffset = font[0];	/* Offset of character */
+ 554              		.loc 1 129 2 view .LVU156
+ 555              		.loc 1 129 10 is_stmt 0 view .LVU157
+ 556 0016 91F80090 		ldrb	r9, [r1]	@ zero_extendqisi2
+ 557              	.LVL70:
+ 130:Core/Src/ILI9341_GFX.c **** 	uint8_t fWidth = font[1];	/* Width of font */
+ 558              		.loc 1 130 2 is_stmt 1 view .LVU158
+ 559              		.loc 1 130 10 is_stmt 0 view .LVU159
+ 560 001a 4F78     		ldrb	r7, [r1, #1]	@ zero_extendqisi2
+ 561              	.LVL71:
+ 131:Core/Src/ILI9341_GFX.c **** 
+ 132:Core/Src/ILI9341_GFX.c **** 	while (*str)
+ 562              		.loc 1 132 2 is_stmt 1 view .LVU160
+ 563              		.loc 1 132 8 is_stmt 0 view .LVU161
+ 564 001c 02E0     		b	.L34
+ 565              	.LVL72:
+ 566              	.L35:
+ 567              	.LBB6:
+ 133:Core/Src/ILI9341_GFX.c **** 	{
+ 134:Core/Src/ILI9341_GFX.c **** 		ILI9341_DrawChar(*str, font, X, Y, color, bgcolor);
+ 135:Core/Src/ILI9341_GFX.c **** 
+ 136:Core/Src/ILI9341_GFX.c **** 		/* Check character width and calculate proper position */
+ 137:Core/Src/ILI9341_GFX.c **** 		uint8_t *tempChar = (uint8_t*)&font[((*str - 0x20) * fOffset) + 4];
+ 138:Core/Src/ILI9341_GFX.c **** 		charWidth = tempChar[0];
+ 139:Core/Src/ILI9341_GFX.c **** 
+ 140:Core/Src/ILI9341_GFX.c **** 		if(charWidth + 2 < fWidth)
+ 141:Core/Src/ILI9341_GFX.c **** 		{
+ 142:Core/Src/ILI9341_GFX.c **** 			/* If character width is smaller than font width */
+ 143:Core/Src/ILI9341_GFX.c **** 			X += (charWidth + 2);
+ 144:Core/Src/ILI9341_GFX.c **** 		}
+ 145:Core/Src/ILI9341_GFX.c **** 		else
+ 146:Core/Src/ILI9341_GFX.c **** 		{
+ 147:Core/Src/ILI9341_GFX.c **** 			X += fWidth;
+ 568              		.loc 1 147 4 is_stmt 1 view .LVU162
+ 569              		.loc 1 147 6 is_stmt 0 view .LVU163
+ 570 001e 3D44     		add	r5, r5, r7
+ 571              	.LVL73:
+ 572              		.loc 1 147 6 view .LVU164
+ 573 0020 ADB2     		uxth	r5, r5
+ 574              	.LVL74:
+ 575              	.L36:
+ 148:Core/Src/ILI9341_GFX.c **** 		}
+ 149:Core/Src/ILI9341_GFX.c **** 
+ 150:Core/Src/ILI9341_GFX.c **** 		str++;
+ 576              		.loc 1 150 3 is_stmt 1 view .LVU165
+ 577              		.loc 1 150 6 is_stmt 0 view .LVU166
+ 578 0022 0134     		adds	r4, r4, #1
+ 579              	.LVL75:
+ 580              	.L34:
+ 581              		.loc 1 150 6 view .LVU167
+ 582              	.LBE6:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 15
+
+
+ 132:Core/Src/ILI9341_GFX.c **** 	{
+ 583              		.loc 1 132 8 is_stmt 1 view .LVU168
+ 132:Core/Src/ILI9341_GFX.c **** 	{
+ 584              		.loc 1 132 9 is_stmt 0 view .LVU169
+ 585 0024 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 132:Core/Src/ILI9341_GFX.c **** 	{
+ 586              		.loc 1 132 8 view .LVU170
+ 587 0026 B0B1     		cbz	r0, .L39
+ 588              	.LBB7:
+ 134:Core/Src/ILI9341_GFX.c **** 
+ 589              		.loc 1 134 3 is_stmt 1 view .LVU171
+ 590 0028 CDF804A0 		str	r10, [sp, #4]
+ 591 002c CDF800B0 		str	fp, [sp]
+ 592 0030 4346     		mov	r3, r8
+ 593 0032 2A46     		mov	r2, r5
+ 594 0034 3146     		mov	r1, r6
+ 595 0036 FFF7FEFF 		bl	ILI9341_DrawChar
+ 596              	.LVL76:
+ 137:Core/Src/ILI9341_GFX.c **** 		charWidth = tempChar[0];
+ 597              		.loc 1 137 3 view .LVU172
+ 137:Core/Src/ILI9341_GFX.c **** 		charWidth = tempChar[0];
+ 598              		.loc 1 137 41 is_stmt 0 view .LVU173
+ 599 003a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 137:Core/Src/ILI9341_GFX.c **** 		charWidth = tempChar[0];
+ 600              		.loc 1 137 46 view .LVU174
+ 601 003c 203B     		subs	r3, r3, #32
+ 137:Core/Src/ILI9341_GFX.c **** 		charWidth = tempChar[0];
+ 602              		.loc 1 137 54 view .LVU175
+ 603 003e 03FB09F3 		mul	r3, r3, r9
+ 137:Core/Src/ILI9341_GFX.c **** 		charWidth = tempChar[0];
+ 604              		.loc 1 137 38 view .LVU176
+ 605 0042 0433     		adds	r3, r3, #4
+ 606              	.LVL77:
+ 138:Core/Src/ILI9341_GFX.c **** 
+ 607              		.loc 1 138 3 is_stmt 1 view .LVU177
+ 138:Core/Src/ILI9341_GFX.c **** 
+ 608              		.loc 1 138 13 is_stmt 0 view .LVU178
+ 609 0044 F25C     		ldrb	r2, [r6, r3]	@ zero_extendqisi2
+ 610              	.LVL78:
+ 140:Core/Src/ILI9341_GFX.c **** 		{
+ 611              		.loc 1 140 3 is_stmt 1 view .LVU179
+ 140:Core/Src/ILI9341_GFX.c **** 		{
+ 612              		.loc 1 140 16 is_stmt 0 view .LVU180
+ 613 0046 931C     		adds	r3, r2, #2
+ 614              	.LVL79:
+ 140:Core/Src/ILI9341_GFX.c **** 		{
+ 615              		.loc 1 140 5 view .LVU181
+ 616 0048 BB42     		cmp	r3, r7
+ 617 004a E8DA     		bge	.L35
+ 143:Core/Src/ILI9341_GFX.c **** 		}
+ 618              		.loc 1 143 4 is_stmt 1 view .LVU182
+ 143:Core/Src/ILI9341_GFX.c **** 		}
+ 619              		.loc 1 143 6 is_stmt 0 view .LVU183
+ 620 004c 1544     		add	r5, r5, r2
+ 621              	.LVL80:
+ 143:Core/Src/ILI9341_GFX.c **** 		}
+ 622              		.loc 1 143 6 view .LVU184
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 16
+
+
+ 623 004e ADB2     		uxth	r5, r5
+ 624 0050 0235     		adds	r5, r5, #2
+ 625 0052 ADB2     		uxth	r5, r5
+ 626              	.LVL81:
+ 143:Core/Src/ILI9341_GFX.c **** 		}
+ 627              		.loc 1 143 6 view .LVU185
+ 628 0054 E5E7     		b	.L36
+ 629              	.LVL82:
+ 630              	.L39:
+ 143:Core/Src/ILI9341_GFX.c **** 		}
+ 631              		.loc 1 143 6 view .LVU186
+ 632              	.LBE7:
+ 151:Core/Src/ILI9341_GFX.c **** 	}
+ 152:Core/Src/ILI9341_GFX.c **** }
+ 633              		.loc 1 152 1 view .LVU187
+ 634 0056 03B0     		add	sp, sp, #12
+ 635              	.LCFI11:
+ 636              		.cfi_def_cfa_offset 36
+ 637              		@ sp needed
+ 638 0058 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 639              		.loc 1 152 1 view .LVU188
+ 640              		.cfi_endproc
+ 641              	.LFE133:
+ 643              		.section	.text.ILI9341_DrawLine,"ax",%progbits
+ 644              		.align	1
+ 645              		.global	ILI9341_DrawLine
+ 646              		.syntax unified
+ 647              		.thumb
+ 648              		.thumb_func
+ 650              	ILI9341_DrawLine:
+ 651              	.LVL83:
+ 652              	.LFB134:
+ 153:Core/Src/ILI9341_GFX.c **** 
+ 154:Core/Src/ILI9341_GFX.c **** void ILI9341_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color)
+ 155:Core/Src/ILI9341_GFX.c **** {
+ 653              		.loc 1 155 1 is_stmt 1 view -0
+ 654              		.cfi_startproc
+ 655              		@ args = 4, pretend = 0, frame = 8
+ 656              		@ frame_needed = 0, uses_anonymous_args = 0
+ 657              		.loc 1 155 1 is_stmt 0 view .LVU190
+ 658 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 659              	.LCFI12:
+ 660              		.cfi_def_cfa_offset 36
+ 661              		.cfi_offset 4, -36
+ 662              		.cfi_offset 5, -32
+ 663              		.cfi_offset 6, -28
+ 664              		.cfi_offset 7, -24
+ 665              		.cfi_offset 8, -20
+ 666              		.cfi_offset 9, -16
+ 667              		.cfi_offset 10, -12
+ 668              		.cfi_offset 11, -8
+ 669              		.cfi_offset 14, -4
+ 670 0004 83B0     		sub	sp, sp, #12
+ 671              	.LCFI13:
+ 672              		.cfi_def_cfa_offset 48
+ 673 0006 0F46     		mov	r7, r1
+ 674 0008 1646     		mov	r6, r2
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 17
+
+
+ 675 000a 1C46     		mov	r4, r3
+ 676 000c BDF83030 		ldrh	r3, [sp, #48]
+ 677              	.LVL84:
+ 678              		.loc 1 155 1 view .LVU191
+ 679 0010 0193     		str	r3, [sp, #4]
+ 156:Core/Src/ILI9341_GFX.c ****   int16_t dx, dy;
+ 680              		.loc 1 156 3 is_stmt 1 view .LVU192
+ 157:Core/Src/ILI9341_GFX.c **** 
+ 158:Core/Src/ILI9341_GFX.c ****   if(x1 > x0)
+ 681              		.loc 1 158 3 view .LVU193
+ 682              		.loc 1 158 5 is_stmt 0 view .LVU194
+ 683 0012 8242     		cmp	r2, r0
+ 684 0014 12D9     		bls	.L41
+ 159:Core/Src/ILI9341_GFX.c **** 	  dx = x1 - x0;
+ 685              		.loc 1 159 4 is_stmt 1 view .LVU195
+ 686              		.loc 1 159 12 is_stmt 0 view .LVU196
+ 687 0016 A2EB0009 		sub	r9, r2, r0
+ 688              		.loc 1 159 7 view .LVU197
+ 689 001a 0FFA89F9 		sxth	r9, r9
+ 690              	.LVL85:
+ 691              	.L42:
+ 160:Core/Src/ILI9341_GFX.c ****   else
+ 161:Core/Src/ILI9341_GFX.c **** 	  dx = x0 - x1;
+ 162:Core/Src/ILI9341_GFX.c **** 
+ 163:Core/Src/ILI9341_GFX.c ****   if(y1 > y0)
+ 692              		.loc 1 163 3 is_stmt 1 view .LVU198
+ 693              		.loc 1 163 5 is_stmt 0 view .LVU199
+ 694 001e BC42     		cmp	r4, r7
+ 695 0020 11D9     		bls	.L43
+ 164:Core/Src/ILI9341_GFX.c **** 	  dy = y1 - y0;
+ 696              		.loc 1 164 4 is_stmt 1 view .LVU200
+ 697              		.loc 1 164 12 is_stmt 0 view .LVU201
+ 698 0022 A4EB0708 		sub	r8, r4, r7
+ 699              		.loc 1 164 7 view .LVU202
+ 700 0026 0FFA88F8 		sxth	r8, r8
+ 701              	.LVL86:
+ 702              	.L44:
+ 165:Core/Src/ILI9341_GFX.c ****   else
+ 166:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 167:Core/Src/ILI9341_GFX.c **** 
+ 168:Core/Src/ILI9341_GFX.c ****   int16_t x, y;
+ 703              		.loc 1 168 3 is_stmt 1 view .LVU203
+ 169:Core/Src/ILI9341_GFX.c ****   int16_t err;
+ 704              		.loc 1 169 3 view .LVU204
+ 170:Core/Src/ILI9341_GFX.c ****   int16_t step;
+ 705              		.loc 1 170 3 view .LVU205
+ 171:Core/Src/ILI9341_GFX.c **** 
+ 172:Core/Src/ILI9341_GFX.c ****   if (0 == dx) {
+ 706              		.loc 1 172 3 view .LVU206
+ 707              		.loc 1 172 6 is_stmt 0 view .LVU207
+ 708 002a B9F1000F 		cmp	r9, #0
+ 709 002e 16D1     		bne	.L45
+ 173:Core/Src/ILI9341_GFX.c ****     // vertical line
+ 174:Core/Src/ILI9341_GFX.c ****     if (0 == dy)
+ 710              		.loc 1 174 5 is_stmt 1 view .LVU208
+ 711              		.loc 1 174 8 is_stmt 0 view .LVU209
+ 712 0030 B8F1000F 		cmp	r8, #0
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 18
+
+
+ 713 0034 0CD1     		bne	.L61
+ 714              	.LVL87:
+ 715              	.L40:
+ 175:Core/Src/ILI9341_GFX.c ****       { return; } // distance = 0, no line to draw
+ 176:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawVLine(x0, y0, dy, color);
+ 177:Core/Src/ILI9341_GFX.c ****     return;
+ 178:Core/Src/ILI9341_GFX.c ****   }
+ 179:Core/Src/ILI9341_GFX.c ****   else if (0 == dy) {
+ 180:Core/Src/ILI9341_GFX.c ****     // horizontal line
+ 181:Core/Src/ILI9341_GFX.c ****     if (0 == dx)
+ 182:Core/Src/ILI9341_GFX.c ****       { return; } // distance = 0, no line to draw
+ 183:Core/Src/ILI9341_GFX.c ****     ILI9341_DrawHLine(x0, y0, dx, color);
+ 184:Core/Src/ILI9341_GFX.c ****     return;
+ 185:Core/Src/ILI9341_GFX.c ****   }
+ 186:Core/Src/ILI9341_GFX.c **** 
+ 187:Core/Src/ILI9341_GFX.c ****   bool is_steep = dy > dx;
+ 188:Core/Src/ILI9341_GFX.c ****   if (is_steep) {
+ 189:Core/Src/ILI9341_GFX.c ****     __SWAP(x0, y0);
+ 190:Core/Src/ILI9341_GFX.c ****     __SWAP(x1, y1);
+ 191:Core/Src/ILI9341_GFX.c ****   }
+ 192:Core/Src/ILI9341_GFX.c **** 
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 194:Core/Src/ILI9341_GFX.c ****     __SWAP(x0, x1);
+ 195:Core/Src/ILI9341_GFX.c ****     __SWAP(y0, y1);
+ 196:Core/Src/ILI9341_GFX.c ****   }
+ 197:Core/Src/ILI9341_GFX.c **** 
+ 198:Core/Src/ILI9341_GFX.c ****   dx = x1 - x0;
+ 199:Core/Src/ILI9341_GFX.c **** 
+ 200:Core/Src/ILI9341_GFX.c ****   if(y1 > y0)
+ 201:Core/Src/ILI9341_GFX.c **** 	  dy = y1 - y0;
+ 202:Core/Src/ILI9341_GFX.c ****   else
+ 203:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 204:Core/Src/ILI9341_GFX.c **** 
+ 205:Core/Src/ILI9341_GFX.c ****   err = dx >> 1;
+ 206:Core/Src/ILI9341_GFX.c **** 
+ 207:Core/Src/ILI9341_GFX.c ****   if (y0 < y1)
+ 208:Core/Src/ILI9341_GFX.c ****     { step = 1; }
+ 209:Core/Src/ILI9341_GFX.c ****   else
+ 210:Core/Src/ILI9341_GFX.c ****     { step = -1; }
+ 211:Core/Src/ILI9341_GFX.c **** 
+ 212:Core/Src/ILI9341_GFX.c ****   while (x0 <= x1) {
+ 213:Core/Src/ILI9341_GFX.c **** 
+ 214:Core/Src/ILI9341_GFX.c ****     if (is_steep)
+ 215:Core/Src/ILI9341_GFX.c ****       { x = y0; y = x0; }
+ 216:Core/Src/ILI9341_GFX.c ****     else
+ 217:Core/Src/ILI9341_GFX.c ****       { x = x0; y = y0; }
+ 218:Core/Src/ILI9341_GFX.c **** 
+ 219:Core/Src/ILI9341_GFX.c ****     // continue algorithm even if current pixel is outside of screen
+ 220:Core/Src/ILI9341_GFX.c ****     // bounds, so that the line is drawn at correct position once
+ 221:Core/Src/ILI9341_GFX.c ****     // it actually enters screen bounds (if ever).
+ 222:Core/Src/ILI9341_GFX.c ****     if ( (x >= 0) && (x <= 320) && (y >= 0) && (y <= 240) ) {
+ 223:Core/Src/ILI9341_GFX.c ****       ILI9341_DrawPixel(x, y, color);
+ 224:Core/Src/ILI9341_GFX.c ****     }
+ 225:Core/Src/ILI9341_GFX.c **** 
+ 226:Core/Src/ILI9341_GFX.c ****     err -= dy;
+ 227:Core/Src/ILI9341_GFX.c ****     if (err < 0) {
+ 228:Core/Src/ILI9341_GFX.c ****       y0 += step;
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 19
+
+
+ 229:Core/Src/ILI9341_GFX.c ****       err += dx;
+ 230:Core/Src/ILI9341_GFX.c ****     }
+ 231:Core/Src/ILI9341_GFX.c **** 
+ 232:Core/Src/ILI9341_GFX.c ****     ++x0;
+ 233:Core/Src/ILI9341_GFX.c ****   }
+ 234:Core/Src/ILI9341_GFX.c **** }...
+ 716              		.loc 1 234 1 view .LVU210
+ 717 0036 03B0     		add	sp, sp, #12
+ 718              	.LCFI14:
+ 719              		.cfi_remember_state
+ 720              		.cfi_def_cfa_offset 36
+ 721              		@ sp needed
+ 722 0038 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 723              	.LVL88:
+ 724              	.L41:
+ 725              	.LCFI15:
+ 726              		.cfi_restore_state
+ 161:Core/Src/ILI9341_GFX.c **** 	  dx = x0 - x1;
+ 727              		.loc 1 161 4 is_stmt 1 view .LVU211
+ 161:Core/Src/ILI9341_GFX.c **** 	  dx = x0 - x1;
+ 728              		.loc 1 161 12 is_stmt 0 view .LVU212
+ 729 003c A0EB0209 		sub	r9, r0, r2
+ 161:Core/Src/ILI9341_GFX.c **** 	  dx = x0 - x1;
+ 730              		.loc 1 161 7 view .LVU213
+ 731 0040 0FFA89F9 		sxth	r9, r9
+ 732              	.LVL89:
+ 161:Core/Src/ILI9341_GFX.c **** 	  dx = x0 - x1;
+ 733              		.loc 1 161 7 view .LVU214
+ 734 0044 EBE7     		b	.L42
+ 735              	.L43:
+ 166:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 736              		.loc 1 166 4 is_stmt 1 view .LVU215
+ 166:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 737              		.loc 1 166 12 is_stmt 0 view .LVU216
+ 738 0046 A7EB0408 		sub	r8, r7, r4
+ 166:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 739              		.loc 1 166 7 view .LVU217
+ 740 004a 0FFA88F8 		sxth	r8, r8
+ 741              	.LVL90:
+ 166:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 742              		.loc 1 166 7 view .LVU218
+ 743 004e ECE7     		b	.L44
+ 744              	.L61:
+ 176:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawVLine(x0, y0, dy, color);
+ 745              		.loc 1 176 2 is_stmt 1 view .LVU219
+ 746 0050 019B     		ldr	r3, [sp, #4]
+ 747 0052 1FFA88F2 		uxth	r2, r8
+ 748              	.LVL91:
+ 176:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawVLine(x0, y0, dy, color);
+ 749              		.loc 1 176 2 is_stmt 0 view .LVU220
+ 750 0056 3946     		mov	r1, r7
+ 751              	.LVL92:
+ 176:Core/Src/ILI9341_GFX.c **** 	ILI9341_DrawVLine(x0, y0, dy, color);
+ 752              		.loc 1 176 2 view .LVU221
+ 753 0058 FFF7FEFF 		bl	ILI9341_DrawVLine
+ 754              	.LVL93:
+ 177:Core/Src/ILI9341_GFX.c ****     return;
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 20
+
+
+ 755              		.loc 1 177 5 is_stmt 1 view .LVU222
+ 756 005c EBE7     		b	.L40
+ 757              	.LVL94:
+ 758              	.L45:
+ 179:Core/Src/ILI9341_GFX.c ****   else if (0 == dy) {
+ 759              		.loc 1 179 8 view .LVU223
+ 179:Core/Src/ILI9341_GFX.c ****   else if (0 == dy) {
+ 760              		.loc 1 179 11 is_stmt 0 view .LVU224
+ 761 005e B8F1000F 		cmp	r8, #0
+ 762 0062 20D0     		beq	.L62
+ 187:Core/Src/ILI9341_GFX.c ****   bool is_steep = dy > dx;
+ 763              		.loc 1 187 3 is_stmt 1 view .LVU225
+ 764              	.LVL95:
+ 188:Core/Src/ILI9341_GFX.c ****   if (is_steep) {
+ 765              		.loc 1 188 3 view .LVU226
+ 188:Core/Src/ILI9341_GFX.c ****   if (is_steep) {
+ 766              		.loc 1 188 6 is_stmt 0 view .LVU227
+ 767 0064 C145     		cmp	r9, r8
+ 768 0066 05DB     		blt	.L48
+ 769 0068 2346     		mov	r3, r4
+ 770 006a 3446     		mov	r4, r6
+ 771 006c 1E46     		mov	r6, r3
+ 772 006e 3B46     		mov	r3, r7
+ 773 0070 0746     		mov	r7, r0
+ 774 0072 1846     		mov	r0, r3
+ 775              	.LVL96:
+ 776              	.L48:
+ 190:Core/Src/ILI9341_GFX.c ****     __SWAP(x1, y1);
+ 777              		.loc 1 190 19 is_stmt 1 discriminator 1 view .LVU228
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 778              		.loc 1 193 3 discriminator 1 view .LVU229
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 779              		.loc 1 193 6 is_stmt 0 discriminator 1 view .LVU230
+ 780 0074 A742     		cmp	r7, r4
+ 781 0076 05D8     		bhi	.L49
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 782              		.loc 1 193 6 view .LVU231
+ 783 0078 3346     		mov	r3, r6
+ 784 007a 0646     		mov	r6, r0
+ 785              	.LVL97:
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 786              		.loc 1 193 6 view .LVU232
+ 787 007c 1846     		mov	r0, r3
+ 788              	.LVL98:
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 789              		.loc 1 193 6 view .LVU233
+ 790 007e 2346     		mov	r3, r4
+ 791 0080 3C46     		mov	r4, r7
+ 792              	.LVL99:
+ 193:Core/Src/ILI9341_GFX.c ****   if (x0 > x1) {
+ 793              		.loc 1 193 6 view .LVU234
+ 794 0082 1F46     		mov	r7, r3
+ 795              	.LVL100:
+ 796              	.L49:
+ 195:Core/Src/ILI9341_GFX.c ****     __SWAP(y0, y1);
+ 797              		.loc 1 195 19 is_stmt 1 discriminator 1 view .LVU235
+ 198:Core/Src/ILI9341_GFX.c ****   dx = x1 - x0;
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 21
+
+
+ 798              		.loc 1 198 3 discriminator 1 view .LVU236
+ 198:Core/Src/ILI9341_GFX.c ****   dx = x1 - x0;
+ 799              		.loc 1 198 11 is_stmt 0 discriminator 1 view .LVU237
+ 800 0084 3D1B     		subs	r5, r7, r4
+ 801 0086 1FFA85FB 		uxth	fp, r5
+ 198:Core/Src/ILI9341_GFX.c ****   dx = x1 - x0;
+ 802              		.loc 1 198 6 discriminator 1 view .LVU238
+ 803 008a 2DB2     		sxth	r5, r5
+ 804              	.LVL101:
+ 200:Core/Src/ILI9341_GFX.c ****   if(y1 > y0)
+ 805              		.loc 1 200 3 is_stmt 1 discriminator 1 view .LVU239
+ 200:Core/Src/ILI9341_GFX.c ****   if(y1 > y0)
+ 806              		.loc 1 200 5 is_stmt 0 discriminator 1 view .LVU240
+ 807 008c 8642     		cmp	r6, r0
+ 808 008e 11D2     		bcs	.L50
+ 201:Core/Src/ILI9341_GFX.c **** 	  dy = y1 - y0;
+ 809              		.loc 1 201 4 is_stmt 1 view .LVU241
+ 201:Core/Src/ILI9341_GFX.c **** 	  dy = y1 - y0;
+ 810              		.loc 1 201 12 is_stmt 0 view .LVU242
+ 811 0090 A0EB060A 		sub	r10, r0, r6
+ 201:Core/Src/ILI9341_GFX.c **** 	  dy = y1 - y0;
+ 812              		.loc 1 201 7 view .LVU243
+ 813 0094 0FFA8AFA 		sxth	r10, r10
+ 814              	.LVL102:
+ 815              	.L51:
+ 205:Core/Src/ILI9341_GFX.c ****   err = dx >> 1;
+ 816              		.loc 1 205 3 is_stmt 1 view .LVU244
+ 205:Core/Src/ILI9341_GFX.c ****   err = dx >> 1;
+ 817              		.loc 1 205 7 is_stmt 0 view .LVU245
+ 818 0098 6D10     		asrs	r5, r5, #1
+ 819              	.LVL103:
+ 207:Core/Src/ILI9341_GFX.c ****   if (y0 < y1)
+ 820              		.loc 1 207 3 is_stmt 1 view .LVU246
+ 207:Core/Src/ILI9341_GFX.c ****   if (y0 < y1)
+ 821              		.loc 1 207 6 is_stmt 0 view .LVU247
+ 822 009a 8642     		cmp	r6, r0
+ 823 009c 33D3     		bcc	.L52
+ 210:Core/Src/ILI9341_GFX.c ****     { step = -1; }
+ 824              		.loc 1 210 12 view .LVU248
+ 825 009e 4FF0FF33 		mov	r3, #-1
+ 826 00a2 0093     		str	r3, [sp]
+ 827 00a4 16E0     		b	.L58
+ 828              	.LVL104:
+ 829              	.L62:
+ 181:Core/Src/ILI9341_GFX.c ****     if (0 == dx)
+ 830              		.loc 1 181 5 is_stmt 1 view .LVU249
+ 183:Core/Src/ILI9341_GFX.c ****     ILI9341_DrawHLine(x0, y0, dx, color);
+ 831              		.loc 1 183 5 view .LVU250
+ 832 00a6 019B     		ldr	r3, [sp, #4]
+ 833 00a8 1FFA89F2 		uxth	r2, r9
+ 834              	.LVL105:
+ 183:Core/Src/ILI9341_GFX.c ****     ILI9341_DrawHLine(x0, y0, dx, color);
+ 835              		.loc 1 183 5 is_stmt 0 view .LVU251
+ 836 00ac 3946     		mov	r1, r7
+ 837              	.LVL106:
+ 183:Core/Src/ILI9341_GFX.c ****     ILI9341_DrawHLine(x0, y0, dx, color);
+ 838              		.loc 1 183 5 view .LVU252
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 22
+
+
+ 839 00ae FFF7FEFF 		bl	ILI9341_DrawHLine
+ 840              	.LVL107:
+ 184:Core/Src/ILI9341_GFX.c ****     return;
+ 841              		.loc 1 184 5 is_stmt 1 view .LVU253
+ 842 00b2 C0E7     		b	.L40
+ 843              	.LVL108:
+ 844              	.L50:
+ 203:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 845              		.loc 1 203 4 view .LVU254
+ 203:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 846              		.loc 1 203 12 is_stmt 0 view .LVU255
+ 847 00b4 A6EB000A 		sub	r10, r6, r0
+ 203:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 848              		.loc 1 203 7 view .LVU256
+ 849 00b8 0FFA8AFA 		sxth	r10, r10
+ 850              	.LVL109:
+ 203:Core/Src/ILI9341_GFX.c **** 	  dy = y0 - y1;
+ 851              		.loc 1 203 7 view .LVU257
+ 852 00bc ECE7     		b	.L51
+ 853              	.LVL110:
+ 854              	.L54:
+ 217:Core/Src/ILI9341_GFX.c ****       { x = x0; y = y0; }
+ 855              		.loc 1 217 9 is_stmt 1 view .LVU258
+ 217:Core/Src/ILI9341_GFX.c ****       { x = x0; y = y0; }
+ 856              		.loc 1 217 11 is_stmt 0 view .LVU259
+ 857 00be 20B2     		sxth	r0, r4
+ 858              	.LVL111:
+ 217:Core/Src/ILI9341_GFX.c ****       { x = x0; y = y0; }
+ 859              		.loc 1 217 17 is_stmt 1 view .LVU260
+ 217:Core/Src/ILI9341_GFX.c ****       { x = x0; y = y0; }
+ 860              		.loc 1 217 19 is_stmt 0 view .LVU261
+ 861 00c0 31B2     		sxth	r1, r6
+ 862              	.LVL112:
+ 217:Core/Src/ILI9341_GFX.c ****       { x = x0; y = y0; }
+ 863              		.loc 1 217 19 view .LVU262
+ 864 00c2 0DE0     		b	.L55
+ 865              	.LVL113:
+ 866              	.L56:
+ 226:Core/Src/ILI9341_GFX.c ****     err -= dy;
+ 867              		.loc 1 226 5 is_stmt 1 view .LVU263
+ 226:Core/Src/ILI9341_GFX.c ****     err -= dy;
+ 868              		.loc 1 226 9 is_stmt 0 view .LVU264
+ 869 00c4 A5EB0A05 		sub	r5, r5, r10
+ 870              	.LVL114:
+ 226:Core/Src/ILI9341_GFX.c ****     err -= dy;
+ 871              		.loc 1 226 9 view .LVU265
+ 872 00c8 ABB2     		uxth	r3, r5
+ 873 00ca 2DB2     		sxth	r5, r5
+ 874              	.LVL115:
+ 227:Core/Src/ILI9341_GFX.c ****     if (err < 0) {
+ 875              		.loc 1 227 5 is_stmt 1 view .LVU266
+ 227:Core/Src/ILI9341_GFX.c ****     if (err < 0) {
+ 876              		.loc 1 227 8 is_stmt 0 view .LVU267
+ 877 00cc 002D     		cmp	r5, #0
+ 878 00ce 14DB     		blt	.L63
+ 879              	.L57:
+ 232:Core/Src/ILI9341_GFX.c ****     ++x0;
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 23
+
+
+ 880              		.loc 1 232 5 is_stmt 1 view .LVU268
+ 881 00d0 0134     		adds	r4, r4, #1
+ 882              	.LVL116:
+ 232:Core/Src/ILI9341_GFX.c ****     ++x0;
+ 883              		.loc 1 232 5 is_stmt 0 view .LVU269
+ 884 00d2 A4B2     		uxth	r4, r4
+ 885              	.LVL117:
+ 886              	.L58:
+ 212:Core/Src/ILI9341_GFX.c ****   while (x0 <= x1) {
+ 887              		.loc 1 212 9 is_stmt 1 view .LVU270
+ 888 00d4 BC42     		cmp	r4, r7
+ 889 00d6 AED8     		bhi	.L40
+ 214:Core/Src/ILI9341_GFX.c ****     if (is_steep)
+ 890              		.loc 1 214 5 view .LVU271
+ 214:Core/Src/ILI9341_GFX.c ****     if (is_steep)
+ 891              		.loc 1 214 8 is_stmt 0 view .LVU272
+ 892 00d8 C145     		cmp	r9, r8
+ 893 00da F0DA     		bge	.L54
+ 215:Core/Src/ILI9341_GFX.c ****       { x = y0; y = x0; }
+ 894              		.loc 1 215 9 is_stmt 1 view .LVU273
+ 215:Core/Src/ILI9341_GFX.c ****       { x = y0; y = x0; }
+ 895              		.loc 1 215 11 is_stmt 0 view .LVU274
+ 896 00dc 30B2     		sxth	r0, r6
+ 897              	.LVL118:
+ 215:Core/Src/ILI9341_GFX.c ****       { x = y0; y = x0; }
+ 898              		.loc 1 215 17 is_stmt 1 view .LVU275
+ 215:Core/Src/ILI9341_GFX.c ****       { x = y0; y = x0; }
+ 899              		.loc 1 215 19 is_stmt 0 view .LVU276
+ 900 00de 21B2     		sxth	r1, r4
+ 901              	.LVL119:
+ 902              	.L55:
+ 222:Core/Src/ILI9341_GFX.c ****     if ( (x >= 0) && (x <= 320) && (y >= 0) && (y <= 240) ) {
+ 903              		.loc 1 222 5 is_stmt 1 view .LVU277
+ 222:Core/Src/ILI9341_GFX.c ****     if ( (x >= 0) && (x <= 320) && (y >= 0) && (y <= 240) ) {
+ 904              		.loc 1 222 19 is_stmt 0 view .LVU278
+ 905 00e0 80B2     		uxth	r0, r0
+ 222:Core/Src/ILI9341_GFX.c ****     if ( (x >= 0) && (x <= 320) && (y >= 0) && (y <= 240) ) {
+ 906              		.loc 1 222 8 view .LVU279
+ 907 00e2 B0F5A07F 		cmp	r0, #320
+ 908 00e6 EDD8     		bhi	.L56
+ 222:Core/Src/ILI9341_GFX.c ****     if ( (x >= 0) && (x <= 320) && (y >= 0) && (y <= 240) ) {
+ 909              		.loc 1 222 33 discriminator 1 view .LVU280
+ 910 00e8 0029     		cmp	r1, #0
+ 911 00ea EBDB     		blt	.L56
+ 222:Core/Src/ILI9341_GFX.c ****     if ( (x >= 0) && (x <= 320) && (y >= 0) && (y <= 240) ) {
+ 912              		.loc 1 222 45 discriminator 2 view .LVU281
+ 913 00ec F029     		cmp	r1, #240
+ 914 00ee E9DC     		bgt	.L56
+ 223:Core/Src/ILI9341_GFX.c ****       ILI9341_DrawPixel(x, y, color);
+ 915              		.loc 1 223 7 is_stmt 1 view .LVU282
+ 916 00f0 019A     		ldr	r2, [sp, #4]
+ 917 00f2 89B2     		uxth	r1, r1
+ 223:Core/Src/ILI9341_GFX.c ****       ILI9341_DrawPixel(x, y, color);
+ 918              		.loc 1 223 7 is_stmt 0 view .LVU283
+ 919 00f4 FFF7FEFF 		bl	ILI9341_DrawPixel
+ 920              	.LVL120:
+ 223:Core/Src/ILI9341_GFX.c ****       ILI9341_DrawPixel(x, y, color);
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 24
+
+
+ 921              		.loc 1 223 7 view .LVU284
+ 922 00f8 E4E7     		b	.L56
+ 923              	.L63:
+ 228:Core/Src/ILI9341_GFX.c ****       y0 += step;
+ 924              		.loc 1 228 7 is_stmt 1 view .LVU285
+ 228:Core/Src/ILI9341_GFX.c ****       y0 += step;
+ 925              		.loc 1 228 10 is_stmt 0 view .LVU286
+ 926 00fa 009A     		ldr	r2, [sp]
+ 927 00fc 1644     		add	r6, r6, r2
+ 928              	.LVL121:
+ 228:Core/Src/ILI9341_GFX.c ****       y0 += step;
+ 929              		.loc 1 228 10 view .LVU287
+ 930 00fe B6B2     		uxth	r6, r6
+ 931              	.LVL122:
+ 229:Core/Src/ILI9341_GFX.c ****       err += dx;
+ 932              		.loc 1 229 7 is_stmt 1 view .LVU288
+ 229:Core/Src/ILI9341_GFX.c ****       err += dx;
+ 933              		.loc 1 229 11 is_stmt 0 view .LVU289
+ 934 0100 5B44     		add	r3, r3, fp
+ 935 0102 1DB2     		sxth	r5, r3
+ 936              	.LVL123:
+ 229:Core/Src/ILI9341_GFX.c ****       err += dx;
+ 937              		.loc 1 229 11 view .LVU290
+ 938 0104 E4E7     		b	.L57
+ 939              	.LVL124:
+ 940              	.L52:
+ 208:Core/Src/ILI9341_GFX.c ****     { step = 1; }
+ 941              		.loc 1 208 12 view .LVU291
+ 942 0106 0123     		movs	r3, #1
+ 943 0108 0093     		str	r3, [sp]
+ 944 010a E3E7     		b	.L58
+ 945              		.cfi_endproc
+ 946              	.LFE134:
+ 948              		.text
+ 949              	.Letext0:
+ 950              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 951              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 952              		.file 4 "Core/Inc/ILI9341_STM32_Driver.h"
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s 			page 25
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 ILI9341_GFX.c
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:20     .text.ILI9341_DrawHollowRectangleCoord:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:26     .text.ILI9341_DrawHollowRectangleCoord:00000000 ILI9341_DrawHollowRectangleCoord
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:200    .text.ILI9341_DrawFilledRectangleCoord:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:206    .text.ILI9341_DrawFilledRectangleCoord:00000000 ILI9341_DrawFilledRectangleCoord
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:337    .text.ILI9341_DrawChar:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:343    .text.ILI9341_DrawChar:00000000 ILI9341_DrawChar
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:518    .text.ILI9341_DrawText:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:524    .text.ILI9341_DrawText:00000000 ILI9341_DrawText
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:644    .text.ILI9341_DrawLine:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccii5aMZ.s:650    .text.ILI9341_DrawLine:00000000 ILI9341_DrawLine
+
+UNDEFINED SYMBOLS
+ILI9341_DrawHLine
+ILI9341_DrawVLine
+ILI9341_DrawPixel
+ILI9341_DrawRectangle

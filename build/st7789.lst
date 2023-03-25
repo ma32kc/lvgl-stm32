@@ -1,0 +1,4716 @@
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"st7789.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.ST7789_WriteCommand,"ax",%progbits
+  20              		.align	1
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	ST7789_WriteCommand:
+  26              	.LVL0:
+  27              	.LFB130:
+  28              		.file 1 "Core/Src/st7789.c"
+   1:Core/Src/st7789.c **** #include "st7789.h"
+   2:Core/Src/st7789.c **** 
+   3:Core/Src/st7789.c **** #ifdef USE_DMA
+   4:Core/Src/st7789.c **** #include <string.h>
+   5:Core/Src/st7789.c **** uint16_t DMA_MIN_SIZE = 16;
+   6:Core/Src/st7789.c **** /* If you're using DMA, then u need a "framebuffer" to store datas to be displayed.
+   7:Core/Src/st7789.c ****  * If your MCU don't have enough RAM, please avoid using DMA(or set 5 to 1).
+   8:Core/Src/st7789.c ****  * And if your MCU have enough RAM(even larger than full-frame size),
+   9:Core/Src/st7789.c ****  * Then you can specify the framebuffer size to the full resolution below.
+  10:Core/Src/st7789.c ****  */
+  11:Core/Src/st7789.c **** #define HOR_LEN 5 //	Alse mind the resolution of your screen!
+  12:Core/Src/st7789.c **** uint16_t disp_buf[ST7789_WIDTH * HOR_LEN];
+  13:Core/Src/st7789.c **** #endif
+  14:Core/Src/st7789.c **** 
+  15:Core/Src/st7789.c **** /**
+  16:Core/Src/st7789.c ****  * @brief Write command to ST7789 controller
+  17:Core/Src/st7789.c ****  * @param cmd -> command to write
+  18:Core/Src/st7789.c ****  * @return none
+  19:Core/Src/st7789.c ****  */
+  20:Core/Src/st7789.c **** static void ST7789_WriteCommand(uint8_t cmd)
+  21:Core/Src/st7789.c **** {
+  29              		.loc 1 21 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 21 1 is_stmt 0 view .LVU1
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 2
+
+
+  38              		.cfi_offset 14, -4
+  39 0002 82B0     		sub	sp, sp, #8
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 16
+  42 0004 8DF80700 		strb	r0, [sp, #7]
+  22:Core/Src/st7789.c **** 	ST7789_Select();
+  43              		.loc 1 22 2 is_stmt 1 view .LVU2
+  44 0008 0C4C     		ldr	r4, .L3
+  45 000a 0022     		movs	r2, #0
+  46 000c 0821     		movs	r1, #8
+  47 000e 2046     		mov	r0, r4
+  48              	.LVL1:
+  49              		.loc 1 22 2 is_stmt 0 view .LVU3
+  50 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  51              	.LVL2:
+  23:Core/Src/st7789.c **** 	ST7789_DC_Clr();
+  52              		.loc 1 23 2 is_stmt 1 view .LVU4
+  53 0014 0022     		movs	r2, #0
+  54 0016 2021     		movs	r1, #32
+  55 0018 2046     		mov	r0, r4
+  56 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  57              	.LVL3:
+  24:Core/Src/st7789.c **** 	HAL_SPI_Transmit(&ST7789_SPI_PORT, &cmd, sizeof(cmd), HAL_MAX_DELAY);
+  58              		.loc 1 24 2 view .LVU5
+  59 001e 4FF0FF33 		mov	r3, #-1
+  60 0022 0122     		movs	r2, #1
+  61 0024 0DF10701 		add	r1, sp, #7
+  62 0028 0548     		ldr	r0, .L3+4
+  63 002a FFF7FEFF 		bl	HAL_SPI_Transmit
+  64              	.LVL4:
+  25:Core/Src/st7789.c **** 	ST7789_UnSelect();
+  65              		.loc 1 25 2 view .LVU6
+  66 002e 0122     		movs	r2, #1
+  67 0030 0821     		movs	r1, #8
+  68 0032 2046     		mov	r0, r4
+  69 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  70              	.LVL5:
+  26:Core/Src/st7789.c **** }
+  71              		.loc 1 26 1 is_stmt 0 view .LVU7
+  72 0038 02B0     		add	sp, sp, #8
+  73              	.LCFI2:
+  74              		.cfi_def_cfa_offset 8
+  75              		@ sp needed
+  76 003a 10BD     		pop	{r4, pc}
+  77              	.L4:
+  78              		.align	2
+  79              	.L3:
+  80 003c 00040240 		.word	1073873920
+  81 0040 00000000 		.word	hspi1
+  82              		.cfi_endproc
+  83              	.LFE130:
+  85              		.section	.text.ST7789_WriteSmallData,"ax",%progbits
+  86              		.align	1
+  87              		.syntax unified
+  88              		.thumb
+  89              		.thumb_func
+  91              	ST7789_WriteSmallData:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 3
+
+
+  92              	.LVL6:
+  93              	.LFB132:
+  27:Core/Src/st7789.c **** 
+  28:Core/Src/st7789.c **** /**
+  29:Core/Src/st7789.c ****  * @brief Write data to ST7789 controller
+  30:Core/Src/st7789.c ****  * @param buff -> pointer of data buffer
+  31:Core/Src/st7789.c ****  * @param buff_size -> size of the data buffer
+  32:Core/Src/st7789.c ****  * @return none
+  33:Core/Src/st7789.c ****  */
+  34:Core/Src/st7789.c **** static void ST7789_WriteData(uint8_t *buff, size_t buff_size)
+  35:Core/Src/st7789.c **** {
+  36:Core/Src/st7789.c **** 	ST7789_Select();
+  37:Core/Src/st7789.c **** 	ST7789_DC_Set();
+  38:Core/Src/st7789.c **** 
+  39:Core/Src/st7789.c **** 	// split data in small chunks because HAL can't send more than 64K at once
+  40:Core/Src/st7789.c **** 
+  41:Core/Src/st7789.c **** 	while (buff_size > 0)
+  42:Core/Src/st7789.c **** 	{
+  43:Core/Src/st7789.c **** 		uint16_t chunk_size = buff_size > 65535 ? 65535 : buff_size;
+  44:Core/Src/st7789.c **** #ifdef USE_DMA
+  45:Core/Src/st7789.c **** 		if (DMA_MIN_SIZE <= buff_size)
+  46:Core/Src/st7789.c **** 		{
+  47:Core/Src/st7789.c **** 			HAL_SPI_Transmit_DMA(&ST7789_SPI_PORT, buff, chunk_size);
+  48:Core/Src/st7789.c **** 			while (ST7789_SPI_PORT.hdmatx->State != HAL_DMA_STATE_READY)
+  49:Core/Src/st7789.c **** 			{
+  50:Core/Src/st7789.c **** 			}
+  51:Core/Src/st7789.c **** 		}
+  52:Core/Src/st7789.c **** 		else
+  53:Core/Src/st7789.c **** 			HAL_SPI_Transmit(&ST7789_SPI_PORT, buff, chunk_size, HAL_MAX_DELAY);
+  54:Core/Src/st7789.c **** #else
+  55:Core/Src/st7789.c **** 		HAL_SPI_Transmit(&ST7789_SPI_PORT, buff, chunk_size, HAL_MAX_DELAY);
+  56:Core/Src/st7789.c **** #endif
+  57:Core/Src/st7789.c **** 		buff += chunk_size;
+  58:Core/Src/st7789.c **** 		buff_size -= chunk_size;
+  59:Core/Src/st7789.c **** 	}
+  60:Core/Src/st7789.c **** 
+  61:Core/Src/st7789.c **** 	ST7789_UnSelect();
+  62:Core/Src/st7789.c **** }
+  63:Core/Src/st7789.c **** /**
+  64:Core/Src/st7789.c ****  * @brief Write data to ST7789 controller, simplify for 8bit data.
+  65:Core/Src/st7789.c ****  * data -> data to write
+  66:Core/Src/st7789.c ****  * @return none
+  67:Core/Src/st7789.c ****  */
+  68:Core/Src/st7789.c **** static void ST7789_WriteSmallData(uint8_t data)
+  69:Core/Src/st7789.c **** {
+  94              		.loc 1 69 1 is_stmt 1 view -0
+  95              		.cfi_startproc
+  96              		@ args = 0, pretend = 0, frame = 8
+  97              		@ frame_needed = 0, uses_anonymous_args = 0
+  98              		.loc 1 69 1 is_stmt 0 view .LVU9
+  99 0000 10B5     		push	{r4, lr}
+ 100              	.LCFI3:
+ 101              		.cfi_def_cfa_offset 8
+ 102              		.cfi_offset 4, -8
+ 103              		.cfi_offset 14, -4
+ 104 0002 82B0     		sub	sp, sp, #8
+ 105              	.LCFI4:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 4
+
+
+ 106              		.cfi_def_cfa_offset 16
+ 107 0004 8DF80700 		strb	r0, [sp, #7]
+  70:Core/Src/st7789.c **** 	ST7789_Select();
+ 108              		.loc 1 70 2 is_stmt 1 view .LVU10
+ 109 0008 0C4C     		ldr	r4, .L7
+ 110 000a 0022     		movs	r2, #0
+ 111 000c 0821     		movs	r1, #8
+ 112 000e 2046     		mov	r0, r4
+ 113              	.LVL7:
+ 114              		.loc 1 70 2 is_stmt 0 view .LVU11
+ 115 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 116              	.LVL8:
+  71:Core/Src/st7789.c **** 	ST7789_DC_Set();
+ 117              		.loc 1 71 2 is_stmt 1 view .LVU12
+ 118 0014 0122     		movs	r2, #1
+ 119 0016 2021     		movs	r1, #32
+ 120 0018 2046     		mov	r0, r4
+ 121 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 122              	.LVL9:
+  72:Core/Src/st7789.c **** 	HAL_SPI_Transmit(&ST7789_SPI_PORT, &data, sizeof(data), HAL_MAX_DELAY);
+ 123              		.loc 1 72 2 view .LVU13
+ 124 001e 4FF0FF33 		mov	r3, #-1
+ 125 0022 0122     		movs	r2, #1
+ 126 0024 0DF10701 		add	r1, sp, #7
+ 127 0028 0548     		ldr	r0, .L7+4
+ 128 002a FFF7FEFF 		bl	HAL_SPI_Transmit
+ 129              	.LVL10:
+  73:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 130              		.loc 1 73 2 view .LVU14
+ 131 002e 0122     		movs	r2, #1
+ 132 0030 0821     		movs	r1, #8
+ 133 0032 2046     		mov	r0, r4
+ 134 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 135              	.LVL11:
+  74:Core/Src/st7789.c **** }
+ 136              		.loc 1 74 1 is_stmt 0 view .LVU15
+ 137 0038 02B0     		add	sp, sp, #8
+ 138              	.LCFI5:
+ 139              		.cfi_def_cfa_offset 8
+ 140              		@ sp needed
+ 141 003a 10BD     		pop	{r4, pc}
+ 142              	.L8:
+ 143              		.align	2
+ 144              	.L7:
+ 145 003c 00040240 		.word	1073873920
+ 146 0040 00000000 		.word	hspi1
+ 147              		.cfi_endproc
+ 148              	.LFE132:
+ 150              		.section	.text.ST7789_WriteData,"ax",%progbits
+ 151              		.align	1
+ 152              		.syntax unified
+ 153              		.thumb
+ 154              		.thumb_func
+ 156              	ST7789_WriteData:
+ 157              	.LVL12:
+ 158              	.LFB131:
+  35:Core/Src/st7789.c **** 	ST7789_Select();
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 5
+
+
+ 159              		.loc 1 35 1 is_stmt 1 view -0
+ 160              		.cfi_startproc
+ 161              		@ args = 0, pretend = 0, frame = 0
+ 162              		@ frame_needed = 0, uses_anonymous_args = 0
+  35:Core/Src/st7789.c **** 	ST7789_Select();
+ 163              		.loc 1 35 1 is_stmt 0 view .LVU17
+ 164 0000 70B5     		push	{r4, r5, r6, lr}
+ 165              	.LCFI6:
+ 166              		.cfi_def_cfa_offset 16
+ 167              		.cfi_offset 4, -16
+ 168              		.cfi_offset 5, -12
+ 169              		.cfi_offset 6, -8
+ 170              		.cfi_offset 14, -4
+ 171 0002 0646     		mov	r6, r0
+ 172 0004 0D46     		mov	r5, r1
+  36:Core/Src/st7789.c **** 	ST7789_DC_Set();
+ 173              		.loc 1 36 2 is_stmt 1 view .LVU18
+ 174 0006 114C     		ldr	r4, .L13
+ 175 0008 0022     		movs	r2, #0
+ 176 000a 0821     		movs	r1, #8
+ 177              	.LVL13:
+  36:Core/Src/st7789.c **** 	ST7789_DC_Set();
+ 178              		.loc 1 36 2 is_stmt 0 view .LVU19
+ 179 000c 2046     		mov	r0, r4
+ 180              	.LVL14:
+  36:Core/Src/st7789.c **** 	ST7789_DC_Set();
+ 181              		.loc 1 36 2 view .LVU20
+ 182 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 183              	.LVL15:
+  37:Core/Src/st7789.c **** 
+ 184              		.loc 1 37 2 is_stmt 1 view .LVU21
+ 185 0012 0122     		movs	r2, #1
+ 186 0014 2021     		movs	r1, #32
+ 187 0016 2046     		mov	r0, r4
+ 188 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 189              	.LVL16:
+  41:Core/Src/st7789.c **** 	{
+ 190              		.loc 1 41 2 view .LVU22
+  41:Core/Src/st7789.c **** 	{
+ 191              		.loc 1 41 8 is_stmt 0 view .LVU23
+ 192 001c 0EE0     		b	.L10
+ 193              	.L11:
+ 194              	.LBB2:
+  43:Core/Src/st7789.c **** #ifdef USE_DMA
+ 195              		.loc 1 43 3 is_stmt 1 view .LVU24
+  43:Core/Src/st7789.c **** #ifdef USE_DMA
+ 196              		.loc 1 43 51 is_stmt 0 view .LVU25
+ 197 001e 4FF6FF74 		movw	r4, #65535
+ 198 0022 AC42     		cmp	r4, r5
+ 199 0024 28BF     		it	cs
+ 200 0026 2C46     		movcs	r4, r5
+  43:Core/Src/st7789.c **** #ifdef USE_DMA
+ 201              		.loc 1 43 12 view .LVU26
+ 202 0028 A4B2     		uxth	r4, r4
+ 203              	.LVL17:
+  55:Core/Src/st7789.c **** #endif
+ 204              		.loc 1 55 3 is_stmt 1 view .LVU27
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 6
+
+
+ 205 002a 4FF0FF33 		mov	r3, #-1
+ 206 002e 2246     		mov	r2, r4
+ 207 0030 3146     		mov	r1, r6
+ 208 0032 0748     		ldr	r0, .L13+4
+ 209 0034 FFF7FEFF 		bl	HAL_SPI_Transmit
+ 210              	.LVL18:
+  57:Core/Src/st7789.c **** 		buff_size -= chunk_size;
+ 211              		.loc 1 57 3 view .LVU28
+  57:Core/Src/st7789.c **** 		buff_size -= chunk_size;
+ 212              		.loc 1 57 8 is_stmt 0 view .LVU29
+ 213 0038 2644     		add	r6, r6, r4
+ 214              	.LVL19:
+  58:Core/Src/st7789.c **** 	}
+ 215              		.loc 1 58 3 is_stmt 1 view .LVU30
+  58:Core/Src/st7789.c **** 	}
+ 216              		.loc 1 58 13 is_stmt 0 view .LVU31
+ 217 003a 2D1B     		subs	r5, r5, r4
+ 218              	.LVL20:
+ 219              	.L10:
+  58:Core/Src/st7789.c **** 	}
+ 220              		.loc 1 58 13 view .LVU32
+ 221              	.LBE2:
+  41:Core/Src/st7789.c **** 	{
+ 222              		.loc 1 41 8 is_stmt 1 view .LVU33
+ 223 003c 002D     		cmp	r5, #0
+ 224 003e EED1     		bne	.L11
+  61:Core/Src/st7789.c **** }
+ 225              		.loc 1 61 2 view .LVU34
+ 226 0040 0122     		movs	r2, #1
+ 227 0042 0821     		movs	r1, #8
+ 228 0044 0148     		ldr	r0, .L13
+ 229 0046 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 230              	.LVL21:
+  62:Core/Src/st7789.c **** /**
+ 231              		.loc 1 62 1 is_stmt 0 view .LVU35
+ 232 004a 70BD     		pop	{r4, r5, r6, pc}
+ 233              	.LVL22:
+ 234              	.L14:
+  62:Core/Src/st7789.c **** /**
+ 235              		.loc 1 62 1 view .LVU36
+ 236              		.align	2
+ 237              	.L13:
+ 238 004c 00040240 		.word	1073873920
+ 239 0050 00000000 		.word	hspi1
+ 240              		.cfi_endproc
+ 241              	.LFE131:
+ 243              		.section	.text.ST7789_SetAddressWindow,"ax",%progbits
+ 244              		.align	1
+ 245              		.syntax unified
+ 246              		.thumb
+ 247              		.thumb_func
+ 249              	ST7789_SetAddressWindow:
+ 250              	.LVL23:
+ 251              	.LFB134:
+  75:Core/Src/st7789.c **** 
+  76:Core/Src/st7789.c **** /**
+  77:Core/Src/st7789.c ****  * @brief Set the rotation direction of the display
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 7
+
+
+  78:Core/Src/st7789.c ****  * @param m -> rotation parameter(please refer it in st7789.h)
+  79:Core/Src/st7789.c ****  * @return none
+  80:Core/Src/st7789.c ****  */
+  81:Core/Src/st7789.c **** void ST7789_SetRotation(uint8_t m)
+  82:Core/Src/st7789.c **** {
+  83:Core/Src/st7789.c **** 	ST7789_WriteCommand(ST7789_MADCTL); // MADCTL
+  84:Core/Src/st7789.c **** 	switch (m)
+  85:Core/Src/st7789.c **** 	{
+  86:Core/Src/st7789.c **** 	case 0:
+  87:Core/Src/st7789.c **** 		ST7789_WriteSmallData(ST7789_MADCTL_MX | ST7789_MADCTL_MY | ST7789_MADCTL_RGB);
+  88:Core/Src/st7789.c **** 		break;
+  89:Core/Src/st7789.c **** 	case 1:
+  90:Core/Src/st7789.c **** 		ST7789_WriteSmallData(ST7789_MADCTL_MY | ST7789_MADCTL_MV | ST7789_MADCTL_RGB);
+  91:Core/Src/st7789.c **** 		break;
+  92:Core/Src/st7789.c **** 	case 2:
+  93:Core/Src/st7789.c **** 		ST7789_WriteSmallData(ST7789_MADCTL_RGB);
+  94:Core/Src/st7789.c **** 		break;
+  95:Core/Src/st7789.c **** 	case 3:
+  96:Core/Src/st7789.c **** 		ST7789_WriteSmallData(ST7789_MADCTL_MX | ST7789_MADCTL_MV | ST7789_MADCTL_RGB);
+  97:Core/Src/st7789.c **** 		break;
+  98:Core/Src/st7789.c **** 	default:
+  99:Core/Src/st7789.c **** 		break;
+ 100:Core/Src/st7789.c **** 	}
+ 101:Core/Src/st7789.c **** }
+ 102:Core/Src/st7789.c **** 
+ 103:Core/Src/st7789.c **** /**
+ 104:Core/Src/st7789.c ****  * @brief Set address of DisplayWindow
+ 105:Core/Src/st7789.c ****  * @param xi&yi -> coordinates of window
+ 106:Core/Src/st7789.c ****  * @return none
+ 107:Core/Src/st7789.c ****  */
+ 108:Core/Src/st7789.c **** static void ST7789_SetAddressWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+ 109:Core/Src/st7789.c **** {
+ 252              		.loc 1 109 1 is_stmt 1 view -0
+ 253              		.cfi_startproc
+ 254              		@ args = 0, pretend = 0, frame = 8
+ 255              		@ frame_needed = 0, uses_anonymous_args = 0
+ 256              		.loc 1 109 1 is_stmt 0 view .LVU38
+ 257 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 258              	.LCFI7:
+ 259              		.cfi_def_cfa_offset 24
+ 260              		.cfi_offset 4, -24
+ 261              		.cfi_offset 5, -20
+ 262              		.cfi_offset 6, -16
+ 263              		.cfi_offset 7, -12
+ 264              		.cfi_offset 8, -8
+ 265              		.cfi_offset 14, -4
+ 266 0004 82B0     		sub	sp, sp, #8
+ 267              	.LCFI8:
+ 268              		.cfi_def_cfa_offset 32
+ 269 0006 0746     		mov	r7, r0
+ 270 0008 0D46     		mov	r5, r1
+ 271 000a 1646     		mov	r6, r2
+ 272 000c 1C46     		mov	r4, r3
+ 110:Core/Src/st7789.c **** 	ST7789_Select();
+ 273              		.loc 1 110 2 is_stmt 1 view .LVU39
+ 274 000e DFF86C80 		ldr	r8, .L17
+ 275 0012 0022     		movs	r2, #0
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 8
+
+
+ 276              	.LVL24:
+ 277              		.loc 1 110 2 is_stmt 0 view .LVU40
+ 278 0014 0821     		movs	r1, #8
+ 279              	.LVL25:
+ 280              		.loc 1 110 2 view .LVU41
+ 281 0016 4046     		mov	r0, r8
+ 282              	.LVL26:
+ 283              		.loc 1 110 2 view .LVU42
+ 284 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 285              	.LVL27:
+ 111:Core/Src/st7789.c **** 	uint16_t x_start = x0 + X_SHIFT, x_end = x1 + X_SHIFT;
+ 286              		.loc 1 111 2 is_stmt 1 view .LVU43
+ 112:Core/Src/st7789.c **** 	uint16_t y_start = y0 + Y_SHIFT, y_end = y1 + Y_SHIFT;
+ 287              		.loc 1 112 2 view .LVU44
+ 113:Core/Src/st7789.c **** 
+ 114:Core/Src/st7789.c **** 	/* Column Address set */
+ 115:Core/Src/st7789.c **** 	ST7789_WriteCommand(ST7789_CASET);
+ 288              		.loc 1 115 2 view .LVU45
+ 289 001c 2A20     		movs	r0, #42
+ 290 001e FFF7FEFF 		bl	ST7789_WriteCommand
+ 291              	.LVL28:
+ 292              	.LBB3:
+ 116:Core/Src/st7789.c **** 	{
+ 117:Core/Src/st7789.c **** 		uint8_t data[] = {x_start >> 8, x_start & 0xFF, x_end >> 8, x_end & 0xFF};
+ 293              		.loc 1 117 3 view .LVU46
+ 294              		.loc 1 117 11 is_stmt 0 view .LVU47
+ 295 0022 3B0A     		lsrs	r3, r7, #8
+ 296 0024 8DF80430 		strb	r3, [sp, #4]
+ 297 0028 8DF80570 		strb	r7, [sp, #5]
+ 298 002c 330A     		lsrs	r3, r6, #8
+ 299 002e 8DF80630 		strb	r3, [sp, #6]
+ 300 0032 8DF80760 		strb	r6, [sp, #7]
+ 118:Core/Src/st7789.c **** 		ST7789_WriteData(data, sizeof(data));
+ 301              		.loc 1 118 3 is_stmt 1 view .LVU48
+ 302 0036 0421     		movs	r1, #4
+ 303 0038 0DEB0100 		add	r0, sp, r1
+ 304 003c FFF7FEFF 		bl	ST7789_WriteData
+ 305              	.LVL29:
+ 306              	.LBE3:
+ 119:Core/Src/st7789.c **** 	}
+ 120:Core/Src/st7789.c **** 
+ 121:Core/Src/st7789.c **** 	/* Row Address set */
+ 122:Core/Src/st7789.c **** 	ST7789_WriteCommand(ST7789_RASET);
+ 307              		.loc 1 122 2 view .LVU49
+ 308 0040 2B20     		movs	r0, #43
+ 309 0042 FFF7FEFF 		bl	ST7789_WriteCommand
+ 310              	.LVL30:
+ 311              	.LBB4:
+ 123:Core/Src/st7789.c **** 	{
+ 124:Core/Src/st7789.c **** 		uint8_t data[] = {y_start >> 8, y_start & 0xFF, y_end >> 8, y_end & 0xFF};
+ 312              		.loc 1 124 3 view .LVU50
+ 313              		.loc 1 124 11 is_stmt 0 view .LVU51
+ 314 0046 2B0A     		lsrs	r3, r5, #8
+ 315 0048 8DF80430 		strb	r3, [sp, #4]
+ 316 004c 8DF80550 		strb	r5, [sp, #5]
+ 317 0050 230A     		lsrs	r3, r4, #8
+ 318 0052 8DF80630 		strb	r3, [sp, #6]
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 9
+
+
+ 319 0056 8DF80740 		strb	r4, [sp, #7]
+ 125:Core/Src/st7789.c **** 		ST7789_WriteData(data, sizeof(data));
+ 320              		.loc 1 125 3 is_stmt 1 view .LVU52
+ 321 005a 0421     		movs	r1, #4
+ 322 005c 0DEB0100 		add	r0, sp, r1
+ 323 0060 FFF7FEFF 		bl	ST7789_WriteData
+ 324              	.LVL31:
+ 325              	.LBE4:
+ 126:Core/Src/st7789.c **** 	}
+ 127:Core/Src/st7789.c **** 	/* Write to RAM */
+ 128:Core/Src/st7789.c **** 	ST7789_WriteCommand(ST7789_RAMWR);
+ 326              		.loc 1 128 2 view .LVU53
+ 327 0064 2C20     		movs	r0, #44
+ 328 0066 FFF7FEFF 		bl	ST7789_WriteCommand
+ 329              	.LVL32:
+ 129:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 330              		.loc 1 129 2 view .LVU54
+ 331 006a 0122     		movs	r2, #1
+ 332 006c 0821     		movs	r1, #8
+ 333 006e 4046     		mov	r0, r8
+ 334 0070 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 335              	.LVL33:
+ 130:Core/Src/st7789.c **** }
+ 336              		.loc 1 130 1 is_stmt 0 view .LVU55
+ 337 0074 02B0     		add	sp, sp, #8
+ 338              	.LCFI9:
+ 339              		.cfi_def_cfa_offset 24
+ 340              		@ sp needed
+ 341 0076 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 342              	.LVL34:
+ 343              	.L18:
+ 344              		.loc 1 130 1 view .LVU56
+ 345 007a 00BF     		.align	2
+ 346              	.L17:
+ 347 007c 00040240 		.word	1073873920
+ 348              		.cfi_endproc
+ 349              	.LFE134:
+ 351              		.section	.text.ST7789_SetRotation,"ax",%progbits
+ 352              		.align	1
+ 353              		.global	ST7789_SetRotation
+ 354              		.syntax unified
+ 355              		.thumb
+ 356              		.thumb_func
+ 358              	ST7789_SetRotation:
+ 359              	.LVL35:
+ 360              	.LFB133:
+  82:Core/Src/st7789.c **** 	ST7789_WriteCommand(ST7789_MADCTL); // MADCTL
+ 361              		.loc 1 82 1 is_stmt 1 view -0
+ 362              		.cfi_startproc
+ 363              		@ args = 0, pretend = 0, frame = 0
+ 364              		@ frame_needed = 0, uses_anonymous_args = 0
+  82:Core/Src/st7789.c **** 	ST7789_WriteCommand(ST7789_MADCTL); // MADCTL
+ 365              		.loc 1 82 1 is_stmt 0 view .LVU58
+ 366 0000 10B5     		push	{r4, lr}
+ 367              	.LCFI10:
+ 368              		.cfi_def_cfa_offset 8
+ 369              		.cfi_offset 4, -8
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 10
+
+
+ 370              		.cfi_offset 14, -4
+ 371 0002 0446     		mov	r4, r0
+  83:Core/Src/st7789.c **** 	switch (m)
+ 372              		.loc 1 83 2 is_stmt 1 view .LVU59
+ 373 0004 3620     		movs	r0, #54
+ 374              	.LVL36:
+  83:Core/Src/st7789.c **** 	switch (m)
+ 375              		.loc 1 83 2 is_stmt 0 view .LVU60
+ 376 0006 FFF7FEFF 		bl	ST7789_WriteCommand
+ 377              	.LVL37:
+  84:Core/Src/st7789.c **** 	{
+ 378              		.loc 1 84 2 is_stmt 1 view .LVU61
+ 379 000a 032C     		cmp	r4, #3
+ 380 000c 06D8     		bhi	.L19
+ 381 000e DFE804F0 		tbb	[pc, r4]
+ 382              	.L22:
+ 383 0012 02       		.byte	(.L25-.L22)/2
+ 384 0013 06       		.byte	(.L24-.L22)/2
+ 385 0014 0A       		.byte	(.L23-.L22)/2
+ 386 0015 0E       		.byte	(.L21-.L22)/2
+ 387              		.p2align 1
+ 388              	.L25:
+  87:Core/Src/st7789.c **** 		break;
+ 389              		.loc 1 87 3 view .LVU62
+ 390 0016 C020     		movs	r0, #192
+ 391 0018 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 392              	.LVL38:
+  88:Core/Src/st7789.c **** 	case 1:
+ 393              		.loc 1 88 3 view .LVU63
+ 394              	.L19:
+ 101:Core/Src/st7789.c **** 
+ 395              		.loc 1 101 1 is_stmt 0 view .LVU64
+ 396 001c 10BD     		pop	{r4, pc}
+ 397              	.L24:
+  90:Core/Src/st7789.c **** 		break;
+ 398              		.loc 1 90 3 is_stmt 1 view .LVU65
+ 399 001e A020     		movs	r0, #160
+ 400 0020 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 401              	.LVL39:
+  91:Core/Src/st7789.c **** 	case 2:
+ 402              		.loc 1 91 3 view .LVU66
+ 403 0024 FAE7     		b	.L19
+ 404              	.L23:
+  93:Core/Src/st7789.c **** 		break;
+ 405              		.loc 1 93 3 view .LVU67
+ 406 0026 0020     		movs	r0, #0
+ 407 0028 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 408              	.LVL40:
+  94:Core/Src/st7789.c **** 	case 3:
+ 409              		.loc 1 94 3 view .LVU68
+ 410 002c F6E7     		b	.L19
+ 411              	.L21:
+  96:Core/Src/st7789.c **** 		break;
+ 412              		.loc 1 96 3 view .LVU69
+ 413 002e 6020     		movs	r0, #96
+ 414 0030 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 415              	.LVL41:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 11
+
+
+  97:Core/Src/st7789.c **** 	default:
+ 416              		.loc 1 97 3 view .LVU70
+ 101:Core/Src/st7789.c **** 
+ 417              		.loc 1 101 1 is_stmt 0 view .LVU71
+ 418 0034 F2E7     		b	.L19
+ 419              		.cfi_endproc
+ 420              	.LFE133:
+ 422              		.section	.text.ST7789_Init,"ax",%progbits
+ 423              		.align	1
+ 424              		.global	ST7789_Init
+ 425              		.syntax unified
+ 426              		.thumb
+ 427              		.thumb_func
+ 429              	ST7789_Init:
+ 430              	.LFB135:
+ 131:Core/Src/st7789.c **** 
+ 132:Core/Src/st7789.c **** /**
+ 133:Core/Src/st7789.c ****  * @brief Initialize ST7789 controller
+ 134:Core/Src/st7789.c ****  * @param none
+ 135:Core/Src/st7789.c ****  * @return none
+ 136:Core/Src/st7789.c ****  */
+ 137:Core/Src/st7789.c **** void ST7789_Init(void)
+ 138:Core/Src/st7789.c **** {
+ 431              		.loc 1 138 1 is_stmt 1 view -0
+ 432              		.cfi_startproc
+ 433              		@ args = 0, pretend = 0, frame = 0
+ 434              		@ frame_needed = 0, uses_anonymous_args = 0
+ 435 0000 08B5     		push	{r3, lr}
+ 436              	.LCFI11:
+ 437              		.cfi_def_cfa_offset 8
+ 438              		.cfi_offset 3, -8
+ 439              		.cfi_offset 14, -4
+ 139:Core/Src/st7789.c **** #ifdef USE_DMA
+ 140:Core/Src/st7789.c **** 	memset(disp_buf, 0, sizeof(disp_buf));
+ 141:Core/Src/st7789.c **** #endif
+ 142:Core/Src/st7789.c **** 	ST7789_WriteCommand(0x01);
+ 440              		.loc 1 142 2 view .LVU73
+ 441 0002 0120     		movs	r0, #1
+ 442 0004 FFF7FEFF 		bl	ST7789_WriteCommand
+ 443              	.LVL42:
+ 143:Core/Src/st7789.c **** 	HAL_Delay(120);
+ 444              		.loc 1 143 2 view .LVU74
+ 445 0008 7820     		movs	r0, #120
+ 446 000a FFF7FEFF 		bl	HAL_Delay
+ 447              	.LVL43:
+ 144:Core/Src/st7789.c **** 	ST7789_WriteCommand(0x11);
+ 448              		.loc 1 144 2 view .LVU75
+ 449 000e 1120     		movs	r0, #17
+ 450 0010 FFF7FEFF 		bl	ST7789_WriteCommand
+ 451              	.LVL44:
+ 145:Core/Src/st7789.c **** 	HAL_Delay(120);
+ 452              		.loc 1 145 2 view .LVU76
+ 453 0014 7820     		movs	r0, #120
+ 454 0016 FFF7FEFF 		bl	HAL_Delay
+ 455              	.LVL45:
+ 146:Core/Src/st7789.c **** 	ST7789_WriteCommand(0x36);
+ 456              		.loc 1 146 2 view .LVU77
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 12
+
+
+ 457 001a 3620     		movs	r0, #54
+ 458 001c FFF7FEFF 		bl	ST7789_WriteCommand
+ 459              	.LVL46:
+ 147:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x00);
+ 460              		.loc 1 147 2 view .LVU78
+ 461 0020 0020     		movs	r0, #0
+ 462 0022 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 463              	.LVL47:
+ 148:Core/Src/st7789.c **** 	ST7789_WriteCommand(0x3a);
+ 464              		.loc 1 148 2 view .LVU79
+ 465 0026 3A20     		movs	r0, #58
+ 466 0028 FFF7FEFF 		bl	ST7789_WriteCommand
+ 467              	.LVL48:
+ 149:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x55);
+ 468              		.loc 1 149 2 view .LVU80
+ 469 002c 5520     		movs	r0, #85
+ 470 002e FFF7FEFF 		bl	ST7789_WriteSmallData
+ 471              	.LVL49:
+ 150:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xb2);
+ 472              		.loc 1 150 2 view .LVU81
+ 473 0032 B220     		movs	r0, #178
+ 474 0034 FFF7FEFF 		bl	ST7789_WriteCommand
+ 475              	.LVL50:
+ 151:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x0c);
+ 476              		.loc 1 151 2 view .LVU82
+ 477 0038 0C20     		movs	r0, #12
+ 478 003a FFF7FEFF 		bl	ST7789_WriteSmallData
+ 479              	.LVL51:
+ 152:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x0c);
+ 480              		.loc 1 152 2 view .LVU83
+ 481 003e 0C20     		movs	r0, #12
+ 482 0040 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 483              	.LVL52:
+ 153:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x00);
+ 484              		.loc 1 153 2 view .LVU84
+ 485 0044 0020     		movs	r0, #0
+ 486 0046 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 487              	.LVL53:
+ 154:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x33);
+ 488              		.loc 1 154 2 view .LVU85
+ 489 004a 3320     		movs	r0, #51
+ 490 004c FFF7FEFF 		bl	ST7789_WriteSmallData
+ 491              	.LVL54:
+ 155:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x33);
+ 492              		.loc 1 155 2 view .LVU86
+ 493 0050 3320     		movs	r0, #51
+ 494 0052 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 495              	.LVL55:
+ 156:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xb7);
+ 496              		.loc 1 156 2 view .LVU87
+ 497 0056 B720     		movs	r0, #183
+ 498 0058 FFF7FEFF 		bl	ST7789_WriteCommand
+ 499              	.LVL56:
+ 157:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x35);
+ 500              		.loc 1 157 2 view .LVU88
+ 501 005c 3520     		movs	r0, #53
+ 502 005e FFF7FEFF 		bl	ST7789_WriteSmallData
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 13
+
+
+ 503              	.LVL57:
+ 158:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xbb);
+ 504              		.loc 1 158 2 view .LVU89
+ 505 0062 BB20     		movs	r0, #187
+ 506 0064 FFF7FEFF 		bl	ST7789_WriteCommand
+ 507              	.LVL58:
+ 159:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x20);
+ 508              		.loc 1 159 2 view .LVU90
+ 509 0068 2020     		movs	r0, #32
+ 510 006a FFF7FEFF 		bl	ST7789_WriteSmallData
+ 511              	.LVL59:
+ 160:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xc0);
+ 512              		.loc 1 160 2 view .LVU91
+ 513 006e C020     		movs	r0, #192
+ 514 0070 FFF7FEFF 		bl	ST7789_WriteCommand
+ 515              	.LVL60:
+ 161:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x2c);
+ 516              		.loc 1 161 2 view .LVU92
+ 517 0074 2C20     		movs	r0, #44
+ 518 0076 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 519              	.LVL61:
+ 162:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xc2);
+ 520              		.loc 1 162 2 view .LVU93
+ 521 007a C220     		movs	r0, #194
+ 522 007c FFF7FEFF 		bl	ST7789_WriteCommand
+ 523              	.LVL62:
+ 163:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x01);
+ 524              		.loc 1 163 2 view .LVU94
+ 525 0080 0120     		movs	r0, #1
+ 526 0082 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 527              	.LVL63:
+ 164:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xc3);
+ 528              		.loc 1 164 2 view .LVU95
+ 529 0086 C320     		movs	r0, #195
+ 530 0088 FFF7FEFF 		bl	ST7789_WriteCommand
+ 531              	.LVL64:
+ 165:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x0b);
+ 532              		.loc 1 165 2 view .LVU96
+ 533 008c 0B20     		movs	r0, #11
+ 534 008e FFF7FEFF 		bl	ST7789_WriteSmallData
+ 535              	.LVL65:
+ 166:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xc4);
+ 536              		.loc 1 166 2 view .LVU97
+ 537 0092 C420     		movs	r0, #196
+ 538 0094 FFF7FEFF 		bl	ST7789_WriteCommand
+ 539              	.LVL66:
+ 167:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x20);
+ 540              		.loc 1 167 2 view .LVU98
+ 541 0098 2020     		movs	r0, #32
+ 542 009a FFF7FEFF 		bl	ST7789_WriteSmallData
+ 543              	.LVL67:
+ 168:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xc6);
+ 544              		.loc 1 168 2 view .LVU99
+ 545 009e C620     		movs	r0, #198
+ 546 00a0 FFF7FEFF 		bl	ST7789_WriteCommand
+ 547              	.LVL68:
+ 169:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x0f);
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 14
+
+
+ 548              		.loc 1 169 2 view .LVU100
+ 549 00a4 0F20     		movs	r0, #15
+ 550 00a6 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 551              	.LVL69:
+ 170:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xd0);
+ 552              		.loc 1 170 2 view .LVU101
+ 553 00aa D020     		movs	r0, #208
+ 554 00ac FFF7FEFF 		bl	ST7789_WriteCommand
+ 555              	.LVL70:
+ 171:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0xa4);
+ 556              		.loc 1 171 2 view .LVU102
+ 557 00b0 A420     		movs	r0, #164
+ 558 00b2 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 559              	.LVL71:
+ 172:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0xa1);
+ 560              		.loc 1 172 2 view .LVU103
+ 561 00b6 A120     		movs	r0, #161
+ 562 00b8 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 563              	.LVL72:
+ 173:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xe0);
+ 564              		.loc 1 173 2 view .LVU104
+ 565 00bc E020     		movs	r0, #224
+ 566 00be FFF7FEFF 		bl	ST7789_WriteCommand
+ 567              	.LVL73:
+ 174:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0xd0);
+ 568              		.loc 1 174 2 view .LVU105
+ 569 00c2 D020     		movs	r0, #208
+ 570 00c4 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 571              	.LVL74:
+ 175:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x03);
+ 572              		.loc 1 175 2 view .LVU106
+ 573 00c8 0320     		movs	r0, #3
+ 574 00ca FFF7FEFF 		bl	ST7789_WriteSmallData
+ 575              	.LVL75:
+ 176:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x09);
+ 576              		.loc 1 176 2 view .LVU107
+ 577 00ce 0920     		movs	r0, #9
+ 578 00d0 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 579              	.LVL76:
+ 177:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x0e);
+ 580              		.loc 1 177 2 view .LVU108
+ 581 00d4 0E20     		movs	r0, #14
+ 582 00d6 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 583              	.LVL77:
+ 178:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x11);
+ 584              		.loc 1 178 2 view .LVU109
+ 585 00da 1120     		movs	r0, #17
+ 586 00dc FFF7FEFF 		bl	ST7789_WriteSmallData
+ 587              	.LVL78:
+ 179:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x3d);
+ 588              		.loc 1 179 2 view .LVU110
+ 589 00e0 3D20     		movs	r0, #61
+ 590 00e2 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 591              	.LVL79:
+ 180:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x47);
+ 592              		.loc 1 180 2 view .LVU111
+ 593 00e6 4720     		movs	r0, #71
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 15
+
+
+ 594 00e8 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 595              	.LVL80:
+ 181:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x55);
+ 596              		.loc 1 181 2 view .LVU112
+ 597 00ec 5520     		movs	r0, #85
+ 598 00ee FFF7FEFF 		bl	ST7789_WriteSmallData
+ 599              	.LVL81:
+ 182:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x53);
+ 600              		.loc 1 182 2 view .LVU113
+ 601 00f2 5320     		movs	r0, #83
+ 602 00f4 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 603              	.LVL82:
+ 183:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x1a);
+ 604              		.loc 1 183 2 view .LVU114
+ 605 00f8 1A20     		movs	r0, #26
+ 606 00fa FFF7FEFF 		bl	ST7789_WriteSmallData
+ 607              	.LVL83:
+ 184:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x16);
+ 608              		.loc 1 184 2 view .LVU115
+ 609 00fe 1620     		movs	r0, #22
+ 610 0100 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 611              	.LVL84:
+ 185:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x14);
+ 612              		.loc 1 185 2 view .LVU116
+ 613 0104 1420     		movs	r0, #20
+ 614 0106 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 615              	.LVL85:
+ 186:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x1f);
+ 616              		.loc 1 186 2 view .LVU117
+ 617 010a 1F20     		movs	r0, #31
+ 618 010c FFF7FEFF 		bl	ST7789_WriteSmallData
+ 619              	.LVL86:
+ 187:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x22);
+ 620              		.loc 1 187 2 view .LVU118
+ 621 0110 2220     		movs	r0, #34
+ 622 0112 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 623              	.LVL87:
+ 188:Core/Src/st7789.c **** 	ST7789_WriteCommand(0xe1);
+ 624              		.loc 1 188 2 view .LVU119
+ 625 0116 E120     		movs	r0, #225
+ 626 0118 FFF7FEFF 		bl	ST7789_WriteCommand
+ 627              	.LVL88:
+ 189:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0xd0);
+ 628              		.loc 1 189 2 view .LVU120
+ 629 011c D020     		movs	r0, #208
+ 630 011e FFF7FEFF 		bl	ST7789_WriteSmallData
+ 631              	.LVL89:
+ 190:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x02);
+ 632              		.loc 1 190 2 view .LVU121
+ 633 0122 0220     		movs	r0, #2
+ 634 0124 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 635              	.LVL90:
+ 191:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x08);
+ 636              		.loc 1 191 2 view .LVU122
+ 637 0128 0820     		movs	r0, #8
+ 638 012a FFF7FEFF 		bl	ST7789_WriteSmallData
+ 639              	.LVL91:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 16
+
+
+ 192:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x0d);
+ 640              		.loc 1 192 2 view .LVU123
+ 641 012e 0D20     		movs	r0, #13
+ 642 0130 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 643              	.LVL92:
+ 193:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x12);
+ 644              		.loc 1 193 2 view .LVU124
+ 645 0134 1220     		movs	r0, #18
+ 646 0136 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 647              	.LVL93:
+ 194:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x2c);
+ 648              		.loc 1 194 2 view .LVU125
+ 649 013a 2C20     		movs	r0, #44
+ 650 013c FFF7FEFF 		bl	ST7789_WriteSmallData
+ 651              	.LVL94:
+ 195:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x43);
+ 652              		.loc 1 195 2 view .LVU126
+ 653 0140 4320     		movs	r0, #67
+ 654 0142 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 655              	.LVL95:
+ 196:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x55);
+ 656              		.loc 1 196 2 view .LVU127
+ 657 0146 5520     		movs	r0, #85
+ 658 0148 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 659              	.LVL96:
+ 197:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x53);
+ 660              		.loc 1 197 2 view .LVU128
+ 661 014c 5320     		movs	r0, #83
+ 662 014e FFF7FEFF 		bl	ST7789_WriteSmallData
+ 663              	.LVL97:
+ 198:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x1e);
+ 664              		.loc 1 198 2 view .LVU129
+ 665 0152 1E20     		movs	r0, #30
+ 666 0154 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 667              	.LVL98:
+ 199:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x1b);
+ 668              		.loc 1 199 2 view .LVU130
+ 669 0158 1B20     		movs	r0, #27
+ 670 015a FFF7FEFF 		bl	ST7789_WriteSmallData
+ 671              	.LVL99:
+ 200:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x19);
+ 672              		.loc 1 200 2 view .LVU131
+ 673 015e 1920     		movs	r0, #25
+ 674 0160 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 675              	.LVL100:
+ 201:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x20);
+ 676              		.loc 1 201 2 view .LVU132
+ 677 0164 2020     		movs	r0, #32
+ 678 0166 FFF7FEFF 		bl	ST7789_WriteSmallData
+ 679              	.LVL101:
+ 202:Core/Src/st7789.c **** 	ST7789_WriteSmallData(0x22);
+ 680              		.loc 1 202 2 view .LVU133
+ 681 016a 2220     		movs	r0, #34
+ 682 016c FFF7FEFF 		bl	ST7789_WriteSmallData
+ 683              	.LVL102:
+ 203:Core/Src/st7789.c **** 	ST7789_WriteCommand(0x29);
+ 684              		.loc 1 203 2 view .LVU134
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 17
+
+
+ 685 0170 2920     		movs	r0, #41
+ 686 0172 FFF7FEFF 		bl	ST7789_WriteCommand
+ 687              	.LVL103:
+ 204:Core/Src/st7789.c **** 	ST7789_WriteCommand(0x38);
+ 688              		.loc 1 204 2 view .LVU135
+ 689 0176 3820     		movs	r0, #56
+ 690 0178 FFF7FEFF 		bl	ST7789_WriteCommand
+ 691              	.LVL104:
+ 205:Core/Src/st7789.c **** 	ST7789_SetRotation(2);
+ 692              		.loc 1 205 2 view .LVU136
+ 693 017c 0220     		movs	r0, #2
+ 694 017e FFF7FEFF 		bl	ST7789_SetRotation
+ 695              	.LVL105:
+ 206:Core/Src/st7789.c **** }
+ 696              		.loc 1 206 1 is_stmt 0 view .LVU137
+ 697 0182 08BD     		pop	{r3, pc}
+ 698              		.cfi_endproc
+ 699              	.LFE135:
+ 701              		.section	.text.ST7789_Fill_Color,"ax",%progbits
+ 702              		.align	1
+ 703              		.global	ST7789_Fill_Color
+ 704              		.syntax unified
+ 705              		.thumb
+ 706              		.thumb_func
+ 708              	ST7789_Fill_Color:
+ 709              	.LVL106:
+ 710              	.LFB136:
+ 207:Core/Src/st7789.c **** 
+ 208:Core/Src/st7789.c **** /**
+ 209:Core/Src/st7789.c ****  * @brief Fill the DisplayWindow with single color
+ 210:Core/Src/st7789.c ****  * @param color -> color to Fill with
+ 211:Core/Src/st7789.c ****  * @return none
+ 212:Core/Src/st7789.c ****  */
+ 213:Core/Src/st7789.c **** void ST7789_Fill_Color(uint16_t color)
+ 214:Core/Src/st7789.c **** {
+ 711              		.loc 1 214 1 is_stmt 1 view -0
+ 712              		.cfi_startproc
+ 713              		@ args = 0, pretend = 0, frame = 8
+ 714              		@ frame_needed = 0, uses_anonymous_args = 0
+ 715              		.loc 1 214 1 is_stmt 0 view .LVU139
+ 716 0000 70B5     		push	{r4, r5, r6, lr}
+ 717              	.LCFI12:
+ 718              		.cfi_def_cfa_offset 16
+ 719              		.cfi_offset 4, -16
+ 720              		.cfi_offset 5, -12
+ 721              		.cfi_offset 6, -8
+ 722              		.cfi_offset 14, -4
+ 723 0002 82B0     		sub	sp, sp, #8
+ 724              	.LCFI13:
+ 725              		.cfi_def_cfa_offset 24
+ 726 0004 0546     		mov	r5, r0
+ 215:Core/Src/st7789.c **** 	uint16_t i;
+ 727              		.loc 1 215 2 is_stmt 1 view .LVU140
+ 216:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(0, 0, ST7789_WIDTH - 1, ST7789_HEIGHT - 1);
+ 728              		.loc 1 216 2 view .LVU141
+ 729 0006 40F23F13 		movw	r3, #319
+ 730 000a EF22     		movs	r2, #239
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 18
+
+
+ 731 000c 0021     		movs	r1, #0
+ 732 000e 0846     		mov	r0, r1
+ 733              	.LVL107:
+ 734              		.loc 1 216 2 is_stmt 0 view .LVU142
+ 735 0010 FFF7FEFF 		bl	ST7789_SetAddressWindow
+ 736              	.LVL108:
+ 217:Core/Src/st7789.c **** 	ST7789_Select();
+ 737              		.loc 1 217 2 is_stmt 1 view .LVU143
+ 738 0014 0022     		movs	r2, #0
+ 739 0016 0821     		movs	r1, #8
+ 740 0018 0F48     		ldr	r0, .L36
+ 741 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 742              	.LVL109:
+ 218:Core/Src/st7789.c **** 
+ 219:Core/Src/st7789.c **** #ifdef USE_DMA
+ 220:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_HEIGHT / HOR_LEN; i++)
+ 221:Core/Src/st7789.c **** 	{
+ 222:Core/Src/st7789.c **** 		memset(disp_buf, color, sizeof(disp_buf));
+ 223:Core/Src/st7789.c **** 		ST7789_WriteData(disp_buf, sizeof(disp_buf));
+ 224:Core/Src/st7789.c **** 	}
+ 225:Core/Src/st7789.c **** #else
+ 226:Core/Src/st7789.c **** 	uint16_t j;
+ 743              		.loc 1 226 2 view .LVU144
+ 227:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_WIDTH; i++)
+ 744              		.loc 1 227 2 view .LVU145
+ 745              		.loc 1 227 9 is_stmt 0 view .LVU146
+ 746 001e 0026     		movs	r6, #0
+ 747              		.loc 1 227 2 view .LVU147
+ 748 0020 0FE0     		b	.L30
+ 749              	.LVL110:
+ 750              	.L31:
+ 751              	.LBB5:
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 229:Core/Src/st7789.c **** 		{
+ 230:Core/Src/st7789.c **** 			uint8_t data[] = {color >> 8, color & 0xFF};
+ 752              		.loc 1 230 4 is_stmt 1 discriminator 3 view .LVU148
+ 753              		.loc 1 230 12 is_stmt 0 discriminator 3 view .LVU149
+ 754 0022 2B0A     		lsrs	r3, r5, #8
+ 755 0024 8DF80430 		strb	r3, [sp, #4]
+ 756 0028 8DF80550 		strb	r5, [sp, #5]
+ 231:Core/Src/st7789.c **** 			ST7789_WriteData(data, sizeof(data));
+ 757              		.loc 1 231 4 is_stmt 1 discriminator 3 view .LVU150
+ 758 002c 0221     		movs	r1, #2
+ 759 002e 01A8     		add	r0, sp, #4
+ 760 0030 FFF7FEFF 		bl	ST7789_WriteData
+ 761              	.LVL111:
+ 762              	.LBE5:
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 763              		.loc 1 228 34 discriminator 3 view .LVU151
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 764              		.loc 1 228 35 is_stmt 0 discriminator 3 view .LVU152
+ 765 0034 0134     		adds	r4, r4, #1
+ 766              	.LVL112:
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 767              		.loc 1 228 35 discriminator 3 view .LVU153
+ 768 0036 A4B2     		uxth	r4, r4
+ 769              	.LVL113:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 19
+
+
+ 770              	.L32:
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 771              		.loc 1 228 15 is_stmt 1 discriminator 1 view .LVU154
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 772              		.loc 1 228 3 is_stmt 0 discriminator 1 view .LVU155
+ 773 0038 B4F5A07F 		cmp	r4, #320
+ 774 003c F1D3     		bcc	.L31
+ 227:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_WIDTH; i++)
+ 775              		.loc 1 227 32 is_stmt 1 discriminator 2 view .LVU156
+ 227:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_WIDTH; i++)
+ 776              		.loc 1 227 33 is_stmt 0 discriminator 2 view .LVU157
+ 777 003e 0136     		adds	r6, r6, #1
+ 778              	.LVL114:
+ 227:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_WIDTH; i++)
+ 779              		.loc 1 227 33 discriminator 2 view .LVU158
+ 780 0040 B6B2     		uxth	r6, r6
+ 781              	.LVL115:
+ 782              	.L30:
+ 227:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_WIDTH; i++)
+ 783              		.loc 1 227 14 is_stmt 1 discriminator 1 view .LVU159
+ 227:Core/Src/st7789.c **** 	for (i = 0; i < ST7789_WIDTH; i++)
+ 784              		.loc 1 227 2 is_stmt 0 discriminator 1 view .LVU160
+ 785 0042 EF2E     		cmp	r6, #239
+ 786 0044 01D8     		bhi	.L35
+ 228:Core/Src/st7789.c **** 		for (j = 0; j < ST7789_HEIGHT; j++)
+ 787              		.loc 1 228 10 view .LVU161
+ 788 0046 0024     		movs	r4, #0
+ 789 0048 F6E7     		b	.L32
+ 790              	.L35:
+ 232:Core/Src/st7789.c **** 		}
+ 233:Core/Src/st7789.c **** #endif
+ 234:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 791              		.loc 1 234 2 is_stmt 1 view .LVU162
+ 792 004a 0122     		movs	r2, #1
+ 793 004c 0821     		movs	r1, #8
+ 794 004e 0248     		ldr	r0, .L36
+ 795 0050 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 796              	.LVL116:
+ 235:Core/Src/st7789.c **** }
+ 797              		.loc 1 235 1 is_stmt 0 view .LVU163
+ 798 0054 02B0     		add	sp, sp, #8
+ 799              	.LCFI14:
+ 800              		.cfi_def_cfa_offset 16
+ 801              		@ sp needed
+ 802 0056 70BD     		pop	{r4, r5, r6, pc}
+ 803              	.LVL117:
+ 804              	.L37:
+ 805              		.loc 1 235 1 view .LVU164
+ 806              		.align	2
+ 807              	.L36:
+ 808 0058 00040240 		.word	1073873920
+ 809              		.cfi_endproc
+ 810              	.LFE136:
+ 812              		.section	.text.ST7789_DrawPixel,"ax",%progbits
+ 813              		.align	1
+ 814              		.global	ST7789_DrawPixel
+ 815              		.syntax unified
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 20
+
+
+ 816              		.thumb
+ 817              		.thumb_func
+ 819              	ST7789_DrawPixel:
+ 820              	.LVL118:
+ 821              	.LFB137:
+ 236:Core/Src/st7789.c **** 
+ 237:Core/Src/st7789.c **** /**
+ 238:Core/Src/st7789.c ****  * @brief Draw a Pixel
+ 239:Core/Src/st7789.c ****  * @param x&y -> coordinate to Draw
+ 240:Core/Src/st7789.c ****  * @param color -> color of the Pixel
+ 241:Core/Src/st7789.c ****  * @return none
+ 242:Core/Src/st7789.c ****  */
+ 243:Core/Src/st7789.c **** void ST7789_DrawPixel(uint16_t x, uint16_t y, uint16_t color)
+ 244:Core/Src/st7789.c **** {
+ 822              		.loc 1 244 1 is_stmt 1 view -0
+ 823              		.cfi_startproc
+ 824              		@ args = 0, pretend = 0, frame = 8
+ 825              		@ frame_needed = 0, uses_anonymous_args = 0
+ 245:Core/Src/st7789.c **** 	if ((x < 0) || (x >= ST7789_WIDTH) ||
+ 826              		.loc 1 245 2 view .LVU166
+ 827              		.loc 1 245 5 is_stmt 0 view .LVU167
+ 828 0000 EF28     		cmp	r0, #239
+ 829 0002 20D8     		bhi	.L43
+ 244:Core/Src/st7789.c **** 	if ((x < 0) || (x >= ST7789_WIDTH) ||
+ 830              		.loc 1 244 1 view .LVU168
+ 831 0004 10B5     		push	{r4, lr}
+ 832              	.LCFI15:
+ 833              		.cfi_def_cfa_offset 8
+ 834              		.cfi_offset 4, -8
+ 835              		.cfi_offset 14, -4
+ 836 0006 82B0     		sub	sp, sp, #8
+ 837              	.LCFI16:
+ 838              		.cfi_def_cfa_offset 16
+ 839 0008 1446     		mov	r4, r2
+ 246:Core/Src/st7789.c **** 		(y < 0) || (y >= ST7789_HEIGHT))
+ 840              		.loc 1 246 11 view .LVU169
+ 841 000a B1F5A07F 		cmp	r1, #320
+ 842 000e 01D3     		bcc	.L46
+ 843              	.LVL119:
+ 844              	.L38:
+ 247:Core/Src/st7789.c **** 		return;
+ 248:Core/Src/st7789.c **** 
+ 249:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x, y);
+ 250:Core/Src/st7789.c **** 	uint8_t data[] = {color >> 8, color & 0xFF};
+ 251:Core/Src/st7789.c **** 	ST7789_Select();
+ 252:Core/Src/st7789.c **** 	ST7789_WriteData(data, sizeof(data));
+ 253:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 254:Core/Src/st7789.c **** }
+ 845              		.loc 1 254 1 view .LVU170
+ 846 0010 02B0     		add	sp, sp, #8
+ 847              	.LCFI17:
+ 848              		.cfi_remember_state
+ 849              		.cfi_def_cfa_offset 8
+ 850              		@ sp needed
+ 851 0012 10BD     		pop	{r4, pc}
+ 852              	.LVL120:
+ 853              	.L46:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 21
+
+
+ 854              	.LCFI18:
+ 855              		.cfi_restore_state
+ 249:Core/Src/st7789.c **** 	uint8_t data[] = {color >> 8, color & 0xFF};
+ 856              		.loc 1 249 2 is_stmt 1 view .LVU171
+ 857 0014 0B46     		mov	r3, r1
+ 858 0016 0246     		mov	r2, r0
+ 859              	.LVL121:
+ 249:Core/Src/st7789.c **** 	uint8_t data[] = {color >> 8, color & 0xFF};
+ 860              		.loc 1 249 2 is_stmt 0 view .LVU172
+ 861 0018 FFF7FEFF 		bl	ST7789_SetAddressWindow
+ 862              	.LVL122:
+ 250:Core/Src/st7789.c **** 	ST7789_Select();
+ 863              		.loc 1 250 2 is_stmt 1 view .LVU173
+ 250:Core/Src/st7789.c **** 	ST7789_Select();
+ 864              		.loc 1 250 10 is_stmt 0 view .LVU174
+ 865 001c 230A     		lsrs	r3, r4, #8
+ 866 001e 8DF80430 		strb	r3, [sp, #4]
+ 867 0022 8DF80540 		strb	r4, [sp, #5]
+ 251:Core/Src/st7789.c **** 	ST7789_WriteData(data, sizeof(data));
+ 868              		.loc 1 251 2 is_stmt 1 view .LVU175
+ 869 0026 084C     		ldr	r4, .L47
+ 870 0028 0022     		movs	r2, #0
+ 871 002a 0821     		movs	r1, #8
+ 872 002c 2046     		mov	r0, r4
+ 873 002e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 874              	.LVL123:
+ 252:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 875              		.loc 1 252 2 view .LVU176
+ 876 0032 0221     		movs	r1, #2
+ 877 0034 01A8     		add	r0, sp, #4
+ 878 0036 FFF7FEFF 		bl	ST7789_WriteData
+ 879              	.LVL124:
+ 253:Core/Src/st7789.c **** }
+ 880              		.loc 1 253 2 view .LVU177
+ 881 003a 0122     		movs	r2, #1
+ 882 003c 0821     		movs	r1, #8
+ 883 003e 2046     		mov	r0, r4
+ 884 0040 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 885              	.LVL125:
+ 886 0044 E4E7     		b	.L38
+ 887              	.LVL126:
+ 888              	.L43:
+ 889              	.LCFI19:
+ 890              		.cfi_def_cfa_offset 0
+ 891              		.cfi_restore 4
+ 892              		.cfi_restore 14
+ 253:Core/Src/st7789.c **** }
+ 893              		.loc 1 253 2 is_stmt 0 view .LVU178
+ 894 0046 7047     		bx	lr
+ 895              	.L48:
+ 896              		.align	2
+ 897              	.L47:
+ 898 0048 00040240 		.word	1073873920
+ 899              		.cfi_endproc
+ 900              	.LFE137:
+ 902              		.section	.text.ST7789_Fill,"ax",%progbits
+ 903              		.align	1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 22
+
+
+ 904              		.global	ST7789_Fill
+ 905              		.syntax unified
+ 906              		.thumb
+ 907              		.thumb_func
+ 909              	ST7789_Fill:
+ 910              	.LVL127:
+ 911              	.LFB138:
+ 255:Core/Src/st7789.c **** 
+ 256:Core/Src/st7789.c **** /**
+ 257:Core/Src/st7789.c ****  * @brief Fill an Area with single color
+ 258:Core/Src/st7789.c ****  * @param xSta&ySta -> coordinate of the start point
+ 259:Core/Src/st7789.c ****  * @param xEnd&yEnd -> coordinate of the end point
+ 260:Core/Src/st7789.c ****  * @param color -> color to Fill with
+ 261:Core/Src/st7789.c ****  * @return none
+ 262:Core/Src/st7789.c ****  */
+ 263:Core/Src/st7789.c **** void ST7789_Fill(uint16_t xSta, uint16_t ySta, uint16_t xEnd, uint16_t yEnd, uint16_t color)
+ 264:Core/Src/st7789.c **** {
+ 912              		.loc 1 264 1 is_stmt 1 view -0
+ 913              		.cfi_startproc
+ 914              		@ args = 4, pretend = 0, frame = 8
+ 915              		@ frame_needed = 0, uses_anonymous_args = 0
+ 916              		.loc 1 264 1 is_stmt 0 view .LVU180
+ 917 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 918              	.LCFI20:
+ 919              		.cfi_def_cfa_offset 28
+ 920              		.cfi_offset 4, -28
+ 921              		.cfi_offset 5, -24
+ 922              		.cfi_offset 6, -20
+ 923              		.cfi_offset 7, -16
+ 924              		.cfi_offset 8, -12
+ 925              		.cfi_offset 9, -8
+ 926              		.cfi_offset 14, -4
+ 927 0004 83B0     		sub	sp, sp, #12
+ 928              	.LCFI21:
+ 929              		.cfi_def_cfa_offset 40
+ 930 0006 BDF82850 		ldrh	r5, [sp, #40]
+ 265:Core/Src/st7789.c **** 	if ((xEnd < 0) || (xEnd >= ST7789_WIDTH) ||
+ 931              		.loc 1 265 2 is_stmt 1 view .LVU181
+ 932              		.loc 1 265 5 is_stmt 0 view .LVU182
+ 933 000a EF2A     		cmp	r2, #239
+ 934 000c 06D8     		bhi	.L49
+ 935 000e 8146     		mov	r9, r0
+ 936 0010 0F46     		mov	r7, r1
+ 937 0012 1646     		mov	r6, r2
+ 938 0014 9846     		mov	r8, r3
+ 266:Core/Src/st7789.c **** 		(yEnd < 0) || (yEnd >= ST7789_HEIGHT))
+ 939              		.loc 1 266 14 view .LVU183
+ 940 0016 B3F5A07F 		cmp	r3, #320
+ 941 001a 02D3     		bcc	.L56
+ 942              	.LVL128:
+ 943              	.L49:
+ 267:Core/Src/st7789.c **** 		return;
+ 268:Core/Src/st7789.c **** 	ST7789_Select();
+ 269:Core/Src/st7789.c **** 	uint16_t i, j;
+ 270:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(xSta, ySta, xEnd, yEnd);
+ 271:Core/Src/st7789.c **** 	for (i = ySta; i <= yEnd; i++)
+ 272:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 23
+
+
+ 273:Core/Src/st7789.c **** 		{
+ 274:Core/Src/st7789.c **** 			uint8_t data[] = {color >> 8, color & 0xFF};
+ 275:Core/Src/st7789.c **** 			ST7789_WriteData(data, sizeof(data));
+ 276:Core/Src/st7789.c **** 		}
+ 277:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 278:Core/Src/st7789.c **** }
+ 944              		.loc 1 278 1 view .LVU184
+ 945 001c 03B0     		add	sp, sp, #12
+ 946              	.LCFI22:
+ 947              		.cfi_remember_state
+ 948              		.cfi_def_cfa_offset 28
+ 949              		@ sp needed
+ 950 001e BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 951              	.LVL129:
+ 952              	.L56:
+ 953              	.LCFI23:
+ 954              		.cfi_restore_state
+ 268:Core/Src/st7789.c **** 	uint16_t i, j;
+ 955              		.loc 1 268 2 is_stmt 1 view .LVU185
+ 956 0022 0022     		movs	r2, #0
+ 957              	.LVL130:
+ 268:Core/Src/st7789.c **** 	uint16_t i, j;
+ 958              		.loc 1 268 2 is_stmt 0 view .LVU186
+ 959 0024 0821     		movs	r1, #8
+ 960              	.LVL131:
+ 268:Core/Src/st7789.c **** 	uint16_t i, j;
+ 961              		.loc 1 268 2 view .LVU187
+ 962 0026 1248     		ldr	r0, .L58
+ 963              	.LVL132:
+ 268:Core/Src/st7789.c **** 	uint16_t i, j;
+ 964              		.loc 1 268 2 view .LVU188
+ 965 0028 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 966              	.LVL133:
+ 269:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(xSta, ySta, xEnd, yEnd);
+ 967              		.loc 1 269 2 is_stmt 1 view .LVU189
+ 270:Core/Src/st7789.c **** 	for (i = ySta; i <= yEnd; i++)
+ 968              		.loc 1 270 2 view .LVU190
+ 969 002c 4346     		mov	r3, r8
+ 970 002e 3246     		mov	r2, r6
+ 971 0030 3946     		mov	r1, r7
+ 972 0032 4846     		mov	r0, r9
+ 973 0034 FFF7FEFF 		bl	ST7789_SetAddressWindow
+ 974              	.LVL134:
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 975              		.loc 1 271 2 view .LVU191
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 976              		.loc 1 271 2 is_stmt 0 view .LVU192
+ 977 0038 0FE0     		b	.L51
+ 978              	.LVL135:
+ 979              	.L52:
+ 980              	.LBB6:
+ 274:Core/Src/st7789.c **** 			ST7789_WriteData(data, sizeof(data));
+ 981              		.loc 1 274 4 is_stmt 1 discriminator 3 view .LVU193
+ 274:Core/Src/st7789.c **** 			ST7789_WriteData(data, sizeof(data));
+ 982              		.loc 1 274 12 is_stmt 0 discriminator 3 view .LVU194
+ 983 003a 4FEA152C 		lsr	ip, r5, #8
+ 984 003e 8DF804C0 		strb	ip, [sp, #4]
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 24
+
+
+ 985 0042 8DF80550 		strb	r5, [sp, #5]
+ 275:Core/Src/st7789.c **** 		}
+ 986              		.loc 1 275 4 is_stmt 1 discriminator 3 view .LVU195
+ 987 0046 0221     		movs	r1, #2
+ 988 0048 01A8     		add	r0, sp, #4
+ 989 004a FFF7FEFF 		bl	ST7789_WriteData
+ 990              	.LVL136:
+ 991              	.LBE6:
+ 272:Core/Src/st7789.c **** 		{
+ 992              		.loc 1 272 29 discriminator 3 view .LVU196
+ 272:Core/Src/st7789.c **** 		{
+ 993              		.loc 1 272 30 is_stmt 0 discriminator 3 view .LVU197
+ 994 004e 0134     		adds	r4, r4, #1
+ 995              	.LVL137:
+ 272:Core/Src/st7789.c **** 		{
+ 996              		.loc 1 272 30 discriminator 3 view .LVU198
+ 997 0050 A4B2     		uxth	r4, r4
+ 998              	.LVL138:
+ 999              	.L53:
+ 272:Core/Src/st7789.c **** 		{
+ 1000              		.loc 1 272 18 is_stmt 1 discriminator 1 view .LVU199
+ 272:Core/Src/st7789.c **** 		{
+ 1001              		.loc 1 272 3 is_stmt 0 discriminator 1 view .LVU200
+ 1002 0052 B442     		cmp	r4, r6
+ 1003 0054 F1D9     		bls	.L52
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 1004              		.loc 1 271 28 is_stmt 1 discriminator 2 view .LVU201
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 1005              		.loc 1 271 29 is_stmt 0 discriminator 2 view .LVU202
+ 1006 0056 0137     		adds	r7, r7, #1
+ 1007              	.LVL139:
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 1008              		.loc 1 271 29 discriminator 2 view .LVU203
+ 1009 0058 BFB2     		uxth	r7, r7
+ 1010              	.LVL140:
+ 1011              	.L51:
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 1012              		.loc 1 271 17 is_stmt 1 discriminator 1 view .LVU204
+ 271:Core/Src/st7789.c **** 		for (j = xSta; j <= xEnd; j++)
+ 1013              		.loc 1 271 2 is_stmt 0 discriminator 1 view .LVU205
+ 1014 005a 4745     		cmp	r7, r8
+ 1015 005c 01D8     		bhi	.L57
+ 272:Core/Src/st7789.c **** 		{
+ 1016              		.loc 1 272 10 view .LVU206
+ 1017 005e 4C46     		mov	r4, r9
+ 1018 0060 F7E7     		b	.L53
+ 1019              	.L57:
+ 277:Core/Src/st7789.c **** }
+ 1020              		.loc 1 277 2 is_stmt 1 view .LVU207
+ 1021 0062 0122     		movs	r2, #1
+ 1022 0064 0821     		movs	r1, #8
+ 1023 0066 0248     		ldr	r0, .L58
+ 1024 0068 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1025              	.LVL141:
+ 1026 006c D6E7     		b	.L49
+ 1027              	.L59:
+ 1028 006e 00BF     		.align	2
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 25
+
+
+ 1029              	.L58:
+ 1030 0070 00040240 		.word	1073873920
+ 1031              		.cfi_endproc
+ 1032              	.LFE138:
+ 1034              		.section	.text.ST7789_DrawPixel_4px,"ax",%progbits
+ 1035              		.align	1
+ 1036              		.global	ST7789_DrawPixel_4px
+ 1037              		.syntax unified
+ 1038              		.thumb
+ 1039              		.thumb_func
+ 1041              	ST7789_DrawPixel_4px:
+ 1042              	.LVL142:
+ 1043              	.LFB139:
+ 279:Core/Src/st7789.c **** 
+ 280:Core/Src/st7789.c **** /**
+ 281:Core/Src/st7789.c ****  * @brief Draw a big Pixel at a point
+ 282:Core/Src/st7789.c ****  * @param x&y -> coordinate of the point
+ 283:Core/Src/st7789.c ****  * @param color -> color of the Pixel
+ 284:Core/Src/st7789.c ****  * @return none
+ 285:Core/Src/st7789.c ****  */
+ 286:Core/Src/st7789.c **** void ST7789_DrawPixel_4px(uint16_t x, uint16_t y, uint16_t color)
+ 287:Core/Src/st7789.c **** {
+ 1044              		.loc 1 287 1 view -0
+ 1045              		.cfi_startproc
+ 1046              		@ args = 0, pretend = 0, frame = 0
+ 1047              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1048              		.loc 1 287 1 is_stmt 0 view .LVU209
+ 1049 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1050              	.LCFI24:
+ 1051              		.cfi_def_cfa_offset 24
+ 1052              		.cfi_offset 4, -24
+ 1053              		.cfi_offset 5, -20
+ 1054              		.cfi_offset 6, -16
+ 1055              		.cfi_offset 7, -12
+ 1056              		.cfi_offset 8, -8
+ 1057              		.cfi_offset 14, -4
+ 1058 0004 82B0     		sub	sp, sp, #8
+ 1059              	.LCFI25:
+ 1060              		.cfi_def_cfa_offset 32
+ 288:Core/Src/st7789.c **** 	if ((x <= 0) || (x > ST7789_WIDTH) ||
+ 1061              		.loc 1 288 2 is_stmt 1 view .LVU210
+ 1062              		.loc 1 288 15 is_stmt 0 view .LVU211
+ 1063 0006 451E     		subs	r5, r0, #1
+ 1064 0008 ADB2     		uxth	r5, r5
+ 1065              		.loc 1 288 5 view .LVU212
+ 1066 000a EF2D     		cmp	r5, #239
+ 1067 000c 06D8     		bhi	.L60
+ 1068 000e 0746     		mov	r7, r0
+ 1069 0010 0C46     		mov	r4, r1
+ 1070 0012 1646     		mov	r6, r2
+ 1071              		.loc 1 288 37 discriminator 1 view .LVU213
+ 1072 0014 11B1     		cbz	r1, .L60
+ 289:Core/Src/st7789.c **** 		(y <= 0) || (y > ST7789_HEIGHT))
+ 1073              		.loc 1 289 12 view .LVU214
+ 1074 0016 B1F5A07F 		cmp	r1, #320
+ 1075 001a 02D9     		bls	.L63
+ 1076              	.LVL143:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 26
+
+
+ 1077              	.L60:
+ 290:Core/Src/st7789.c **** 		return;
+ 291:Core/Src/st7789.c **** 	ST7789_Select();
+ 292:Core/Src/st7789.c **** 	ST7789_Fill(x - 1, y - 1, x + 1, y + 1, color);
+ 293:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 294:Core/Src/st7789.c **** }
+ 1078              		.loc 1 294 1 view .LVU215
+ 1079 001c 02B0     		add	sp, sp, #8
+ 1080              	.LCFI26:
+ 1081              		.cfi_remember_state
+ 1082              		.cfi_def_cfa_offset 24
+ 1083              		@ sp needed
+ 1084 001e BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1085              	.LVL144:
+ 1086              	.L63:
+ 1087              	.LCFI27:
+ 1088              		.cfi_restore_state
+ 291:Core/Src/st7789.c **** 	ST7789_Fill(x - 1, y - 1, x + 1, y + 1, color);
+ 1089              		.loc 1 291 2 is_stmt 1 view .LVU216
+ 1090 0022 DFF82C80 		ldr	r8, .L64
+ 1091 0026 0022     		movs	r2, #0
+ 1092              	.LVL145:
+ 291:Core/Src/st7789.c **** 	ST7789_Fill(x - 1, y - 1, x + 1, y + 1, color);
+ 1093              		.loc 1 291 2 is_stmt 0 view .LVU217
+ 1094 0028 0821     		movs	r1, #8
+ 1095              	.LVL146:
+ 291:Core/Src/st7789.c **** 	ST7789_Fill(x - 1, y - 1, x + 1, y + 1, color);
+ 1096              		.loc 1 291 2 view .LVU218
+ 1097 002a 4046     		mov	r0, r8
+ 1098              	.LVL147:
+ 291:Core/Src/st7789.c **** 	ST7789_Fill(x - 1, y - 1, x + 1, y + 1, color);
+ 1099              		.loc 1 291 2 view .LVU219
+ 1100 002c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1101              	.LVL148:
+ 292:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1102              		.loc 1 292 2 is_stmt 1 view .LVU220
+ 1103 0030 631C     		adds	r3, r4, #1
+ 1104 0032 7A1C     		adds	r2, r7, #1
+ 1105 0034 611E     		subs	r1, r4, #1
+ 1106 0036 0096     		str	r6, [sp]
+ 1107 0038 9BB2     		uxth	r3, r3
+ 1108 003a 92B2     		uxth	r2, r2
+ 1109 003c 89B2     		uxth	r1, r1
+ 1110 003e 2846     		mov	r0, r5
+ 1111 0040 FFF7FEFF 		bl	ST7789_Fill
+ 1112              	.LVL149:
+ 293:Core/Src/st7789.c **** }
+ 1113              		.loc 1 293 2 view .LVU221
+ 1114 0044 0122     		movs	r2, #1
+ 1115 0046 0821     		movs	r1, #8
+ 1116 0048 4046     		mov	r0, r8
+ 1117 004a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1118              	.LVL150:
+ 1119 004e E5E7     		b	.L60
+ 1120              	.L65:
+ 1121              		.align	2
+ 1122              	.L64:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 27
+
+
+ 1123 0050 00040240 		.word	1073873920
+ 1124              		.cfi_endproc
+ 1125              	.LFE139:
+ 1127              		.section	.text.ST7789_DrawLine,"ax",%progbits
+ 1128              		.align	1
+ 1129              		.global	ST7789_DrawLine
+ 1130              		.syntax unified
+ 1131              		.thumb
+ 1132              		.thumb_func
+ 1134              	ST7789_DrawLine:
+ 1135              	.LVL151:
+ 1136              	.LFB140:
+ 295:Core/Src/st7789.c **** 
+ 296:Core/Src/st7789.c **** /**
+ 297:Core/Src/st7789.c ****  * @brief Draw a line with single color
+ 298:Core/Src/st7789.c ****  * @param x1&y1 -> coordinate of the start point
+ 299:Core/Src/st7789.c ****  * @param x2&y2 -> coordinate of the end point
+ 300:Core/Src/st7789.c ****  * @param color -> color of the line to Draw
+ 301:Core/Src/st7789.c ****  * @return none
+ 302:Core/Src/st7789.c ****  */
+ 303:Core/Src/st7789.c **** void ST7789_DrawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,
+ 304:Core/Src/st7789.c **** 					 uint16_t color)
+ 305:Core/Src/st7789.c **** {
+ 1137              		.loc 1 305 1 view -0
+ 1138              		.cfi_startproc
+ 1139              		@ args = 4, pretend = 0, frame = 8
+ 1140              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1141              		.loc 1 305 1 is_stmt 0 view .LVU223
+ 1142 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1143              	.LCFI28:
+ 1144              		.cfi_def_cfa_offset 36
+ 1145              		.cfi_offset 4, -36
+ 1146              		.cfi_offset 5, -32
+ 1147              		.cfi_offset 6, -28
+ 1148              		.cfi_offset 7, -24
+ 1149              		.cfi_offset 8, -20
+ 1150              		.cfi_offset 9, -16
+ 1151              		.cfi_offset 10, -12
+ 1152              		.cfi_offset 11, -8
+ 1153              		.cfi_offset 14, -4
+ 1154 0004 83B0     		sub	sp, sp, #12
+ 1155              	.LCFI29:
+ 1156              		.cfi_def_cfa_offset 48
+ 1157 0006 0F46     		mov	r7, r1
+ 1158 0008 1646     		mov	r6, r2
+ 1159 000a 1D46     		mov	r5, r3
+ 1160 000c BDF830B0 		ldrh	fp, [sp, #48]
+ 306:Core/Src/st7789.c **** 	uint16_t swap;
+ 1161              		.loc 1 306 2 is_stmt 1 view .LVU224
+ 307:Core/Src/st7789.c **** 	uint16_t steep = ABS(y1 - y0) > ABS(x1 - x0);
+ 1162              		.loc 1 307 2 view .LVU225
+ 1163              		.loc 1 307 19 is_stmt 0 view .LVU226
+ 1164 0010 A3EB0108 		sub	r8, r3, r1
+ 1165 0014 B8F1000F 		cmp	r8, #0
+ 1166 0018 B8BF     		it	lt
+ 1167 001a C8F10008 		rsblt	r8, r8, #0
+ 1168              		.loc 1 307 34 view .LVU227
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 28
+
+
+ 1169 001e A2EB0009 		sub	r9, r2, r0
+ 1170 0022 B9F1000F 		cmp	r9, #0
+ 1171 0026 B8BF     		it	lt
+ 1172 0028 C9F10009 		rsblt	r9, r9, #0
+ 1173              	.LVL152:
+ 308:Core/Src/st7789.c **** 	if (steep)
+ 1174              		.loc 1 308 2 is_stmt 1 view .LVU228
+ 1175              		.loc 1 308 5 is_stmt 0 view .LVU229
+ 1176 002c C845     		cmp	r8, r9
+ 1177 002e 03DC     		bgt	.L67
+ 1178 0030 1546     		mov	r5, r2
+ 1179 0032 1E46     		mov	r6, r3
+ 1180 0034 0746     		mov	r7, r0
+ 1181 0036 0846     		mov	r0, r1
+ 1182              	.LVL153:
+ 1183              	.L67:
+ 309:Core/Src/st7789.c **** 	{
+ 310:Core/Src/st7789.c **** 		swap = x0;
+ 311:Core/Src/st7789.c **** 		x0 = y0;
+ 312:Core/Src/st7789.c **** 		y0 = swap;
+ 313:Core/Src/st7789.c **** 
+ 314:Core/Src/st7789.c **** 		swap = x1;
+ 315:Core/Src/st7789.c **** 		x1 = y1;
+ 316:Core/Src/st7789.c **** 		y1 = swap;
+ 317:Core/Src/st7789.c **** 		//_swap_int16_t(x0, y0);
+ 318:Core/Src/st7789.c **** 		//_swap_int16_t(x1, y1);
+ 319:Core/Src/st7789.c **** 	}
+ 320:Core/Src/st7789.c **** 
+ 321:Core/Src/st7789.c **** 	if (x0 > x1)
+ 1184              		.loc 1 321 2 is_stmt 1 view .LVU230
+ 1185              		.loc 1 321 5 is_stmt 0 view .LVU231
+ 1186 0038 AF42     		cmp	r7, r5
+ 1187 003a 05D8     		bhi	.L68
+ 1188 003c 3346     		mov	r3, r6
+ 1189 003e 0646     		mov	r6, r0
+ 1190              	.LVL154:
+ 1191              		.loc 1 321 5 view .LVU232
+ 1192 0040 1846     		mov	r0, r3
+ 1193              	.LVL155:
+ 1194              		.loc 1 321 5 view .LVU233
+ 1195 0042 2B46     		mov	r3, r5
+ 1196 0044 3D46     		mov	r5, r7
+ 1197              	.LVL156:
+ 1198              		.loc 1 321 5 view .LVU234
+ 1199 0046 1F46     		mov	r7, r3
+ 1200              	.LVL157:
+ 1201              	.L68:
+ 322:Core/Src/st7789.c **** 	{
+ 323:Core/Src/st7789.c **** 		swap = x0;
+ 324:Core/Src/st7789.c **** 		x0 = x1;
+ 325:Core/Src/st7789.c **** 		x1 = swap;
+ 326:Core/Src/st7789.c **** 
+ 327:Core/Src/st7789.c **** 		swap = y0;
+ 328:Core/Src/st7789.c **** 		y0 = y1;
+ 329:Core/Src/st7789.c **** 		y1 = swap;
+ 330:Core/Src/st7789.c **** 		//_swap_int16_t(x0, x1);
+ 331:Core/Src/st7789.c **** 		//_swap_int16_t(y0, y1);
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 29
+
+
+ 332:Core/Src/st7789.c **** 	}
+ 333:Core/Src/st7789.c **** 
+ 334:Core/Src/st7789.c **** 	int16_t dx, dy;
+ 1202              		.loc 1 334 2 is_stmt 1 view .LVU235
+ 335:Core/Src/st7789.c **** 	dx = x1 - x0;
+ 1203              		.loc 1 335 2 view .LVU236
+ 1204              		.loc 1 335 10 is_stmt 0 view .LVU237
+ 1205 0048 7C1B     		subs	r4, r7, r5
+ 1206 004a A3B2     		uxth	r3, r4
+ 1207 004c 0093     		str	r3, [sp]
+ 1208              	.LVL158:
+ 336:Core/Src/st7789.c **** 	dy = ABS(y1 - y0);
+ 1209              		.loc 1 336 2 is_stmt 1 view .LVU238
+ 1210              		.loc 1 336 7 is_stmt 0 view .LVU239
+ 1211 004e A0EB060A 		sub	r10, r0, r6
+ 1212 0052 BAF1000F 		cmp	r10, #0
+ 1213 0056 B8BF     		it	lt
+ 1214 0058 CAF1000A 		rsblt	r10, r10, #0
+ 1215              	.LVL159:
+ 337:Core/Src/st7789.c **** 
+ 338:Core/Src/st7789.c **** 	int16_t err = dx / 2;
+ 1216              		.loc 1 338 2 is_stmt 1 view .LVU240
+ 1217              		.loc 1 338 10 is_stmt 0 view .LVU241
+ 1218 005c C4F3C033 		ubfx	r3, r4, #15, #1
+ 1219 0060 03FA84F4 		sxtah	r4, r3, r4
+ 1220              	.LVL160:
+ 1221              		.loc 1 338 10 view .LVU242
+ 1222 0064 6410     		asrs	r4, r4, #1
+ 1223              	.LVL161:
+ 339:Core/Src/st7789.c **** 	int16_t ystep;
+ 1224              		.loc 1 339 2 is_stmt 1 view .LVU243
+ 340:Core/Src/st7789.c **** 
+ 341:Core/Src/st7789.c **** 	if (y0 < y1)
+ 1225              		.loc 1 341 2 view .LVU244
+ 1226              		.loc 1 341 5 is_stmt 0 view .LVU245
+ 1227 0066 8642     		cmp	r6, r0
+ 1228 0068 21D3     		bcc	.L69
+ 342:Core/Src/st7789.c **** 	{
+ 343:Core/Src/st7789.c **** 		ystep = 1;
+ 344:Core/Src/st7789.c **** 	}
+ 345:Core/Src/st7789.c **** 	else
+ 346:Core/Src/st7789.c **** 	{
+ 347:Core/Src/st7789.c **** 		ystep = -1;
+ 1229              		.loc 1 347 9 view .LVU246
+ 1230 006a 4FF0FF33 		mov	r3, #-1
+ 1231 006e 0193     		str	r3, [sp, #4]
+ 1232 0070 0CE0     		b	.L74
+ 1233              	.LVL162:
+ 1234              	.L71:
+ 348:Core/Src/st7789.c **** 	}
+ 349:Core/Src/st7789.c **** 
+ 350:Core/Src/st7789.c **** 	for (; x0 <= x1; x0++)
+ 351:Core/Src/st7789.c **** 	{
+ 352:Core/Src/st7789.c **** 		if (steep)
+ 353:Core/Src/st7789.c **** 		{
+ 354:Core/Src/st7789.c **** 			ST7789_DrawPixel(y0, x0, color);
+ 355:Core/Src/st7789.c **** 		}
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 30
+
+
+ 356:Core/Src/st7789.c **** 		else
+ 357:Core/Src/st7789.c **** 		{
+ 358:Core/Src/st7789.c **** 			ST7789_DrawPixel(x0, y0, color);
+ 1235              		.loc 1 358 4 is_stmt 1 view .LVU247
+ 1236 0072 5A46     		mov	r2, fp
+ 1237 0074 3146     		mov	r1, r6
+ 1238 0076 2846     		mov	r0, r5
+ 1239 0078 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1240              	.LVL163:
+ 1241              	.L72:
+ 359:Core/Src/st7789.c **** 		}
+ 360:Core/Src/st7789.c **** 		err -= dy;
+ 1242              		.loc 1 360 3 view .LVU248
+ 1243              		.loc 1 360 7 is_stmt 0 view .LVU249
+ 1244 007c A4EB0A04 		sub	r4, r4, r10
+ 1245              	.LVL164:
+ 1246              		.loc 1 360 7 view .LVU250
+ 1247 0080 A3B2     		uxth	r3, r4
+ 1248 0082 24B2     		sxth	r4, r4
+ 1249              	.LVL165:
+ 361:Core/Src/st7789.c **** 		if (err < 0)
+ 1250              		.loc 1 361 3 is_stmt 1 view .LVU251
+ 1251              		.loc 1 361 6 is_stmt 0 view .LVU252
+ 1252 0084 002C     		cmp	r4, #0
+ 1253 0086 0BDB     		blt	.L77
+ 1254              	.L73:
+ 350:Core/Src/st7789.c **** 	{
+ 1255              		.loc 1 350 19 is_stmt 1 view .LVU253
+ 350:Core/Src/st7789.c **** 	{
+ 1256              		.loc 1 350 21 is_stmt 0 view .LVU254
+ 1257 0088 0135     		adds	r5, r5, #1
+ 1258              	.LVL166:
+ 350:Core/Src/st7789.c **** 	{
+ 1259              		.loc 1 350 21 view .LVU255
+ 1260 008a ADB2     		uxth	r5, r5
+ 1261              	.LVL167:
+ 1262              	.L74:
+ 350:Core/Src/st7789.c **** 	{
+ 1263              		.loc 1 350 9 is_stmt 1 discriminator 1 view .LVU256
+ 350:Core/Src/st7789.c **** 	{
+ 1264              		.loc 1 350 2 is_stmt 0 discriminator 1 view .LVU257
+ 1265 008c BD42     		cmp	r5, r7
+ 1266 008e 11D8     		bhi	.L78
+ 352:Core/Src/st7789.c **** 		{
+ 1267              		.loc 1 352 3 is_stmt 1 view .LVU258
+ 352:Core/Src/st7789.c **** 		{
+ 1268              		.loc 1 352 6 is_stmt 0 view .LVU259
+ 1269 0090 C845     		cmp	r8, r9
+ 1270 0092 EEDD     		ble	.L71
+ 354:Core/Src/st7789.c **** 		}
+ 1271              		.loc 1 354 4 is_stmt 1 view .LVU260
+ 1272 0094 5A46     		mov	r2, fp
+ 1273 0096 2946     		mov	r1, r5
+ 1274 0098 3046     		mov	r0, r6
+ 1275 009a FFF7FEFF 		bl	ST7789_DrawPixel
+ 1276              	.LVL168:
+ 1277 009e EDE7     		b	.L72
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 31
+
+
+ 1278              	.L77:
+ 362:Core/Src/st7789.c **** 		{
+ 363:Core/Src/st7789.c **** 			y0 += ystep;
+ 1279              		.loc 1 363 4 view .LVU261
+ 1280              		.loc 1 363 7 is_stmt 0 view .LVU262
+ 1281 00a0 019A     		ldr	r2, [sp, #4]
+ 1282 00a2 1644     		add	r6, r6, r2
+ 1283              	.LVL169:
+ 1284              		.loc 1 363 7 view .LVU263
+ 1285 00a4 B6B2     		uxth	r6, r6
+ 1286              	.LVL170:
+ 364:Core/Src/st7789.c **** 			err += dx;
+ 1287              		.loc 1 364 4 is_stmt 1 view .LVU264
+ 1288              		.loc 1 364 8 is_stmt 0 view .LVU265
+ 1289 00a6 009A     		ldr	r2, [sp]
+ 1290 00a8 1344     		add	r3, r3, r2
+ 1291 00aa 1CB2     		sxth	r4, r3
+ 1292              	.LVL171:
+ 1293              		.loc 1 364 8 view .LVU266
+ 1294 00ac ECE7     		b	.L73
+ 1295              	.LVL172:
+ 1296              	.L69:
+ 343:Core/Src/st7789.c **** 	}
+ 1297              		.loc 1 343 9 view .LVU267
+ 1298 00ae 0123     		movs	r3, #1
+ 1299 00b0 0193     		str	r3, [sp, #4]
+ 1300 00b2 EBE7     		b	.L74
+ 1301              	.LVL173:
+ 1302              	.L78:
+ 365:Core/Src/st7789.c **** 		}
+ 366:Core/Src/st7789.c **** 	}
+ 367:Core/Src/st7789.c **** }
+ 1303              		.loc 1 367 1 view .LVU268
+ 1304 00b4 03B0     		add	sp, sp, #12
+ 1305              	.LCFI30:
+ 1306              		.cfi_def_cfa_offset 36
+ 1307              	.LVL174:
+ 1308              		.loc 1 367 1 view .LVU269
+ 1309              		@ sp needed
+ 1310 00b6 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1311              		.loc 1 367 1 view .LVU270
+ 1312              		.cfi_endproc
+ 1313              	.LFE140:
+ 1315              		.section	.text.ST7789_DrawRectangle,"ax",%progbits
+ 1316              		.align	1
+ 1317              		.global	ST7789_DrawRectangle
+ 1318              		.syntax unified
+ 1319              		.thumb
+ 1320              		.thumb_func
+ 1322              	ST7789_DrawRectangle:
+ 1323              	.LVL175:
+ 1324              	.LFB141:
+ 368:Core/Src/st7789.c **** 
+ 369:Core/Src/st7789.c **** /**
+ 370:Core/Src/st7789.c ****  * @brief Draw a Rectangle with single color
+ 371:Core/Src/st7789.c ****  * @param xi&yi -> 2 coordinates of 2 top points.
+ 372:Core/Src/st7789.c ****  * @param color -> color of the Rectangle line
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 32
+
+
+ 373:Core/Src/st7789.c ****  * @return none
+ 374:Core/Src/st7789.c ****  */
+ 375:Core/Src/st7789.c **** void ST7789_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
+ 376:Core/Src/st7789.c **** {
+ 1325              		.loc 1 376 1 is_stmt 1 view -0
+ 1326              		.cfi_startproc
+ 1327              		@ args = 4, pretend = 0, frame = 0
+ 1328              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1329              		.loc 1 376 1 is_stmt 0 view .LVU272
+ 1330 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 1331              	.LCFI31:
+ 1332              		.cfi_def_cfa_offset 28
+ 1333              		.cfi_offset 4, -28
+ 1334              		.cfi_offset 5, -24
+ 1335              		.cfi_offset 6, -20
+ 1336              		.cfi_offset 7, -16
+ 1337              		.cfi_offset 8, -12
+ 1338              		.cfi_offset 9, -8
+ 1339              		.cfi_offset 14, -4
+ 1340 0004 83B0     		sub	sp, sp, #12
+ 1341              	.LCFI32:
+ 1342              		.cfi_def_cfa_offset 40
+ 1343 0006 0746     		mov	r7, r0
+ 1344 0008 0D46     		mov	r5, r1
+ 1345 000a 1446     		mov	r4, r2
+ 1346 000c 1E46     		mov	r6, r3
+ 1347 000e BDF82880 		ldrh	r8, [sp, #40]
+ 377:Core/Src/st7789.c **** 	ST7789_Select();
+ 1348              		.loc 1 377 2 is_stmt 1 view .LVU273
+ 1349 0012 DFF85C90 		ldr	r9, .L81
+ 1350 0016 0022     		movs	r2, #0
+ 1351              	.LVL176:
+ 1352              		.loc 1 377 2 is_stmt 0 view .LVU274
+ 1353 0018 0821     		movs	r1, #8
+ 1354              	.LVL177:
+ 1355              		.loc 1 377 2 view .LVU275
+ 1356 001a 4846     		mov	r0, r9
+ 1357              	.LVL178:
+ 1358              		.loc 1 377 2 view .LVU276
+ 1359 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1360              	.LVL179:
+ 378:Core/Src/st7789.c **** 	ST7789_DrawLine(x1, y1, x2, y1, color);
+ 1361              		.loc 1 378 2 is_stmt 1 view .LVU277
+ 1362 0020 CDF80080 		str	r8, [sp]
+ 1363 0024 2B46     		mov	r3, r5
+ 1364 0026 2246     		mov	r2, r4
+ 1365 0028 2946     		mov	r1, r5
+ 1366 002a 3846     		mov	r0, r7
+ 1367 002c FFF7FEFF 		bl	ST7789_DrawLine
+ 1368              	.LVL180:
+ 379:Core/Src/st7789.c **** 	ST7789_DrawLine(x1, y1, x1, y2, color);
+ 1369              		.loc 1 379 2 view .LVU278
+ 1370 0030 CDF80080 		str	r8, [sp]
+ 1371 0034 3346     		mov	r3, r6
+ 1372 0036 3A46     		mov	r2, r7
+ 1373 0038 2946     		mov	r1, r5
+ 1374 003a 3846     		mov	r0, r7
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 33
+
+
+ 1375 003c FFF7FEFF 		bl	ST7789_DrawLine
+ 1376              	.LVL181:
+ 380:Core/Src/st7789.c **** 	ST7789_DrawLine(x1, y2, x2, y2, color);
+ 1377              		.loc 1 380 2 view .LVU279
+ 1378 0040 CDF80080 		str	r8, [sp]
+ 1379 0044 3346     		mov	r3, r6
+ 1380 0046 2246     		mov	r2, r4
+ 1381 0048 3146     		mov	r1, r6
+ 1382 004a 3846     		mov	r0, r7
+ 1383 004c FFF7FEFF 		bl	ST7789_DrawLine
+ 1384              	.LVL182:
+ 381:Core/Src/st7789.c **** 	ST7789_DrawLine(x2, y1, x2, y2, color);
+ 1385              		.loc 1 381 2 view .LVU280
+ 1386 0050 CDF80080 		str	r8, [sp]
+ 1387 0054 3346     		mov	r3, r6
+ 1388 0056 2246     		mov	r2, r4
+ 1389 0058 2946     		mov	r1, r5
+ 1390 005a 2046     		mov	r0, r4
+ 1391 005c FFF7FEFF 		bl	ST7789_DrawLine
+ 1392              	.LVL183:
+ 382:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1393              		.loc 1 382 2 view .LVU281
+ 1394 0060 0122     		movs	r2, #1
+ 1395 0062 0821     		movs	r1, #8
+ 1396 0064 4846     		mov	r0, r9
+ 1397 0066 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1398              	.LVL184:
+ 383:Core/Src/st7789.c **** }
+ 1399              		.loc 1 383 1 is_stmt 0 view .LVU282
+ 1400 006a 03B0     		add	sp, sp, #12
+ 1401              	.LCFI33:
+ 1402              		.cfi_def_cfa_offset 28
+ 1403              		@ sp needed
+ 1404 006c BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 1405              	.LVL185:
+ 1406              	.L82:
+ 1407              		.loc 1 383 1 view .LVU283
+ 1408              		.align	2
+ 1409              	.L81:
+ 1410 0070 00040240 		.word	1073873920
+ 1411              		.cfi_endproc
+ 1412              	.LFE141:
+ 1414              		.section	.text.ST7789_DrawCircle,"ax",%progbits
+ 1415              		.align	1
+ 1416              		.global	ST7789_DrawCircle
+ 1417              		.syntax unified
+ 1418              		.thumb
+ 1419              		.thumb_func
+ 1421              	ST7789_DrawCircle:
+ 1422              	.LVL186:
+ 1423              	.LFB142:
+ 384:Core/Src/st7789.c **** 
+ 385:Core/Src/st7789.c **** /**
+ 386:Core/Src/st7789.c ****  * @brief Draw a circle with single color
+ 387:Core/Src/st7789.c ****  * @param x0&y0 -> coordinate of circle center
+ 388:Core/Src/st7789.c ****  * @param r -> radius of circle
+ 389:Core/Src/st7789.c ****  * @param color -> color of circle line
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 34
+
+
+ 390:Core/Src/st7789.c ****  * @return  none
+ 391:Core/Src/st7789.c ****  */
+ 392:Core/Src/st7789.c **** void ST7789_DrawCircle(uint16_t x0, uint16_t y0, uint8_t r, uint16_t color)
+ 393:Core/Src/st7789.c **** {
+ 1424              		.loc 1 393 1 is_stmt 1 view -0
+ 1425              		.cfi_startproc
+ 1426              		@ args = 0, pretend = 0, frame = 24
+ 1427              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1428              		.loc 1 393 1 is_stmt 0 view .LVU285
+ 1429 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1430              	.LCFI34:
+ 1431              		.cfi_def_cfa_offset 36
+ 1432              		.cfi_offset 4, -36
+ 1433              		.cfi_offset 5, -32
+ 1434              		.cfi_offset 6, -28
+ 1435              		.cfi_offset 7, -24
+ 1436              		.cfi_offset 8, -20
+ 1437              		.cfi_offset 9, -16
+ 1438              		.cfi_offset 10, -12
+ 1439              		.cfi_offset 11, -8
+ 1440              		.cfi_offset 14, -4
+ 1441 0004 87B0     		sub	sp, sp, #28
+ 1442              	.LCFI35:
+ 1443              		.cfi_def_cfa_offset 64
+ 1444 0006 8346     		mov	fp, r0
+ 1445 0008 8A46     		mov	r10, r1
+ 1446 000a 1E46     		mov	r6, r3
+ 394:Core/Src/st7789.c **** 	int16_t f = 1 - r;
+ 1447              		.loc 1 394 2 is_stmt 1 view .LVU286
+ 1448              		.loc 1 394 16 is_stmt 0 view .LVU287
+ 1449 000c 94B2     		uxth	r4, r2
+ 1450              		.loc 1 394 10 view .LVU288
+ 1451 000e C2F10109 		rsb	r9, r2, #1
+ 1452              	.LVL187:
+ 395:Core/Src/st7789.c **** 	int16_t ddF_x = 1;
+ 1453              		.loc 1 395 2 is_stmt 1 view .LVU289
+ 396:Core/Src/st7789.c **** 	int16_t ddF_y = -2 * r;
+ 1454              		.loc 1 396 2 view .LVU290
+ 1455              		.loc 1 396 10 is_stmt 0 view .LVU291
+ 1456 0012 C2EBC233 		rsb	r3, r2, r2, lsl #15
+ 1457              	.LVL188:
+ 1458              		.loc 1 396 10 view .LVU292
+ 1459 0016 5B00     		lsls	r3, r3, #1
+ 1460 0018 1BB2     		sxth	r3, r3
+ 1461 001a 0593     		str	r3, [sp, #20]
+ 1462              	.LVL189:
+ 397:Core/Src/st7789.c **** 	int16_t x = 0;
+ 1463              		.loc 1 397 2 is_stmt 1 view .LVU293
+ 398:Core/Src/st7789.c **** 	int16_t y = r;
+ 1464              		.loc 1 398 2 view .LVU294
+ 1465              		.loc 1 398 10 is_stmt 0 view .LVU295
+ 1466 001c 13B2     		sxth	r3, r2
+ 1467 001e 0193     		str	r3, [sp, #4]
+ 1468              	.LVL190:
+ 399:Core/Src/st7789.c **** 
+ 400:Core/Src/st7789.c **** 	ST7789_Select();
+ 1469              		.loc 1 400 2 is_stmt 1 view .LVU296
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 35
+
+
+ 1470 0020 0022     		movs	r2, #0
+ 1471              	.LVL191:
+ 1472              		.loc 1 400 2 is_stmt 0 view .LVU297
+ 1473 0022 0821     		movs	r1, #8
+ 1474              	.LVL192:
+ 1475              		.loc 1 400 2 view .LVU298
+ 1476 0024 4948     		ldr	r0, .L90
+ 1477              	.LVL193:
+ 1478              		.loc 1 400 2 view .LVU299
+ 1479 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1480              	.LVL194:
+ 401:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0, y0 + r, color);
+ 1481              		.loc 1 401 2 is_stmt 1 view .LVU300
+ 1482 002a 04EB0A01 		add	r1, r4, r10
+ 1483 002e 3246     		mov	r2, r6
+ 1484 0030 89B2     		uxth	r1, r1
+ 1485 0032 5846     		mov	r0, fp
+ 1486 0034 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1487              	.LVL195:
+ 402:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0, y0 - r, color);
+ 1488              		.loc 1 402 2 view .LVU301
+ 1489 0038 AAEB0401 		sub	r1, r10, r4
+ 1490 003c 3246     		mov	r2, r6
+ 1491 003e 89B2     		uxth	r1, r1
+ 1492 0040 5846     		mov	r0, fp
+ 1493 0042 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1494              	.LVL196:
+ 403:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0 + r, y0, color);
+ 1495              		.loc 1 403 2 view .LVU302
+ 1496 0046 04EB0B00 		add	r0, r4, fp
+ 1497 004a 3246     		mov	r2, r6
+ 1498 004c 5146     		mov	r1, r10
+ 1499 004e 80B2     		uxth	r0, r0
+ 1500 0050 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1501              	.LVL197:
+ 404:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0 - r, y0, color);
+ 1502              		.loc 1 404 2 view .LVU303
+ 1503 0054 ABEB0400 		sub	r0, fp, r4
+ 1504 0058 3246     		mov	r2, r6
+ 1505 005a 5146     		mov	r1, r10
+ 1506 005c 80B2     		uxth	r0, r0
+ 1507 005e FFF7FEFF 		bl	ST7789_DrawPixel
+ 1508              	.LVL198:
+ 405:Core/Src/st7789.c **** 
+ 406:Core/Src/st7789.c **** 	while (x < y)
+ 1509              		.loc 1 406 2 view .LVU304
+ 397:Core/Src/st7789.c **** 	int16_t y = r;
+ 1510              		.loc 1 397 10 is_stmt 0 view .LVU305
+ 1511 0062 0023     		movs	r3, #0
+ 1512 0064 0293     		str	r3, [sp, #8]
+ 395:Core/Src/st7789.c **** 	int16_t ddF_y = -2 * r;
+ 1513              		.loc 1 395 10 view .LVU306
+ 1514 0066 0123     		movs	r3, #1
+ 1515 0068 0393     		str	r3, [sp, #12]
+ 1516              		.loc 1 406 8 view .LVU307
+ 1517 006a 5EE0     		b	.L84
+ 1518              	.LVL199:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 36
+
+
+ 1519              	.L89:
+ 407:Core/Src/st7789.c **** 	{
+ 408:Core/Src/st7789.c **** 		if (f >= 0)
+ 409:Core/Src/st7789.c **** 		{
+ 410:Core/Src/st7789.c **** 			y--;
+ 1520              		.loc 1 410 4 is_stmt 1 view .LVU308
+ 1521              		.loc 1 410 5 is_stmt 0 view .LVU309
+ 1522 006c 019B     		ldr	r3, [sp, #4]
+ 1523 006e 013B     		subs	r3, r3, #1
+ 1524 0070 1BB2     		sxth	r3, r3
+ 1525 0072 0193     		str	r3, [sp, #4]
+ 1526              	.LVL200:
+ 411:Core/Src/st7789.c **** 			ddF_y += 2;
+ 1527              		.loc 1 411 4 is_stmt 1 view .LVU310
+ 1528              		.loc 1 411 10 is_stmt 0 view .LVU311
+ 1529 0074 059B     		ldr	r3, [sp, #20]
+ 1530 0076 0233     		adds	r3, r3, #2
+ 1531 0078 1AB2     		sxth	r2, r3
+ 1532 007a 0592     		str	r2, [sp, #20]
+ 1533              	.LVL201:
+ 412:Core/Src/st7789.c **** 			f += ddF_y;
+ 1534              		.loc 1 412 4 is_stmt 1 view .LVU312
+ 1535              		.loc 1 412 6 is_stmt 0 view .LVU313
+ 1536 007c 19FA83F9 		uxtah	r9, r9, r3
+ 1537              	.LVL202:
+ 1538              		.loc 1 412 6 view .LVU314
+ 1539 0080 0FFA89F9 		sxth	r9, r9
+ 1540              	.LVL203:
+ 1541              	.L85:
+ 413:Core/Src/st7789.c **** 		}
+ 414:Core/Src/st7789.c **** 		x++;
+ 1542              		.loc 1 414 3 is_stmt 1 view .LVU315
+ 1543              		.loc 1 414 4 is_stmt 0 view .LVU316
+ 1544 0084 029B     		ldr	r3, [sp, #8]
+ 1545 0086 0133     		adds	r3, r3, #1
+ 1546 0088 9DB2     		uxth	r5, r3
+ 1547 008a 1BB2     		sxth	r3, r3
+ 1548 008c 0293     		str	r3, [sp, #8]
+ 1549              	.LVL204:
+ 415:Core/Src/st7789.c **** 		ddF_x += 2;
+ 1550              		.loc 1 415 3 is_stmt 1 view .LVU317
+ 1551              		.loc 1 415 9 is_stmt 0 view .LVU318
+ 1552 008e 039B     		ldr	r3, [sp, #12]
+ 1553 0090 0233     		adds	r3, r3, #2
+ 1554 0092 1AB2     		sxth	r2, r3
+ 1555 0094 0392     		str	r2, [sp, #12]
+ 1556              	.LVL205:
+ 416:Core/Src/st7789.c **** 		f += ddF_x;
+ 1557              		.loc 1 416 3 is_stmt 1 view .LVU319
+ 1558              		.loc 1 416 5 is_stmt 0 view .LVU320
+ 1559 0096 19FA83F9 		uxtah	r9, r9, r3
+ 1560              	.LVL206:
+ 1561              		.loc 1 416 5 view .LVU321
+ 1562 009a 0FFA89F9 		sxth	r9, r9
+ 1563              	.LVL207:
+ 417:Core/Src/st7789.c **** 
+ 418:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 + x, y0 + y, color);
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 37
+
+
+ 1564              		.loc 1 418 3 is_stmt 1 view .LVU322
+ 1565 009e 05EB0B03 		add	r3, r5, fp
+ 1566 00a2 9BB2     		uxth	r3, r3
+ 1567 00a4 BDF80440 		ldrh	r4, [sp, #4]
+ 1568 00a8 04EB0A08 		add	r8, r4, r10
+ 1569 00ac 1FFA88F8 		uxth	r8, r8
+ 1570 00b0 3246     		mov	r2, r6
+ 1571 00b2 4146     		mov	r1, r8
+ 1572 00b4 0493     		str	r3, [sp, #16]
+ 1573 00b6 1846     		mov	r0, r3
+ 1574 00b8 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1575              	.LVL208:
+ 419:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 - x, y0 + y, color);
+ 1576              		.loc 1 419 3 view .LVU323
+ 1577 00bc ABEB0507 		sub	r7, fp, r5
+ 1578 00c0 BFB2     		uxth	r7, r7
+ 1579 00c2 3246     		mov	r2, r6
+ 1580 00c4 4146     		mov	r1, r8
+ 1581 00c6 3846     		mov	r0, r7
+ 1582 00c8 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1583              	.LVL209:
+ 420:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 + x, y0 - y, color);
+ 1584              		.loc 1 420 3 view .LVU324
+ 1585 00cc AAEB0408 		sub	r8, r10, r4
+ 1586 00d0 1FFA88F8 		uxth	r8, r8
+ 1587 00d4 3246     		mov	r2, r6
+ 1588 00d6 4146     		mov	r1, r8
+ 1589 00d8 0498     		ldr	r0, [sp, #16]
+ 1590 00da FFF7FEFF 		bl	ST7789_DrawPixel
+ 1591              	.LVL210:
+ 421:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 - x, y0 - y, color);
+ 1592              		.loc 1 421 3 view .LVU325
+ 1593 00de 3246     		mov	r2, r6
+ 1594 00e0 4146     		mov	r1, r8
+ 1595 00e2 3846     		mov	r0, r7
+ 1596 00e4 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1597              	.LVL211:
+ 422:Core/Src/st7789.c **** 
+ 423:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 + y, y0 + x, color);
+ 1598              		.loc 1 423 3 view .LVU326
+ 1599 00e8 04EB0B07 		add	r7, r4, fp
+ 1600 00ec BFB2     		uxth	r7, r7
+ 1601 00ee 05EB0A08 		add	r8, r5, r10
+ 1602 00f2 1FFA88F8 		uxth	r8, r8
+ 1603 00f6 3246     		mov	r2, r6
+ 1604 00f8 4146     		mov	r1, r8
+ 1605 00fa 3846     		mov	r0, r7
+ 1606 00fc FFF7FEFF 		bl	ST7789_DrawPixel
+ 1607              	.LVL212:
+ 424:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 - y, y0 + x, color);
+ 1608              		.loc 1 424 3 view .LVU327
+ 1609 0100 ABEB0404 		sub	r4, fp, r4
+ 1610 0104 A4B2     		uxth	r4, r4
+ 1611 0106 3246     		mov	r2, r6
+ 1612 0108 4146     		mov	r1, r8
+ 1613 010a 2046     		mov	r0, r4
+ 1614 010c FFF7FEFF 		bl	ST7789_DrawPixel
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 38
+
+
+ 1615              	.LVL213:
+ 425:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 + y, y0 - x, color);
+ 1616              		.loc 1 425 3 view .LVU328
+ 1617 0110 AAEB0505 		sub	r5, r10, r5
+ 1618 0114 ADB2     		uxth	r5, r5
+ 1619 0116 3246     		mov	r2, r6
+ 1620 0118 2946     		mov	r1, r5
+ 1621 011a 3846     		mov	r0, r7
+ 1622 011c FFF7FEFF 		bl	ST7789_DrawPixel
+ 1623              	.LVL214:
+ 426:Core/Src/st7789.c **** 		ST7789_DrawPixel(x0 - y, y0 - x, color);
+ 1624              		.loc 1 426 3 view .LVU329
+ 1625 0120 3246     		mov	r2, r6
+ 1626 0122 2946     		mov	r1, r5
+ 1627 0124 2046     		mov	r0, r4
+ 1628 0126 FFF7FEFF 		bl	ST7789_DrawPixel
+ 1629              	.LVL215:
+ 1630              	.L84:
+ 406:Core/Src/st7789.c **** 	{
+ 1631              		.loc 1 406 8 view .LVU330
+ 1632 012a 029B     		ldr	r3, [sp, #8]
+ 1633 012c 019A     		ldr	r2, [sp, #4]
+ 1634 012e 9342     		cmp	r3, r2
+ 1635 0130 03DA     		bge	.L88
+ 408:Core/Src/st7789.c **** 		{
+ 1636              		.loc 1 408 3 view .LVU331
+ 408:Core/Src/st7789.c **** 		{
+ 1637              		.loc 1 408 6 is_stmt 0 view .LVU332
+ 1638 0132 B9F1000F 		cmp	r9, #0
+ 1639 0136 99DA     		bge	.L89
+ 1640 0138 A4E7     		b	.L85
+ 1641              	.L88:
+ 427:Core/Src/st7789.c **** 	}
+ 428:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1642              		.loc 1 428 2 is_stmt 1 view .LVU333
+ 1643 013a 0122     		movs	r2, #1
+ 1644 013c 0821     		movs	r1, #8
+ 1645 013e 0348     		ldr	r0, .L90
+ 1646 0140 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1647              	.LVL216:
+ 429:Core/Src/st7789.c **** }
+ 1648              		.loc 1 429 1 is_stmt 0 view .LVU334
+ 1649 0144 07B0     		add	sp, sp, #28
+ 1650              	.LCFI36:
+ 1651              		.cfi_def_cfa_offset 36
+ 1652              		@ sp needed
+ 1653 0146 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1654              	.LVL217:
+ 1655              	.L91:
+ 1656              		.loc 1 429 1 view .LVU335
+ 1657 014a 00BF     		.align	2
+ 1658              	.L90:
+ 1659 014c 00040240 		.word	1073873920
+ 1660              		.cfi_endproc
+ 1661              	.LFE142:
+ 1663              		.section	.text.ST7789_DrawImage,"ax",%progbits
+ 1664              		.align	1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 39
+
+
+ 1665              		.global	ST7789_DrawImage
+ 1666              		.syntax unified
+ 1667              		.thumb
+ 1668              		.thumb_func
+ 1670              	ST7789_DrawImage:
+ 1671              	.LVL218:
+ 1672              	.LFB143:
+ 430:Core/Src/st7789.c **** 
+ 431:Core/Src/st7789.c **** /**
+ 432:Core/Src/st7789.c ****  * @brief Draw an Image on the screen
+ 433:Core/Src/st7789.c ****  * @param x&y -> start point of the Image
+ 434:Core/Src/st7789.c ****  * @param w&h -> width & height of the Image to Draw
+ 435:Core/Src/st7789.c ****  * @param data -> pointer of the Image array
+ 436:Core/Src/st7789.c ****  * @return none
+ 437:Core/Src/st7789.c ****  */
+ 438:Core/Src/st7789.c **** void ST7789_DrawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const uint16_t *data)
+ 439:Core/Src/st7789.c **** {
+ 1673              		.loc 1 439 1 is_stmt 1 view -0
+ 1674              		.cfi_startproc
+ 1675              		@ args = 4, pretend = 0, frame = 0
+ 1676              		@ frame_needed = 0, uses_anonymous_args = 0
+ 440:Core/Src/st7789.c **** 	if ((x >= ST7789_WIDTH) || (y >= ST7789_HEIGHT))
+ 1677              		.loc 1 440 2 view .LVU337
+ 1678              		.loc 1 440 5 is_stmt 0 view .LVU338
+ 1679 0000 EF28     		cmp	r0, #239
+ 1680 0002 30D8     		bhi	.L95
+ 439:Core/Src/st7789.c **** 	if ((x >= ST7789_WIDTH) || (y >= ST7789_HEIGHT))
+ 1681              		.loc 1 439 1 discriminator 1 view .LVU339
+ 1682 0004 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1683              	.LCFI37:
+ 1684              		.cfi_def_cfa_offset 24
+ 1685              		.cfi_offset 4, -24
+ 1686              		.cfi_offset 5, -20
+ 1687              		.cfi_offset 6, -16
+ 1688              		.cfi_offset 7, -12
+ 1689              		.cfi_offset 8, -8
+ 1690              		.cfi_offset 14, -4
+ 1691 0008 0446     		mov	r4, r0
+ 1692 000a 0D46     		mov	r5, r1
+ 1693 000c 1746     		mov	r7, r2
+ 1694 000e 1E46     		mov	r6, r3
+ 1695              		.loc 1 440 26 discriminator 1 view .LVU340
+ 1696 0010 B1F5A07F 		cmp	r1, #320
+ 1697 0014 06D2     		bcs	.L92
+ 441:Core/Src/st7789.c **** 		return;
+ 442:Core/Src/st7789.c **** 	if ((x + w - 1) >= ST7789_WIDTH)
+ 1698              		.loc 1 442 2 is_stmt 1 view .LVU341
+ 1699              		.loc 1 442 9 is_stmt 0 view .LVU342
+ 1700 0016 8318     		adds	r3, r0, r2
+ 1701              	.LVL219:
+ 1702              		.loc 1 442 5 view .LVU343
+ 1703 0018 F02B     		cmp	r3, #240
+ 1704 001a 03DC     		bgt	.L92
+ 443:Core/Src/st7789.c **** 		return;
+ 444:Core/Src/st7789.c **** 	if ((y + h - 1) >= ST7789_HEIGHT)
+ 1705              		.loc 1 444 2 is_stmt 1 view .LVU344
+ 1706              		.loc 1 444 9 is_stmt 0 view .LVU345
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 40
+
+
+ 1707 001c 8B19     		adds	r3, r1, r6
+ 1708              		.loc 1 444 5 view .LVU346
+ 1709 001e B3F5A07F 		cmp	r3, #320
+ 1710 0022 01DD     		ble	.L98
+ 1711              	.LVL220:
+ 1712              	.L92:
+ 445:Core/Src/st7789.c **** 		return;
+ 446:Core/Src/st7789.c **** 
+ 447:Core/Src/st7789.c **** 	ST7789_Select();
+ 448:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x + w - 1, y + h - 1);
+ 449:Core/Src/st7789.c **** 	ST7789_WriteData((uint8_t *)data, sizeof(uint16_t) * w * h);
+ 450:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 451:Core/Src/st7789.c **** }
+ 1713              		.loc 1 451 1 view .LVU347
+ 1714 0024 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1715              	.LVL221:
+ 1716              	.L98:
+ 447:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x + w - 1, y + h - 1);
+ 1717              		.loc 1 447 2 is_stmt 1 view .LVU348
+ 1718 0028 DFF83C80 		ldr	r8, .L99
+ 1719 002c 0022     		movs	r2, #0
+ 1720              	.LVL222:
+ 447:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x + w - 1, y + h - 1);
+ 1721              		.loc 1 447 2 is_stmt 0 view .LVU349
+ 1722 002e 0821     		movs	r1, #8
+ 1723              	.LVL223:
+ 447:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x + w - 1, y + h - 1);
+ 1724              		.loc 1 447 2 view .LVU350
+ 1725 0030 4046     		mov	r0, r8
+ 1726              	.LVL224:
+ 447:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x + w - 1, y + h - 1);
+ 1727              		.loc 1 447 2 view .LVU351
+ 1728 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1729              	.LVL225:
+ 448:Core/Src/st7789.c **** 	ST7789_WriteData((uint8_t *)data, sizeof(uint16_t) * w * h);
+ 1730              		.loc 1 448 2 is_stmt 1 view .LVU352
+ 448:Core/Src/st7789.c **** 	ST7789_WriteData((uint8_t *)data, sizeof(uint16_t) * w * h);
+ 1731              		.loc 1 448 34 is_stmt 0 view .LVU353
+ 1732 0036 E219     		adds	r2, r4, r7
+ 1733 0038 92B2     		uxth	r2, r2
+ 448:Core/Src/st7789.c **** 	ST7789_WriteData((uint8_t *)data, sizeof(uint16_t) * w * h);
+ 1734              		.loc 1 448 45 view .LVU354
+ 1735 003a AB19     		adds	r3, r5, r6
+ 1736 003c 9BB2     		uxth	r3, r3
+ 448:Core/Src/st7789.c **** 	ST7789_WriteData((uint8_t *)data, sizeof(uint16_t) * w * h);
+ 1737              		.loc 1 448 2 view .LVU355
+ 1738 003e 013B     		subs	r3, r3, #1
+ 1739 0040 013A     		subs	r2, r2, #1
+ 1740 0042 9BB2     		uxth	r3, r3
+ 1741 0044 92B2     		uxth	r2, r2
+ 1742 0046 2946     		mov	r1, r5
+ 1743 0048 2046     		mov	r0, r4
+ 1744 004a FFF7FEFF 		bl	ST7789_SetAddressWindow
+ 1745              	.LVL226:
+ 449:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1746              		.loc 1 449 2 is_stmt 1 view .LVU356
+ 449:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 41
+
+
+ 1747              		.loc 1 449 57 is_stmt 0 view .LVU357
+ 1748 004e 06FB07F1 		mul	r1, r6, r7
+ 449:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1749              		.loc 1 449 2 view .LVU358
+ 1750 0052 4900     		lsls	r1, r1, #1
+ 1751 0054 0698     		ldr	r0, [sp, #24]
+ 1752 0056 FFF7FEFF 		bl	ST7789_WriteData
+ 1753              	.LVL227:
+ 450:Core/Src/st7789.c **** }
+ 1754              		.loc 1 450 2 is_stmt 1 view .LVU359
+ 1755 005a 0122     		movs	r2, #1
+ 1756 005c 0821     		movs	r1, #8
+ 1757 005e 4046     		mov	r0, r8
+ 1758 0060 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1759              	.LVL228:
+ 1760 0064 DEE7     		b	.L92
+ 1761              	.LVL229:
+ 1762              	.L95:
+ 1763              	.LCFI38:
+ 1764              		.cfi_def_cfa_offset 0
+ 1765              		.cfi_restore 4
+ 1766              		.cfi_restore 5
+ 1767              		.cfi_restore 6
+ 1768              		.cfi_restore 7
+ 1769              		.cfi_restore 8
+ 1770              		.cfi_restore 14
+ 450:Core/Src/st7789.c **** }
+ 1771              		.loc 1 450 2 is_stmt 0 view .LVU360
+ 1772 0066 7047     		bx	lr
+ 1773              	.L100:
+ 1774              		.align	2
+ 1775              	.L99:
+ 1776 0068 00040240 		.word	1073873920
+ 1777              		.cfi_endproc
+ 1778              	.LFE143:
+ 1780              		.section	.text.ST7789_InvertColors,"ax",%progbits
+ 1781              		.align	1
+ 1782              		.global	ST7789_InvertColors
+ 1783              		.syntax unified
+ 1784              		.thumb
+ 1785              		.thumb_func
+ 1787              	ST7789_InvertColors:
+ 1788              	.LVL230:
+ 1789              	.LFB144:
+ 452:Core/Src/st7789.c **** 
+ 453:Core/Src/st7789.c **** /**
+ 454:Core/Src/st7789.c ****  * @brief Invert Fullscreen color
+ 455:Core/Src/st7789.c ****  * @param invert -> Whether to invert
+ 456:Core/Src/st7789.c ****  * @return none
+ 457:Core/Src/st7789.c ****  */
+ 458:Core/Src/st7789.c **** void ST7789_InvertColors(uint8_t invert)
+ 459:Core/Src/st7789.c **** {
+ 1790              		.loc 1 459 1 is_stmt 1 view -0
+ 1791              		.cfi_startproc
+ 1792              		@ args = 0, pretend = 0, frame = 0
+ 1793              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1794              		.loc 1 459 1 is_stmt 0 view .LVU362
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 42
+
+
+ 1795 0000 10B5     		push	{r4, lr}
+ 1796              	.LCFI39:
+ 1797              		.cfi_def_cfa_offset 8
+ 1798              		.cfi_offset 4, -8
+ 1799              		.cfi_offset 14, -4
+ 1800 0002 0446     		mov	r4, r0
+ 460:Core/Src/st7789.c **** 	ST7789_Select();
+ 1801              		.loc 1 460 2 is_stmt 1 view .LVU363
+ 1802 0004 0022     		movs	r2, #0
+ 1803 0006 0821     		movs	r1, #8
+ 1804 0008 0748     		ldr	r0, .L105
+ 1805              	.LVL231:
+ 1806              		.loc 1 460 2 is_stmt 0 view .LVU364
+ 1807 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1808              	.LVL232:
+ 461:Core/Src/st7789.c **** 	ST7789_WriteCommand(invert ? 0x21 /* INVON */ : 0x20 /* INVOFF */);
+ 1809              		.loc 1 461 2 is_stmt 1 view .LVU365
+ 1810 000e 44B1     		cbz	r4, .L103
+ 1811 0010 2120     		movs	r0, #33
+ 1812              	.L102:
+ 1813              		.loc 1 461 2 is_stmt 0 discriminator 4 view .LVU366
+ 1814 0012 FFF7FEFF 		bl	ST7789_WriteCommand
+ 1815              	.LVL233:
+ 462:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1816              		.loc 1 462 2 is_stmt 1 discriminator 4 view .LVU367
+ 1817 0016 0122     		movs	r2, #1
+ 1818 0018 0821     		movs	r1, #8
+ 1819 001a 0348     		ldr	r0, .L105
+ 1820 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1821              	.LVL234:
+ 463:Core/Src/st7789.c **** }
+ 1822              		.loc 1 463 1 is_stmt 0 discriminator 4 view .LVU368
+ 1823 0020 10BD     		pop	{r4, pc}
+ 1824              	.L103:
+ 461:Core/Src/st7789.c **** 	ST7789_WriteCommand(invert ? 0x21 /* INVON */ : 0x20 /* INVOFF */);
+ 1825              		.loc 1 461 2 view .LVU369
+ 1826 0022 2020     		movs	r0, #32
+ 1827 0024 F5E7     		b	.L102
+ 1828              	.L106:
+ 1829 0026 00BF     		.align	2
+ 1830              	.L105:
+ 1831 0028 00040240 		.word	1073873920
+ 1832              		.cfi_endproc
+ 1833              	.LFE144:
+ 1835              		.section	.text.ST7789_WriteChar,"ax",%progbits
+ 1836              		.align	1
+ 1837              		.global	ST7789_WriteChar
+ 1838              		.syntax unified
+ 1839              		.thumb
+ 1840              		.thumb_func
+ 1842              	ST7789_WriteChar:
+ 1843              	.LVL235:
+ 1844              	.LFB145:
+ 464:Core/Src/st7789.c **** 
+ 465:Core/Src/st7789.c **** /**
+ 466:Core/Src/st7789.c ****  * @brief Write a char
+ 467:Core/Src/st7789.c ****  * @param  x&y -> cursor of the start point.
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 43
+
+
+ 468:Core/Src/st7789.c ****  * @param ch -> char to write
+ 469:Core/Src/st7789.c ****  * @param font -> fontstyle of the string
+ 470:Core/Src/st7789.c ****  * @param color -> color of the char
+ 471:Core/Src/st7789.c ****  * @param bgcolor -> background color of the char
+ 472:Core/Src/st7789.c ****  * @return  none
+ 473:Core/Src/st7789.c ****  */
+ 474:Core/Src/st7789.c **** void ST7789_WriteChar(uint16_t x, uint16_t y, char ch, FontDef font, uint16_t color, uint16_t bgcol
+ 475:Core/Src/st7789.c **** {
+ 1845              		.loc 1 475 1 is_stmt 1 view -0
+ 1846              		.cfi_startproc
+ 1847              		@ args = 20, pretend = 8, frame = 8
+ 1848              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1849              		.loc 1 475 1 is_stmt 0 view .LVU371
+ 1850 0000 82B0     		sub	sp, sp, #8
+ 1851              	.LCFI40:
+ 1852              		.cfi_def_cfa_offset 8
+ 1853 0002 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1854              	.LCFI41:
+ 1855              		.cfi_def_cfa_offset 44
+ 1856              		.cfi_offset 4, -44
+ 1857              		.cfi_offset 5, -40
+ 1858              		.cfi_offset 6, -36
+ 1859              		.cfi_offset 7, -32
+ 1860              		.cfi_offset 8, -28
+ 1861              		.cfi_offset 9, -24
+ 1862              		.cfi_offset 10, -20
+ 1863              		.cfi_offset 11, -16
+ 1864              		.cfi_offset 14, -12
+ 1865 0006 83B0     		sub	sp, sp, #12
+ 1866              	.LCFI42:
+ 1867              		.cfi_def_cfa_offset 56
+ 1868 0008 0446     		mov	r4, r0
+ 1869 000a 0E46     		mov	r6, r1
+ 1870 000c 9346     		mov	fp, r2
+ 1871 000e 0D93     		str	r3, [sp, #52]
+ 1872 0010 BDF83C80 		ldrh	r8, [sp, #60]
+ 1873 0014 BDF84070 		ldrh	r7, [sp, #64]
+ 476:Core/Src/st7789.c **** 	uint32_t i, b, j;
+ 1874              		.loc 1 476 2 is_stmt 1 view .LVU372
+ 477:Core/Src/st7789.c **** 	ST7789_Select();
+ 1875              		.loc 1 477 2 view .LVU373
+ 1876 0018 0022     		movs	r2, #0
+ 1877              	.LVL236:
+ 1878              		.loc 1 477 2 is_stmt 0 view .LVU374
+ 1879 001a 0821     		movs	r1, #8
+ 1880              	.LVL237:
+ 1881              		.loc 1 477 2 view .LVU375
+ 1882 001c 2448     		ldr	r0, .L117
+ 1883              	.LVL238:
+ 1884              		.loc 1 477 2 view .LVU376
+ 1885 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1886              	.LVL239:
+ 478:Core/Src/st7789.c **** 	ST7789_SetAddressWindow(x, y, x + font.width - 1, y + font.height - 1);
+ 1887              		.loc 1 478 2 is_stmt 1 view .LVU377
+ 1888              		.loc 1 478 40 is_stmt 0 view .LVU378
+ 1889 0022 9DF83450 		ldrb	r5, [sp, #52]	@ zero_extendqisi2
+ 1890              		.loc 1 478 34 view .LVU379
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 44
+
+
+ 1891 0026 2A19     		adds	r2, r5, r4
+ 1892 0028 92B2     		uxth	r2, r2
+ 1893              		.loc 1 478 60 view .LVU380
+ 1894 002a 9DF835A0 		ldrb	r10, [sp, #53]	@ zero_extendqisi2
+ 1895              		.loc 1 478 54 view .LVU381
+ 1896 002e 0AEB0603 		add	r3, r10, r6
+ 1897 0032 9BB2     		uxth	r3, r3
+ 1898              		.loc 1 478 2 view .LVU382
+ 1899 0034 013B     		subs	r3, r3, #1
+ 1900 0036 013A     		subs	r2, r2, #1
+ 1901 0038 9BB2     		uxth	r3, r3
+ 1902 003a 92B2     		uxth	r2, r2
+ 1903 003c 3146     		mov	r1, r6
+ 1904 003e 2046     		mov	r0, r4
+ 1905 0040 FFF7FEFF 		bl	ST7789_SetAddressWindow
+ 1906              	.LVL240:
+ 479:Core/Src/st7789.c **** 
+ 480:Core/Src/st7789.c **** 	for (i = 0; i < font.height; i++)
+ 1907              		.loc 1 480 2 is_stmt 1 view .LVU383
+ 1908              		.loc 1 480 9 is_stmt 0 view .LVU384
+ 1909 0044 4FF00009 		mov	r9, #0
+ 1910              		.loc 1 480 2 view .LVU385
+ 1911 0048 1DE0     		b	.L108
+ 1912              	.LVL241:
+ 1913              	.L110:
+ 1914              	.LBB7:
+ 481:Core/Src/st7789.c **** 	{
+ 482:Core/Src/st7789.c **** 		b = font.data[(ch - 32) * font.height + i];
+ 483:Core/Src/st7789.c **** 		for (j = 0; j < font.width; j++)
+ 484:Core/Src/st7789.c **** 		{
+ 485:Core/Src/st7789.c **** 			if ((b << j) & 0x8000)
+ 486:Core/Src/st7789.c **** 			{
+ 487:Core/Src/st7789.c **** 				uint8_t data[] = {color >> 8, color & 0xFF};
+ 488:Core/Src/st7789.c **** 				ST7789_WriteData(data, sizeof(data));
+ 489:Core/Src/st7789.c **** 			}
+ 490:Core/Src/st7789.c **** 			else
+ 491:Core/Src/st7789.c **** 			{
+ 492:Core/Src/st7789.c **** 				uint8_t data[] = {bgcolor >> 8, bgcolor & 0xFF};
+ 1915              		.loc 1 492 5 is_stmt 1 view .LVU386
+ 1916              		.loc 1 492 13 is_stmt 0 view .LVU387
+ 1917 004a 3B0A     		lsrs	r3, r7, #8
+ 1918 004c 8DF80430 		strb	r3, [sp, #4]
+ 1919 0050 8DF80570 		strb	r7, [sp, #5]
+ 493:Core/Src/st7789.c **** 				ST7789_WriteData(data, sizeof(data));
+ 1920              		.loc 1 493 5 is_stmt 1 view .LVU388
+ 1921 0054 0221     		movs	r1, #2
+ 1922 0056 01A8     		add	r0, sp, #4
+ 1923 0058 FFF7FEFF 		bl	ST7789_WriteData
+ 1924              	.LVL242:
+ 1925              	.L111:
+ 1926              		.loc 1 493 5 is_stmt 0 view .LVU389
+ 1927              	.LBE7:
+ 483:Core/Src/st7789.c **** 		{
+ 1928              		.loc 1 483 31 is_stmt 1 discriminator 2 view .LVU390
+ 483:Core/Src/st7789.c **** 		{
+ 1929              		.loc 1 483 32 is_stmt 0 discriminator 2 view .LVU391
+ 1930 005c 0134     		adds	r4, r4, #1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 45
+
+
+ 1931              	.LVL243:
+ 1932              	.L109:
+ 483:Core/Src/st7789.c **** 		{
+ 1933              		.loc 1 483 15 is_stmt 1 discriminator 1 view .LVU392
+ 483:Core/Src/st7789.c **** 		{
+ 1934              		.loc 1 483 3 is_stmt 0 discriminator 1 view .LVU393
+ 1935 005e A542     		cmp	r5, r4
+ 1936 0060 0FD9     		bls	.L115
+ 485:Core/Src/st7789.c **** 			{
+ 1937              		.loc 1 485 4 is_stmt 1 view .LVU394
+ 485:Core/Src/st7789.c **** 			{
+ 1938              		.loc 1 485 11 is_stmt 0 view .LVU395
+ 1939 0062 06FA04F3 		lsl	r3, r6, r4
+ 485:Core/Src/st7789.c **** 			{
+ 1940              		.loc 1 485 7 view .LVU396
+ 1941 0066 13F4004F 		tst	r3, #32768
+ 1942 006a EED0     		beq	.L110
+ 1943              	.LBB8:
+ 487:Core/Src/st7789.c **** 				ST7789_WriteData(data, sizeof(data));
+ 1944              		.loc 1 487 5 is_stmt 1 view .LVU397
+ 487:Core/Src/st7789.c **** 				ST7789_WriteData(data, sizeof(data));
+ 1945              		.loc 1 487 13 is_stmt 0 view .LVU398
+ 1946 006c 4FEA1823 		lsr	r3, r8, #8
+ 1947 0070 8DF80430 		strb	r3, [sp, #4]
+ 1948 0074 8DF80580 		strb	r8, [sp, #5]
+ 488:Core/Src/st7789.c **** 			}
+ 1949              		.loc 1 488 5 is_stmt 1 view .LVU399
+ 1950 0078 0221     		movs	r1, #2
+ 1951 007a 01A8     		add	r0, sp, #4
+ 1952 007c FFF7FEFF 		bl	ST7789_WriteData
+ 1953              	.LVL244:
+ 1954              	.LBE8:
+ 1955 0080 ECE7     		b	.L111
+ 1956              	.L115:
+ 480:Core/Src/st7789.c **** 	{
+ 1957              		.loc 1 480 31 discriminator 2 view .LVU400
+ 480:Core/Src/st7789.c **** 	{
+ 1958              		.loc 1 480 32 is_stmt 0 discriminator 2 view .LVU401
+ 1959 0082 09F10109 		add	r9, r9, #1
+ 1960              	.LVL245:
+ 1961              	.L108:
+ 480:Core/Src/st7789.c **** 	{
+ 1962              		.loc 1 480 14 is_stmt 1 discriminator 1 view .LVU402
+ 480:Core/Src/st7789.c **** 	{
+ 1963              		.loc 1 480 2 is_stmt 0 discriminator 1 view .LVU403
+ 1964 0086 CA45     		cmp	r10, r9
+ 1965 0088 08D9     		bls	.L116
+ 482:Core/Src/st7789.c **** 		for (j = 0; j < font.width; j++)
+ 1966              		.loc 1 482 3 is_stmt 1 view .LVU404
+ 482:Core/Src/st7789.c **** 		for (j = 0; j < font.width; j++)
+ 1967              		.loc 1 482 21 is_stmt 0 view .LVU405
+ 1968 008a ABF12003 		sub	r3, fp, #32
+ 482:Core/Src/st7789.c **** 		for (j = 0; j < font.width; j++)
+ 1969              		.loc 1 482 41 view .LVU406
+ 1970 008e 0AFB0393 		mla	r3, r10, r3, r9
+ 482:Core/Src/st7789.c **** 		for (j = 0; j < font.width; j++)
+ 1971              		.loc 1 482 16 view .LVU407
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 46
+
+
+ 1972 0092 0E9A     		ldr	r2, [sp, #56]
+ 1973 0094 32F81360 		ldrh	r6, [r2, r3, lsl #1]
+ 1974              	.LVL246:
+ 483:Core/Src/st7789.c **** 		{
+ 1975              		.loc 1 483 3 is_stmt 1 view .LVU408
+ 483:Core/Src/st7789.c **** 		{
+ 1976              		.loc 1 483 10 is_stmt 0 view .LVU409
+ 1977 0098 0024     		movs	r4, #0
+ 483:Core/Src/st7789.c **** 		{
+ 1978              		.loc 1 483 3 view .LVU410
+ 1979 009a E0E7     		b	.L109
+ 1980              	.LVL247:
+ 1981              	.L116:
+ 494:Core/Src/st7789.c **** 			}
+ 495:Core/Src/st7789.c **** 		}
+ 496:Core/Src/st7789.c **** 	}
+ 497:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 1982              		.loc 1 497 2 is_stmt 1 view .LVU411
+ 1983 009c 0122     		movs	r2, #1
+ 1984 009e 0821     		movs	r1, #8
+ 1985 00a0 0348     		ldr	r0, .L117
+ 1986 00a2 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1987              	.LVL248:
+ 498:Core/Src/st7789.c **** }
+ 1988              		.loc 1 498 1 is_stmt 0 view .LVU412
+ 1989 00a6 03B0     		add	sp, sp, #12
+ 1990              	.LCFI43:
+ 1991              		.cfi_def_cfa_offset 44
+ 1992              		@ sp needed
+ 1993 00a8 BDE8F04F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1994              	.LCFI44:
+ 1995              		.cfi_restore 14
+ 1996              		.cfi_restore 11
+ 1997              		.cfi_restore 10
+ 1998              		.cfi_restore 9
+ 1999              		.cfi_restore 8
+ 2000              		.cfi_restore 7
+ 2001              		.cfi_restore 6
+ 2002              		.cfi_restore 5
+ 2003              		.cfi_restore 4
+ 2004              		.cfi_def_cfa_offset 8
+ 2005              	.LVL249:
+ 2006              		.loc 1 498 1 view .LVU413
+ 2007 00ac 02B0     		add	sp, sp, #8
+ 2008              	.LCFI45:
+ 2009              		.cfi_def_cfa_offset 0
+ 2010 00ae 7047     		bx	lr
+ 2011              	.L118:
+ 2012              		.align	2
+ 2013              	.L117:
+ 2014 00b0 00040240 		.word	1073873920
+ 2015              		.cfi_endproc
+ 2016              	.LFE145:
+ 2018              		.section	.text.ST7789_WriteString,"ax",%progbits
+ 2019              		.align	1
+ 2020              		.global	ST7789_WriteString
+ 2021              		.syntax unified
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 47
+
+
+ 2022              		.thumb
+ 2023              		.thumb_func
+ 2025              	ST7789_WriteString:
+ 2026              	.LVL250:
+ 2027              	.LFB146:
+ 499:Core/Src/st7789.c **** 
+ 500:Core/Src/st7789.c **** /**
+ 501:Core/Src/st7789.c ****  * @brief Write a string
+ 502:Core/Src/st7789.c ****  * @param  x&y -> cursor of the start point.
+ 503:Core/Src/st7789.c ****  * @param str -> string to write
+ 504:Core/Src/st7789.c ****  * @param font -> fontstyle of the string
+ 505:Core/Src/st7789.c ****  * @param color -> color of the string
+ 506:Core/Src/st7789.c ****  * @param bgcolor -> background color of the string
+ 507:Core/Src/st7789.c ****  * @return  none
+ 508:Core/Src/st7789.c ****  */
+ 509:Core/Src/st7789.c **** void ST7789_WriteString(uint16_t x, uint16_t y, const char *str, FontDef font, uint16_t color, uint
+ 510:Core/Src/st7789.c **** {
+ 2028              		.loc 1 510 1 is_stmt 1 view -0
+ 2029              		.cfi_startproc
+ 2030              		@ args = 20, pretend = 8, frame = 0
+ 2031              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2032              		.loc 1 510 1 is_stmt 0 view .LVU415
+ 2033 0000 82B0     		sub	sp, sp, #8
+ 2034              	.LCFI46:
+ 2035              		.cfi_def_cfa_offset 8
+ 2036 0002 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 2037              	.LCFI47:
+ 2038              		.cfi_def_cfa_offset 36
+ 2039              		.cfi_offset 4, -36
+ 2040              		.cfi_offset 5, -32
+ 2041              		.cfi_offset 6, -28
+ 2042              		.cfi_offset 7, -24
+ 2043              		.cfi_offset 8, -20
+ 2044              		.cfi_offset 9, -16
+ 2045              		.cfi_offset 14, -12
+ 2046 0006 85B0     		sub	sp, sp, #20
+ 2047              	.LCFI48:
+ 2048              		.cfi_def_cfa_offset 56
+ 2049 0008 0646     		mov	r6, r0
+ 2050 000a 0D46     		mov	r5, r1
+ 2051 000c 1746     		mov	r7, r2
+ 2052 000e 0D93     		str	r3, [sp, #52]
+ 2053 0010 BDF83C90 		ldrh	r9, [sp, #60]
+ 2054 0014 BDF84080 		ldrh	r8, [sp, #64]
+ 511:Core/Src/st7789.c **** 	ST7789_Select();
+ 2055              		.loc 1 511 2 is_stmt 1 view .LVU416
+ 2056 0018 0022     		movs	r2, #0
+ 2057              	.LVL251:
+ 2058              		.loc 1 511 2 is_stmt 0 view .LVU417
+ 2059 001a 0821     		movs	r1, #8
+ 2060              	.LVL252:
+ 2061              		.loc 1 511 2 view .LVU418
+ 2062 001c 1848     		ldr	r0, .L128
+ 2063              	.LVL253:
+ 2064              		.loc 1 511 2 view .LVU419
+ 2065 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2066              	.LVL254:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 48
+
+
+ 512:Core/Src/st7789.c **** 	while (*str)
+ 2067              		.loc 1 512 2 is_stmt 1 view .LVU420
+ 2068              		.loc 1 512 8 is_stmt 0 view .LVU421
+ 2069 0022 10E0     		b	.L120
+ 2070              	.LVL255:
+ 2071              	.L127:
+ 513:Core/Src/st7789.c **** 	{
+ 514:Core/Src/st7789.c **** 		if (x + font.width >= ST7789_WIDTH)
+ 515:Core/Src/st7789.c **** 		{
+ 516:Core/Src/st7789.c **** 			x = 0;
+ 517:Core/Src/st7789.c **** 			y += font.height;
+ 518:Core/Src/st7789.c **** 			if (y + font.height >= ST7789_HEIGHT)
+ 519:Core/Src/st7789.c **** 			{
+ 520:Core/Src/st7789.c **** 				break;
+ 521:Core/Src/st7789.c **** 			}
+ 522:Core/Src/st7789.c **** 
+ 523:Core/Src/st7789.c **** 			if (*str == ' ')
+ 524:Core/Src/st7789.c **** 			{
+ 525:Core/Src/st7789.c **** 				// skip spaces in the beginning of the new line
+ 526:Core/Src/st7789.c **** 				str++;
+ 2072              		.loc 1 526 5 is_stmt 1 view .LVU422
+ 2073              		.loc 1 526 8 is_stmt 0 view .LVU423
+ 2074 0024 0137     		adds	r7, r7, #1
+ 2075              	.LVL256:
+ 527:Core/Src/st7789.c **** 				continue;
+ 2076              		.loc 1 527 5 is_stmt 1 view .LVU424
+ 516:Core/Src/st7789.c **** 			y += font.height;
+ 2077              		.loc 1 516 6 is_stmt 0 view .LVU425
+ 2078 0026 0026     		movs	r6, #0
+ 2079              		.loc 1 527 5 view .LVU426
+ 2080 0028 0DE0     		b	.L120
+ 2081              	.LVL257:
+ 2082              	.L121:
+ 528:Core/Src/st7789.c **** 			}
+ 529:Core/Src/st7789.c **** 		}
+ 530:Core/Src/st7789.c **** 		ST7789_WriteChar(x, y, *str, font, color, bgcolor);
+ 2083              		.loc 1 530 3 is_stmt 1 view .LVU427
+ 2084 002a CDF80880 		str	r8, [sp, #8]
+ 2085 002e CDF80490 		str	r9, [sp, #4]
+ 2086 0032 0E9B     		ldr	r3, [sp, #56]
+ 2087 0034 0093     		str	r3, [sp]
+ 2088 0036 0D9B     		ldr	r3, [sp, #52]
+ 2089 0038 2946     		mov	r1, r5
+ 2090 003a 3046     		mov	r0, r6
+ 2091 003c FFF7FEFF 		bl	ST7789_WriteChar
+ 2092              	.LVL258:
+ 531:Core/Src/st7789.c **** 		x += font.width;
+ 2093              		.loc 1 531 3 view .LVU428
+ 2094              		.loc 1 531 5 is_stmt 0 view .LVU429
+ 2095 0040 3444     		add	r4, r4, r6
+ 2096 0042 A6B2     		uxth	r6, r4
+ 2097              	.LVL259:
+ 532:Core/Src/st7789.c **** 		str++;
+ 2098              		.loc 1 532 3 is_stmt 1 view .LVU430
+ 2099              		.loc 1 532 6 is_stmt 0 view .LVU431
+ 2100 0044 0137     		adds	r7, r7, #1
+ 2101              	.LVL260:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 49
+
+
+ 2102              	.L120:
+ 512:Core/Src/st7789.c **** 	{
+ 2103              		.loc 1 512 8 is_stmt 1 view .LVU432
+ 512:Core/Src/st7789.c **** 	{
+ 2104              		.loc 1 512 9 is_stmt 0 view .LVU433
+ 2105 0046 3A78     		ldrb	r2, [r7]	@ zero_extendqisi2
+ 512:Core/Src/st7789.c **** 	{
+ 2106              		.loc 1 512 8 view .LVU434
+ 2107 0048 82B1     		cbz	r2, .L122
+ 514:Core/Src/st7789.c **** 		{
+ 2108              		.loc 1 514 3 is_stmt 1 view .LVU435
+ 514:Core/Src/st7789.c **** 		{
+ 2109              		.loc 1 514 15 is_stmt 0 view .LVU436
+ 2110 004a 9DF83440 		ldrb	r4, [sp, #52]	@ zero_extendqisi2
+ 514:Core/Src/st7789.c **** 		{
+ 2111              		.loc 1 514 9 view .LVU437
+ 2112 004e 3319     		adds	r3, r6, r4
+ 514:Core/Src/st7789.c **** 		{
+ 2113              		.loc 1 514 6 view .LVU438
+ 2114 0050 EF2B     		cmp	r3, #239
+ 2115 0052 EADD     		ble	.L121
+ 516:Core/Src/st7789.c **** 			y += font.height;
+ 2116              		.loc 1 516 4 is_stmt 1 view .LVU439
+ 2117              	.LVL261:
+ 517:Core/Src/st7789.c **** 			if (y + font.height >= ST7789_HEIGHT)
+ 2118              		.loc 1 517 4 view .LVU440
+ 517:Core/Src/st7789.c **** 			if (y + font.height >= ST7789_HEIGHT)
+ 2119              		.loc 1 517 13 is_stmt 0 view .LVU441
+ 2120 0054 9DF83530 		ldrb	r3, [sp, #53]	@ zero_extendqisi2
+ 517:Core/Src/st7789.c **** 			if (y + font.height >= ST7789_HEIGHT)
+ 2121              		.loc 1 517 6 view .LVU442
+ 2122 0058 1D44     		add	r5, r5, r3
+ 2123              	.LVL262:
+ 517:Core/Src/st7789.c **** 			if (y + font.height >= ST7789_HEIGHT)
+ 2124              		.loc 1 517 6 view .LVU443
+ 2125 005a ADB2     		uxth	r5, r5
+ 2126              	.LVL263:
+ 518:Core/Src/st7789.c **** 			{
+ 2127              		.loc 1 518 4 is_stmt 1 view .LVU444
+ 518:Core/Src/st7789.c **** 			{
+ 2128              		.loc 1 518 10 is_stmt 0 view .LVU445
+ 2129 005c 2B44     		add	r3, r3, r5
+ 518:Core/Src/st7789.c **** 			{
+ 2130              		.loc 1 518 7 view .LVU446
+ 2131 005e B3F5A07F 		cmp	r3, #320
+ 2132 0062 03DA     		bge	.L122
+ 523:Core/Src/st7789.c **** 			{
+ 2133              		.loc 1 523 4 is_stmt 1 view .LVU447
+ 523:Core/Src/st7789.c **** 			{
+ 2134              		.loc 1 523 7 is_stmt 0 view .LVU448
+ 2135 0064 202A     		cmp	r2, #32
+ 2136 0066 DDD0     		beq	.L127
+ 516:Core/Src/st7789.c **** 			y += font.height;
+ 2137              		.loc 1 516 6 view .LVU449
+ 2138 0068 0026     		movs	r6, #0
+ 2139 006a DEE7     		b	.L121
+ 2140              	.LVL264:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 50
+
+
+ 2141              	.L122:
+ 533:Core/Src/st7789.c **** 	}
+ 534:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 2142              		.loc 1 534 2 is_stmt 1 view .LVU450
+ 2143 006c 0122     		movs	r2, #1
+ 2144 006e 0821     		movs	r1, #8
+ 2145 0070 0348     		ldr	r0, .L128
+ 2146 0072 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2147              	.LVL265:
+ 535:Core/Src/st7789.c **** }
+ 2148              		.loc 1 535 1 is_stmt 0 view .LVU451
+ 2149 0076 05B0     		add	sp, sp, #20
+ 2150              	.LCFI49:
+ 2151              		.cfi_def_cfa_offset 36
+ 2152              		@ sp needed
+ 2153 0078 BDE8F043 		pop	{r4, r5, r6, r7, r8, r9, lr}
+ 2154              	.LCFI50:
+ 2155              		.cfi_restore 14
+ 2156              		.cfi_restore 9
+ 2157              		.cfi_restore 8
+ 2158              		.cfi_restore 7
+ 2159              		.cfi_restore 6
+ 2160              		.cfi_restore 5
+ 2161              		.cfi_restore 4
+ 2162              		.cfi_def_cfa_offset 8
+ 2163              	.LVL266:
+ 2164              		.loc 1 535 1 view .LVU452
+ 2165 007c 02B0     		add	sp, sp, #8
+ 2166              	.LCFI51:
+ 2167              		.cfi_def_cfa_offset 0
+ 2168 007e 7047     		bx	lr
+ 2169              	.L129:
+ 2170              		.align	2
+ 2171              	.L128:
+ 2172 0080 00040240 		.word	1073873920
+ 2173              		.cfi_endproc
+ 2174              	.LFE146:
+ 2176              		.section	.text.ST7789_DrawFilledRectangle,"ax",%progbits
+ 2177              		.align	1
+ 2178              		.global	ST7789_DrawFilledRectangle
+ 2179              		.syntax unified
+ 2180              		.thumb
+ 2181              		.thumb_func
+ 2183              	ST7789_DrawFilledRectangle:
+ 2184              	.LVL267:
+ 2185              	.LFB147:
+ 536:Core/Src/st7789.c **** 
+ 537:Core/Src/st7789.c **** /**
+ 538:Core/Src/st7789.c ****  * @brief Draw a filled Rectangle with single color
+ 539:Core/Src/st7789.c ****  * @param  x&y -> coordinates of the starting point
+ 540:Core/Src/st7789.c ****  * @param w&h -> width & height of the Rectangle
+ 541:Core/Src/st7789.c ****  * @param color -> color of the Rectangle
+ 542:Core/Src/st7789.c ****  * @return  none
+ 543:Core/Src/st7789.c ****  */
+ 544:Core/Src/st7789.c **** void ST7789_DrawFilledRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color)
+ 545:Core/Src/st7789.c **** {
+ 2186              		.loc 1 545 1 is_stmt 1 view -0
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 51
+
+
+ 2187              		.cfi_startproc
+ 2188              		@ args = 4, pretend = 0, frame = 0
+ 2189              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2190              		.loc 1 545 1 is_stmt 0 view .LVU454
+ 2191 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 2192              	.LCFI52:
+ 2193              		.cfi_def_cfa_offset 28
+ 2194              		.cfi_offset 4, -28
+ 2195              		.cfi_offset 5, -24
+ 2196              		.cfi_offset 6, -20
+ 2197              		.cfi_offset 7, -16
+ 2198              		.cfi_offset 8, -12
+ 2199              		.cfi_offset 9, -8
+ 2200              		.cfi_offset 14, -4
+ 2201 0004 83B0     		sub	sp, sp, #12
+ 2202              	.LCFI53:
+ 2203              		.cfi_def_cfa_offset 40
+ 2204 0006 0546     		mov	r5, r0
+ 2205 0008 0F46     		mov	r7, r1
+ 2206 000a 9046     		mov	r8, r2
+ 2207 000c 1E46     		mov	r6, r3
+ 2208 000e BDF82890 		ldrh	r9, [sp, #40]
+ 546:Core/Src/st7789.c **** 	ST7789_Select();
+ 2209              		.loc 1 546 2 is_stmt 1 view .LVU455
+ 2210 0012 0022     		movs	r2, #0
+ 2211              	.LVL268:
+ 2212              		.loc 1 546 2 is_stmt 0 view .LVU456
+ 2213 0014 0821     		movs	r1, #8
+ 2214              	.LVL269:
+ 2215              		.loc 1 546 2 view .LVU457
+ 2216 0016 1948     		ldr	r0, .L137
+ 2217              	.LVL270:
+ 2218              		.loc 1 546 2 view .LVU458
+ 2219 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2220              	.LVL271:
+ 547:Core/Src/st7789.c **** 	uint8_t i;
+ 2221              		.loc 1 547 2 is_stmt 1 view .LVU459
+ 548:Core/Src/st7789.c **** 
+ 549:Core/Src/st7789.c **** 	/* Check input parameters */
+ 550:Core/Src/st7789.c **** 	if (x >= ST7789_WIDTH ||
+ 2222              		.loc 1 550 2 view .LVU460
+ 2223              		.loc 1 550 5 is_stmt 0 view .LVU461
+ 2224 001c EF2D     		cmp	r5, #239
+ 2225 001e 2AD8     		bhi	.L130
+ 2226              		.loc 1 550 24 discriminator 1 view .LVU462
+ 2227 0020 B7F5A07F 		cmp	r7, #320
+ 2228 0024 27D2     		bcs	.L130
+ 551:Core/Src/st7789.c **** 		y >= ST7789_HEIGHT)
+ 552:Core/Src/st7789.c **** 	{
+ 553:Core/Src/st7789.c **** 		/* Return error */
+ 554:Core/Src/st7789.c **** 		return;
+ 555:Core/Src/st7789.c **** 	}
+ 556:Core/Src/st7789.c **** 
+ 557:Core/Src/st7789.c **** 	/* Check width and height */
+ 558:Core/Src/st7789.c **** 	if ((x + w) >= ST7789_WIDTH)
+ 2229              		.loc 1 558 2 is_stmt 1 view .LVU463
+ 2230              		.loc 1 558 9 is_stmt 0 view .LVU464
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 52
+
+
+ 2231 0026 05EB0803 		add	r3, r5, r8
+ 2232              		.loc 1 558 5 view .LVU465
+ 2233 002a EF2B     		cmp	r3, #239
+ 2234 002c 03DD     		ble	.L132
+ 559:Core/Src/st7789.c **** 	{
+ 560:Core/Src/st7789.c **** 		w = ST7789_WIDTH - x;
+ 2235              		.loc 1 560 3 is_stmt 1 view .LVU466
+ 2236              		.loc 1 560 5 is_stmt 0 view .LVU467
+ 2237 002e C5F1F008 		rsb	r8, r5, #240
+ 2238 0032 1FFA88F8 		uxth	r8, r8
+ 2239              	.LVL272:
+ 2240              	.L132:
+ 561:Core/Src/st7789.c **** 	}
+ 562:Core/Src/st7789.c **** 	if ((y + h) >= ST7789_HEIGHT)
+ 2241              		.loc 1 562 2 is_stmt 1 view .LVU468
+ 2242              		.loc 1 562 9 is_stmt 0 view .LVU469
+ 2243 0036 BB19     		adds	r3, r7, r6
+ 2244              		.loc 1 562 5 view .LVU470
+ 2245 0038 B3F5A07F 		cmp	r3, #320
+ 2246 003c 02DB     		blt	.L133
+ 563:Core/Src/st7789.c **** 	{
+ 564:Core/Src/st7789.c **** 		h = ST7789_HEIGHT - y;
+ 2247              		.loc 1 564 3 is_stmt 1 view .LVU471
+ 2248              		.loc 1 564 5 is_stmt 0 view .LVU472
+ 2249 003e C7F5A076 		rsb	r6, r7, #320
+ 2250 0042 B6B2     		uxth	r6, r6
+ 2251              	.LVL273:
+ 2252              	.L133:
+ 565:Core/Src/st7789.c **** 	}
+ 566:Core/Src/st7789.c **** 
+ 567:Core/Src/st7789.c **** 	/* Draw lines */
+ 568:Core/Src/st7789.c **** 	for (i = 0; i <= h; i++)
+ 2253              		.loc 1 568 2 is_stmt 1 view .LVU473
+ 2254              		.loc 1 568 9 is_stmt 0 view .LVU474
+ 2255 0044 0024     		movs	r4, #0
+ 2256              		.loc 1 568 2 view .LVU475
+ 2257 0046 0DE0     		b	.L134
+ 2258              	.LVL274:
+ 2259              	.L135:
+ 569:Core/Src/st7789.c **** 	{
+ 570:Core/Src/st7789.c **** 		/* Draw lines */
+ 571:Core/Src/st7789.c **** 		ST7789_DrawLine(x, y + i, x + w, y + i, color);
+ 2260              		.loc 1 571 3 is_stmt 1 discriminator 3 view .LVU476
+ 2261 0048 0CEB0701 		add	r1, ip, r7
+ 2262 004c 89B2     		uxth	r1, r1
+ 2263 004e 08EB0502 		add	r2, r8, r5
+ 2264 0052 CDF80090 		str	r9, [sp]
+ 2265 0056 0B46     		mov	r3, r1
+ 2266 0058 92B2     		uxth	r2, r2
+ 2267 005a 2846     		mov	r0, r5
+ 2268 005c FFF7FEFF 		bl	ST7789_DrawLine
+ 2269              	.LVL275:
+ 568:Core/Src/st7789.c **** 	{
+ 2270              		.loc 1 568 22 discriminator 3 view .LVU477
+ 568:Core/Src/st7789.c **** 	{
+ 2271              		.loc 1 568 23 is_stmt 0 discriminator 3 view .LVU478
+ 2272 0060 0134     		adds	r4, r4, #1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 53
+
+
+ 2273              	.LVL276:
+ 568:Core/Src/st7789.c **** 	{
+ 2274              		.loc 1 568 23 discriminator 3 view .LVU479
+ 2275 0062 E4B2     		uxtb	r4, r4
+ 2276              	.LVL277:
+ 2277              	.L134:
+ 568:Core/Src/st7789.c **** 	{
+ 2278              		.loc 1 568 14 is_stmt 1 discriminator 1 view .LVU480
+ 568:Core/Src/st7789.c **** 	{
+ 2279              		.loc 1 568 16 is_stmt 0 discriminator 1 view .LVU481
+ 2280 0064 1FFA84FC 		uxth	ip, r4
+ 568:Core/Src/st7789.c **** 	{
+ 2281              		.loc 1 568 2 discriminator 1 view .LVU482
+ 2282 0068 B445     		cmp	ip, r6
+ 2283 006a EDD9     		bls	.L135
+ 572:Core/Src/st7789.c **** 	}
+ 573:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 2284              		.loc 1 573 2 is_stmt 1 view .LVU483
+ 2285 006c 0122     		movs	r2, #1
+ 2286 006e 0821     		movs	r1, #8
+ 2287 0070 0248     		ldr	r0, .L137
+ 2288 0072 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2289              	.LVL278:
+ 2290              	.L130:
+ 574:Core/Src/st7789.c **** }
+ 2291              		.loc 1 574 1 is_stmt 0 view .LVU484
+ 2292 0076 03B0     		add	sp, sp, #12
+ 2293              	.LCFI54:
+ 2294              		.cfi_def_cfa_offset 28
+ 2295              		@ sp needed
+ 2296 0078 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 2297              	.LVL279:
+ 2298              	.L138:
+ 2299              		.loc 1 574 1 view .LVU485
+ 2300              		.align	2
+ 2301              	.L137:
+ 2302 007c 00040240 		.word	1073873920
+ 2303              		.cfi_endproc
+ 2304              	.LFE147:
+ 2306              		.section	.text.ST7789_DrawTriangle,"ax",%progbits
+ 2307              		.align	1
+ 2308              		.global	ST7789_DrawTriangle
+ 2309              		.syntax unified
+ 2310              		.thumb
+ 2311              		.thumb_func
+ 2313              	ST7789_DrawTriangle:
+ 2314              	.LVL280:
+ 2315              	.LFB148:
+ 575:Core/Src/st7789.c **** 
+ 576:Core/Src/st7789.c **** /**
+ 577:Core/Src/st7789.c ****  * @brief Draw a Triangle with single color
+ 578:Core/Src/st7789.c ****  * @param  xi&yi -> 3 coordinates of 3 top points.
+ 579:Core/Src/st7789.c ****  * @param color ->color of the lines
+ 580:Core/Src/st7789.c ****  * @return  none
+ 581:Core/Src/st7789.c ****  */
+ 582:Core/Src/st7789.c **** void ST7789_DrawTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t 
+ 583:Core/Src/st7789.c **** {
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 54
+
+
+ 2316              		.loc 1 583 1 is_stmt 1 view -0
+ 2317              		.cfi_startproc
+ 2318              		@ args = 12, pretend = 0, frame = 0
+ 2319              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2320              		.loc 1 583 1 is_stmt 0 view .LVU487
+ 2321 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 2322              	.LCFI55:
+ 2323              		.cfi_def_cfa_offset 36
+ 2324              		.cfi_offset 4, -36
+ 2325              		.cfi_offset 5, -32
+ 2326              		.cfi_offset 6, -28
+ 2327              		.cfi_offset 7, -24
+ 2328              		.cfi_offset 8, -20
+ 2329              		.cfi_offset 9, -16
+ 2330              		.cfi_offset 10, -12
+ 2331              		.cfi_offset 11, -8
+ 2332              		.cfi_offset 14, -4
+ 2333 0004 83B0     		sub	sp, sp, #12
+ 2334              	.LCFI56:
+ 2335              		.cfi_def_cfa_offset 48
+ 2336 0006 0446     		mov	r4, r0
+ 2337 0008 0D46     		mov	r5, r1
+ 2338 000a 1646     		mov	r6, r2
+ 2339 000c 1F46     		mov	r7, r3
+ 2340 000e BDF830A0 		ldrh	r10, [sp, #48]
+ 2341 0012 BDF834B0 		ldrh	fp, [sp, #52]
+ 2342 0016 BDF83880 		ldrh	r8, [sp, #56]
+ 584:Core/Src/st7789.c **** 	ST7789_Select();
+ 2343              		.loc 1 584 2 is_stmt 1 view .LVU488
+ 2344 001a DFF84C90 		ldr	r9, .L141
+ 2345 001e 0022     		movs	r2, #0
+ 2346              	.LVL281:
+ 2347              		.loc 1 584 2 is_stmt 0 view .LVU489
+ 2348 0020 0821     		movs	r1, #8
+ 2349              	.LVL282:
+ 2350              		.loc 1 584 2 view .LVU490
+ 2351 0022 4846     		mov	r0, r9
+ 2352              	.LVL283:
+ 2353              		.loc 1 584 2 view .LVU491
+ 2354 0024 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2355              	.LVL284:
+ 585:Core/Src/st7789.c **** 	/* Draw lines */
+ 586:Core/Src/st7789.c **** 	ST7789_DrawLine(x1, y1, x2, y2, color);
+ 2356              		.loc 1 586 2 is_stmt 1 view .LVU492
+ 2357 0028 CDF80080 		str	r8, [sp]
+ 2358 002c 3B46     		mov	r3, r7
+ 2359 002e 3246     		mov	r2, r6
+ 2360 0030 2946     		mov	r1, r5
+ 2361 0032 2046     		mov	r0, r4
+ 2362 0034 FFF7FEFF 		bl	ST7789_DrawLine
+ 2363              	.LVL285:
+ 587:Core/Src/st7789.c **** 	ST7789_DrawLine(x2, y2, x3, y3, color);
+ 2364              		.loc 1 587 2 view .LVU493
+ 2365 0038 CDF80080 		str	r8, [sp]
+ 2366 003c 5B46     		mov	r3, fp
+ 2367 003e 5246     		mov	r2, r10
+ 2368 0040 3946     		mov	r1, r7
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 55
+
+
+ 2369 0042 3046     		mov	r0, r6
+ 2370 0044 FFF7FEFF 		bl	ST7789_DrawLine
+ 2371              	.LVL286:
+ 588:Core/Src/st7789.c **** 	ST7789_DrawLine(x3, y3, x1, y1, color);
+ 2372              		.loc 1 588 2 view .LVU494
+ 2373 0048 CDF80080 		str	r8, [sp]
+ 2374 004c 2B46     		mov	r3, r5
+ 2375 004e 2246     		mov	r2, r4
+ 2376 0050 5946     		mov	r1, fp
+ 2377 0052 5046     		mov	r0, r10
+ 2378 0054 FFF7FEFF 		bl	ST7789_DrawLine
+ 2379              	.LVL287:
+ 589:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 2380              		.loc 1 589 2 view .LVU495
+ 2381 0058 0122     		movs	r2, #1
+ 2382 005a 0821     		movs	r1, #8
+ 2383 005c 4846     		mov	r0, r9
+ 2384 005e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2385              	.LVL288:
+ 590:Core/Src/st7789.c **** }
+ 2386              		.loc 1 590 1 is_stmt 0 view .LVU496
+ 2387 0062 03B0     		add	sp, sp, #12
+ 2388              	.LCFI57:
+ 2389              		.cfi_def_cfa_offset 36
+ 2390              		@ sp needed
+ 2391 0064 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 2392              	.LVL289:
+ 2393              	.L142:
+ 2394              		.loc 1 590 1 view .LVU497
+ 2395              		.align	2
+ 2396              	.L141:
+ 2397 0068 00040240 		.word	1073873920
+ 2398              		.cfi_endproc
+ 2399              	.LFE148:
+ 2401              		.section	.text.ST7789_DrawFilledTriangle,"ax",%progbits
+ 2402              		.align	1
+ 2403              		.global	ST7789_DrawFilledTriangle
+ 2404              		.syntax unified
+ 2405              		.thumb
+ 2406              		.thumb_func
+ 2408              	ST7789_DrawFilledTriangle:
+ 2409              	.LVL290:
+ 2410              	.LFB149:
+ 591:Core/Src/st7789.c **** 
+ 592:Core/Src/st7789.c **** /**
+ 593:Core/Src/st7789.c ****  * @brief Draw a filled Triangle with single color
+ 594:Core/Src/st7789.c ****  * @param  xi&yi -> 3 coordinates of 3 top points.
+ 595:Core/Src/st7789.c ****  * @param color ->color of the triangle
+ 596:Core/Src/st7789.c ****  * @return  none
+ 597:Core/Src/st7789.c ****  */
+ 598:Core/Src/st7789.c **** void ST7789_DrawFilledTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uin
+ 599:Core/Src/st7789.c **** {
+ 2411              		.loc 1 599 1 is_stmt 1 view -0
+ 2412              		.cfi_startproc
+ 2413              		@ args = 12, pretend = 0, frame = 32
+ 2414              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2415              		.loc 1 599 1 is_stmt 0 view .LVU499
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 56
+
+
+ 2416 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 2417              	.LCFI58:
+ 2418              		.cfi_def_cfa_offset 36
+ 2419              		.cfi_offset 4, -36
+ 2420              		.cfi_offset 5, -32
+ 2421              		.cfi_offset 6, -28
+ 2422              		.cfi_offset 7, -24
+ 2423              		.cfi_offset 8, -20
+ 2424              		.cfi_offset 9, -16
+ 2425              		.cfi_offset 10, -12
+ 2426              		.cfi_offset 11, -8
+ 2427              		.cfi_offset 14, -4
+ 2428 0004 8BB0     		sub	sp, sp, #44
+ 2429              	.LCFI59:
+ 2430              		.cfi_def_cfa_offset 80
+ 2431 0006 0746     		mov	r7, r0
+ 2432 0008 0E46     		mov	r6, r1
+ 2433 000a 9146     		mov	r9, r2
+ 2434 000c 9846     		mov	r8, r3
+ 2435 000e BDF85030 		ldrh	r3, [sp, #80]
+ 2436              	.LVL291:
+ 2437              		.loc 1 599 1 view .LVU500
+ 2438 0012 0593     		str	r3, [sp, #20]
+ 2439 0014 BDF85430 		ldrh	r3, [sp, #84]
+ 2440 0018 0693     		str	r3, [sp, #24]
+ 2441 001a BDF85830 		ldrh	r3, [sp, #88]
+ 2442 001e 0793     		str	r3, [sp, #28]
+ 600:Core/Src/st7789.c **** 	ST7789_Select();
+ 2443              		.loc 1 600 2 is_stmt 1 view .LVU501
+ 2444 0020 0022     		movs	r2, #0
+ 2445              	.LVL292:
+ 2446              		.loc 1 600 2 is_stmt 0 view .LVU502
+ 2447 0022 0821     		movs	r1, #8
+ 2448              	.LVL293:
+ 2449              		.loc 1 600 2 view .LVU503
+ 2450 0024 3748     		ldr	r0, .L155
+ 2451              	.LVL294:
+ 2452              		.loc 1 600 2 view .LVU504
+ 2453 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2454              	.LVL295:
+ 601:Core/Src/st7789.c **** 	int16_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0,
+ 2455              		.loc 1 601 2 is_stmt 1 view .LVU505
+ 602:Core/Src/st7789.c **** 			yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0,
+ 603:Core/Src/st7789.c **** 			curpixel = 0;
+ 604:Core/Src/st7789.c **** 
+ 605:Core/Src/st7789.c **** 	deltax = ABS(x2 - x1);
+ 2456              		.loc 1 605 2 view .LVU506
+ 2457              		.loc 1 605 11 is_stmt 0 view .LVU507
+ 2458 002a A9EB070A 		sub	r10, r9, r7
+ 2459 002e BAF1000F 		cmp	r10, #0
+ 2460 0032 B8BF     		it	lt
+ 2461 0034 CAF1000A 		rsblt	r10, r10, #0
+ 2462              		.loc 1 605 9 view .LVU508
+ 2463 0038 0FFA8AFA 		sxth	r10, r10
+ 2464              	.LVL296:
+ 606:Core/Src/st7789.c **** 	deltay = ABS(y2 - y1);
+ 2465              		.loc 1 606 2 is_stmt 1 view .LVU509
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 57
+
+
+ 2466              		.loc 1 606 11 is_stmt 0 view .LVU510
+ 2467 003c A8EB060B 		sub	fp, r8, r6
+ 2468 0040 BBF1000F 		cmp	fp, #0
+ 2469 0044 B8BF     		it	lt
+ 2470 0046 CBF1000B 		rsblt	fp, fp, #0
+ 2471              		.loc 1 606 9 view .LVU511
+ 2472 004a 0FFA8BFB 		sxth	fp, fp
+ 2473              	.LVL297:
+ 607:Core/Src/st7789.c **** 	x = x1;
+ 2474              		.loc 1 607 2 is_stmt 1 view .LVU512
+ 2475              		.loc 1 607 4 is_stmt 0 view .LVU513
+ 2476 004e 3CB2     		sxth	r4, r7
+ 2477              	.LVL298:
+ 608:Core/Src/st7789.c **** 	y = y1;
+ 2478              		.loc 1 608 2 is_stmt 1 view .LVU514
+ 2479              		.loc 1 608 4 is_stmt 0 view .LVU515
+ 2480 0050 35B2     		sxth	r5, r6
+ 2481              	.LVL299:
+ 609:Core/Src/st7789.c **** 
+ 610:Core/Src/st7789.c **** 	if (x2 >= x1)
+ 2482              		.loc 1 610 2 is_stmt 1 view .LVU516
+ 2483              		.loc 1 610 5 is_stmt 0 view .LVU517
+ 2484 0052 B945     		cmp	r9, r7
+ 2485 0054 12D3     		bcc	.L151
+ 611:Core/Src/st7789.c **** 	{
+ 612:Core/Src/st7789.c **** 		xinc1 = 1;
+ 2486              		.loc 1 612 9 view .LVU518
+ 2487 0056 0123     		movs	r3, #1
+ 2488 0058 0893     		str	r3, [sp, #32]
+ 2489              	.L144:
+ 2490              	.LVL300:
+ 613:Core/Src/st7789.c **** 		xinc2 = 1;
+ 614:Core/Src/st7789.c **** 	}
+ 615:Core/Src/st7789.c **** 	else
+ 616:Core/Src/st7789.c **** 	{
+ 617:Core/Src/st7789.c **** 		xinc1 = -1;
+ 618:Core/Src/st7789.c **** 		xinc2 = -1;
+ 619:Core/Src/st7789.c **** 	}
+ 620:Core/Src/st7789.c **** 
+ 621:Core/Src/st7789.c **** 	if (y2 >= y1)
+ 2491              		.loc 1 621 2 is_stmt 1 view .LVU519
+ 2492              		.loc 1 621 5 is_stmt 0 view .LVU520
+ 2493 005a B045     		cmp	r8, r6
+ 2494 005c 12D3     		bcc	.L152
+ 622:Core/Src/st7789.c **** 	{
+ 623:Core/Src/st7789.c **** 		yinc1 = 1;
+ 2495              		.loc 1 623 9 view .LVU521
+ 2496 005e 0123     		movs	r3, #1
+ 2497 0060 0993     		str	r3, [sp, #36]
+ 2498              	.L145:
+ 2499              	.LVL301:
+ 624:Core/Src/st7789.c **** 		yinc2 = 1;
+ 625:Core/Src/st7789.c **** 	}
+ 626:Core/Src/st7789.c **** 	else
+ 627:Core/Src/st7789.c **** 	{
+ 628:Core/Src/st7789.c **** 		yinc1 = -1;
+ 629:Core/Src/st7789.c **** 		yinc2 = -1;
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 58
+
+
+ 630:Core/Src/st7789.c **** 	}
+ 631:Core/Src/st7789.c **** 
+ 632:Core/Src/st7789.c **** 	if (deltax >= deltay)
+ 2500              		.loc 1 632 2 is_stmt 1 view .LVU522
+ 2501              		.loc 1 632 5 is_stmt 0 view .LVU523
+ 2502 0062 DA45     		cmp	r10, fp
+ 2503 0064 12DB     		blt	.L146
+ 633:Core/Src/st7789.c **** 	{
+ 634:Core/Src/st7789.c **** 		xinc1 = 0;
+ 2504              		.loc 1 634 3 is_stmt 1 view .LVU524
+ 2505              	.LVL302:
+ 635:Core/Src/st7789.c **** 		yinc2 = 0;
+ 2506              		.loc 1 635 3 view .LVU525
+ 636:Core/Src/st7789.c **** 		den = deltax;
+ 2507              		.loc 1 636 3 view .LVU526
+ 637:Core/Src/st7789.c **** 		num = deltax / 2;
+ 2508              		.loc 1 637 3 view .LVU527
+ 2509              		.loc 1 637 7 is_stmt 0 view .LVU528
+ 2510 0066 0AEBDA76 		add	r6, r10, r10, lsr #31
+ 2511 006a 46F34F06 		sbfx	r6, r6, #1, #16
+ 2512              	.LVL303:
+ 638:Core/Src/st7789.c **** 		numadd = deltay;
+ 2513              		.loc 1 638 3 is_stmt 1 view .LVU529
+ 639:Core/Src/st7789.c **** 		numpixels = deltax;
+ 2514              		.loc 1 639 3 view .LVU530
+ 2515              		.loc 1 639 3 is_stmt 0 view .LVU531
+ 2516 006e 089B     		ldr	r3, [sp, #32]
+ 2517 0070 0393     		str	r3, [sp, #12]
+ 635:Core/Src/st7789.c **** 		den = deltax;
+ 2518              		.loc 1 635 9 view .LVU532
+ 2519 0072 0023     		movs	r3, #0
+ 2520 0074 0893     		str	r3, [sp, #32]
+ 2521              	.LVL304:
+ 634:Core/Src/st7789.c **** 		yinc2 = 0;
+ 2522              		.loc 1 634 9 view .LVU533
+ 2523 0076 0493     		str	r3, [sp, #16]
+ 2524              	.LVL305:
+ 2525              	.L147:
+ 640:Core/Src/st7789.c **** 	}
+ 641:Core/Src/st7789.c **** 	else
+ 642:Core/Src/st7789.c **** 	{
+ 643:Core/Src/st7789.c **** 		xinc2 = 0;
+ 644:Core/Src/st7789.c **** 		yinc1 = 0;
+ 645:Core/Src/st7789.c **** 		den = deltay;
+ 646:Core/Src/st7789.c **** 		num = deltay / 2;
+ 647:Core/Src/st7789.c **** 		numadd = deltax;
+ 648:Core/Src/st7789.c **** 		numpixels = deltay;
+ 649:Core/Src/st7789.c **** 	}
+ 650:Core/Src/st7789.c **** 
+ 651:Core/Src/st7789.c **** 	for (curpixel = 0; curpixel <= numpixels; curpixel++)
+ 2526              		.loc 1 651 2 is_stmt 1 view .LVU534
+ 2527              		.loc 1 651 16 is_stmt 0 view .LVU535
+ 2528 0078 0027     		movs	r7, #0
+ 2529              	.LVL306:
+ 2530              		.loc 1 651 2 view .LVU536
+ 2531 007a 1CE0     		b	.L148
+ 2532              	.LVL307:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 59
+
+
+ 2533              	.L151:
+ 617:Core/Src/st7789.c **** 		xinc2 = -1;
+ 2534              		.loc 1 617 9 view .LVU537
+ 2535 007c 4FF0FF33 		mov	r3, #-1
+ 2536 0080 0893     		str	r3, [sp, #32]
+ 2537 0082 EAE7     		b	.L144
+ 2538              	.LVL308:
+ 2539              	.L152:
+ 628:Core/Src/st7789.c **** 		yinc2 = -1;
+ 2540              		.loc 1 628 9 view .LVU538
+ 2541 0084 4FF0FF33 		mov	r3, #-1
+ 2542 0088 0993     		str	r3, [sp, #36]
+ 2543 008a EAE7     		b	.L145
+ 2544              	.LVL309:
+ 2545              	.L146:
+ 643:Core/Src/st7789.c **** 		yinc1 = 0;
+ 2546              		.loc 1 643 3 is_stmt 1 view .LVU539
+ 644:Core/Src/st7789.c **** 		den = deltay;
+ 2547              		.loc 1 644 3 view .LVU540
+ 645:Core/Src/st7789.c **** 		num = deltay / 2;
+ 2548              		.loc 1 645 3 view .LVU541
+ 646:Core/Src/st7789.c **** 		numadd = deltax;
+ 2549              		.loc 1 646 3 view .LVU542
+ 646:Core/Src/st7789.c **** 		numadd = deltax;
+ 2550              		.loc 1 646 7 is_stmt 0 view .LVU543
+ 2551 008c 0BEBDB76 		add	r6, fp, fp, lsr #31
+ 2552 0090 46F34F06 		sbfx	r6, r6, #1, #16
+ 2553              	.LVL310:
+ 647:Core/Src/st7789.c **** 		numpixels = deltay;
+ 2554              		.loc 1 647 3 is_stmt 1 view .LVU544
+ 648:Core/Src/st7789.c **** 	}
+ 2555              		.loc 1 648 3 view .LVU545
+ 646:Core/Src/st7789.c **** 		numadd = deltax;
+ 2556              		.loc 1 646 7 is_stmt 0 view .LVU546
+ 2557 0094 5346     		mov	r3, r10
+ 645:Core/Src/st7789.c **** 		num = deltay / 2;
+ 2558              		.loc 1 645 7 view .LVU547
+ 2559 0096 DA46     		mov	r10, fp
+ 2560              	.LVL311:
+ 647:Core/Src/st7789.c **** 		numpixels = deltay;
+ 2561              		.loc 1 647 10 view .LVU548
+ 2562 0098 9B46     		mov	fp, r3
+ 2563              	.LVL312:
+ 646:Core/Src/st7789.c **** 		numadd = deltax;
+ 2564              		.loc 1 646 7 view .LVU549
+ 2565 009a 099B     		ldr	r3, [sp, #36]
+ 2566              	.LVL313:
+ 646:Core/Src/st7789.c **** 		numadd = deltax;
+ 2567              		.loc 1 646 7 view .LVU550
+ 2568 009c 0493     		str	r3, [sp, #16]
+ 644:Core/Src/st7789.c **** 		den = deltay;
+ 2569              		.loc 1 644 9 view .LVU551
+ 2570 009e 0023     		movs	r3, #0
+ 2571 00a0 0993     		str	r3, [sp, #36]
+ 2572              	.LVL314:
+ 643:Core/Src/st7789.c **** 		yinc1 = 0;
+ 2573              		.loc 1 643 9 view .LVU552
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 60
+
+
+ 2574 00a2 0393     		str	r3, [sp, #12]
+ 2575 00a4 E8E7     		b	.L147
+ 2576              	.LVL315:
+ 2577              	.L149:
+ 652:Core/Src/st7789.c **** 	{
+ 653:Core/Src/st7789.c **** 		ST7789_DrawLine(x, y, x3, y3, color);
+ 654:Core/Src/st7789.c **** 
+ 655:Core/Src/st7789.c **** 		num += numadd;
+ 656:Core/Src/st7789.c **** 		if (num >= den)
+ 657:Core/Src/st7789.c **** 		{
+ 658:Core/Src/st7789.c **** 			num -= den;
+ 659:Core/Src/st7789.c **** 			x += xinc1;
+ 660:Core/Src/st7789.c **** 			y += yinc1;
+ 661:Core/Src/st7789.c **** 		}
+ 662:Core/Src/st7789.c **** 		x += xinc2;
+ 2578              		.loc 1 662 3 is_stmt 1 discriminator 2 view .LVU553
+ 2579              		.loc 1 662 5 is_stmt 0 discriminator 2 view .LVU554
+ 2580 00a6 039B     		ldr	r3, [sp, #12]
+ 2581 00a8 1C44     		add	r4, r4, r3
+ 2582              	.LVL316:
+ 2583              		.loc 1 662 5 discriminator 2 view .LVU555
+ 2584 00aa 24B2     		sxth	r4, r4
+ 2585              	.LVL317:
+ 663:Core/Src/st7789.c **** 		y += yinc2;
+ 2586              		.loc 1 663 3 is_stmt 1 discriminator 2 view .LVU556
+ 2587              		.loc 1 663 5 is_stmt 0 discriminator 2 view .LVU557
+ 2588 00ac 049B     		ldr	r3, [sp, #16]
+ 2589 00ae 1D44     		add	r5, r5, r3
+ 2590              	.LVL318:
+ 2591              		.loc 1 663 5 discriminator 2 view .LVU558
+ 2592 00b0 2DB2     		sxth	r5, r5
+ 2593              	.LVL319:
+ 651:Core/Src/st7789.c **** 	{
+ 2594              		.loc 1 651 44 is_stmt 1 discriminator 2 view .LVU559
+ 651:Core/Src/st7789.c **** 	{
+ 2595              		.loc 1 651 52 is_stmt 0 discriminator 2 view .LVU560
+ 2596 00b2 0137     		adds	r7, r7, #1
+ 2597              	.LVL320:
+ 651:Core/Src/st7789.c **** 	{
+ 2598              		.loc 1 651 52 discriminator 2 view .LVU561
+ 2599 00b4 3FB2     		sxth	r7, r7
+ 2600              	.LVL321:
+ 2601              	.L148:
+ 651:Core/Src/st7789.c **** 	{
+ 2602              		.loc 1 651 21 is_stmt 1 discriminator 1 view .LVU562
+ 651:Core/Src/st7789.c **** 	{
+ 2603              		.loc 1 651 2 is_stmt 0 discriminator 1 view .LVU563
+ 2604 00b6 BA45     		cmp	r10, r7
+ 2605 00b8 1CDB     		blt	.L154
+ 653:Core/Src/st7789.c **** 
+ 2606              		.loc 1 653 3 is_stmt 1 view .LVU564
+ 2607 00ba 1FFA84F9 		uxth	r9, r4
+ 2608 00be 1FFA85F8 		uxth	r8, r5
+ 2609 00c2 079B     		ldr	r3, [sp, #28]
+ 2610 00c4 0093     		str	r3, [sp]
+ 2611 00c6 069B     		ldr	r3, [sp, #24]
+ 2612 00c8 059A     		ldr	r2, [sp, #20]
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 61
+
+
+ 2613 00ca 4146     		mov	r1, r8
+ 2614 00cc 4846     		mov	r0, r9
+ 2615 00ce FFF7FEFF 		bl	ST7789_DrawLine
+ 2616              	.LVL322:
+ 655:Core/Src/st7789.c **** 		if (num >= den)
+ 2617              		.loc 1 655 3 view .LVU565
+ 655:Core/Src/st7789.c **** 		if (num >= den)
+ 2618              		.loc 1 655 7 is_stmt 0 view .LVU566
+ 2619 00d2 5E44     		add	r6, r6, fp
+ 2620              	.LVL323:
+ 655:Core/Src/st7789.c **** 		if (num >= den)
+ 2621              		.loc 1 655 7 view .LVU567
+ 2622 00d4 B3B2     		uxth	r3, r6
+ 2623 00d6 36B2     		sxth	r6, r6
+ 2624              	.LVL324:
+ 656:Core/Src/st7789.c **** 		{
+ 2625              		.loc 1 656 3 is_stmt 1 view .LVU568
+ 656:Core/Src/st7789.c **** 		{
+ 2626              		.loc 1 656 6 is_stmt 0 view .LVU569
+ 2627 00d8 B245     		cmp	r10, r6
+ 2628 00da E4DC     		bgt	.L149
+ 658:Core/Src/st7789.c **** 			x += xinc1;
+ 2629              		.loc 1 658 4 is_stmt 1 view .LVU570
+ 658:Core/Src/st7789.c **** 			x += xinc1;
+ 2630              		.loc 1 658 8 is_stmt 0 view .LVU571
+ 2631 00dc A3EB0A03 		sub	r3, r3, r10
+ 2632 00e0 1EB2     		sxth	r6, r3
+ 2633              	.LVL325:
+ 659:Core/Src/st7789.c **** 			y += yinc1;
+ 2634              		.loc 1 659 4 is_stmt 1 view .LVU572
+ 659:Core/Src/st7789.c **** 			y += yinc1;
+ 2635              		.loc 1 659 6 is_stmt 0 view .LVU573
+ 2636 00e2 089B     		ldr	r3, [sp, #32]
+ 2637 00e4 09EB0304 		add	r4, r9, r3
+ 2638              	.LVL326:
+ 659:Core/Src/st7789.c **** 			y += yinc1;
+ 2639              		.loc 1 659 6 view .LVU574
+ 2640 00e8 24B2     		sxth	r4, r4
+ 2641              	.LVL327:
+ 660:Core/Src/st7789.c **** 		}
+ 2642              		.loc 1 660 4 is_stmt 1 view .LVU575
+ 660:Core/Src/st7789.c **** 		}
+ 2643              		.loc 1 660 6 is_stmt 0 view .LVU576
+ 2644 00ea 099B     		ldr	r3, [sp, #36]
+ 2645 00ec 08EB0305 		add	r5, r8, r3
+ 2646              	.LVL328:
+ 660:Core/Src/st7789.c **** 		}
+ 2647              		.loc 1 660 6 view .LVU577
+ 2648 00f0 2DB2     		sxth	r5, r5
+ 2649              	.LVL329:
+ 660:Core/Src/st7789.c **** 		}
+ 2650              		.loc 1 660 6 view .LVU578
+ 2651 00f2 D8E7     		b	.L149
+ 2652              	.L154:
+ 664:Core/Src/st7789.c **** 	}
+ 665:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 2653              		.loc 1 665 2 is_stmt 1 view .LVU579
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 62
+
+
+ 2654 00f4 0122     		movs	r2, #1
+ 2655 00f6 0821     		movs	r1, #8
+ 2656 00f8 0248     		ldr	r0, .L155
+ 2657 00fa FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2658              	.LVL330:
+ 666:Core/Src/st7789.c **** }
+ 2659              		.loc 1 666 1 is_stmt 0 view .LVU580
+ 2660 00fe 0BB0     		add	sp, sp, #44
+ 2661              	.LCFI60:
+ 2662              		.cfi_def_cfa_offset 36
+ 2663              		@ sp needed
+ 2664 0100 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 2665              	.LVL331:
+ 2666              	.L156:
+ 2667              		.loc 1 666 1 view .LVU581
+ 2668              		.align	2
+ 2669              	.L155:
+ 2670 0104 00040240 		.word	1073873920
+ 2671              		.cfi_endproc
+ 2672              	.LFE149:
+ 2674              		.section	.text.ST7789_DrawFilledCircle,"ax",%progbits
+ 2675              		.align	1
+ 2676              		.global	ST7789_DrawFilledCircle
+ 2677              		.syntax unified
+ 2678              		.thumb
+ 2679              		.thumb_func
+ 2681              	ST7789_DrawFilledCircle:
+ 2682              	.LVL332:
+ 2683              	.LFB150:
+ 667:Core/Src/st7789.c **** 
+ 668:Core/Src/st7789.c **** /**
+ 669:Core/Src/st7789.c ****  * @brief Draw a Filled circle with single color
+ 670:Core/Src/st7789.c ****  * @param x0&y0 -> coordinate of circle center
+ 671:Core/Src/st7789.c ****  * @param r -> radius of circle
+ 672:Core/Src/st7789.c ****  * @param color -> color of circle
+ 673:Core/Src/st7789.c ****  * @return  none
+ 674:Core/Src/st7789.c ****  */
+ 675:Core/Src/st7789.c **** void ST7789_DrawFilledCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
+ 676:Core/Src/st7789.c **** {
+ 2684              		.loc 1 676 1 is_stmt 1 view -0
+ 2685              		.cfi_startproc
+ 2686              		@ args = 0, pretend = 0, frame = 16
+ 2687              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2688              		.loc 1 676 1 is_stmt 0 view .LVU583
+ 2689 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 2690              	.LCFI61:
+ 2691              		.cfi_def_cfa_offset 36
+ 2692              		.cfi_offset 4, -36
+ 2693              		.cfi_offset 5, -32
+ 2694              		.cfi_offset 6, -28
+ 2695              		.cfi_offset 7, -24
+ 2696              		.cfi_offset 8, -20
+ 2697              		.cfi_offset 9, -16
+ 2698              		.cfi_offset 10, -12
+ 2699              		.cfi_offset 11, -8
+ 2700              		.cfi_offset 14, -4
+ 2701 0004 87B0     		sub	sp, sp, #28
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 63
+
+
+ 2702              	.LCFI62:
+ 2703              		.cfi_def_cfa_offset 64
+ 2704 0006 8046     		mov	r8, r0
+ 2705 0008 0F46     		mov	r7, r1
+ 2706 000a 1446     		mov	r4, r2
+ 2707 000c 0292     		str	r2, [sp, #8]
+ 2708 000e 9B46     		mov	fp, r3
+ 677:Core/Src/st7789.c **** 	ST7789_Select();
+ 2709              		.loc 1 677 2 is_stmt 1 view .LVU584
+ 2710 0010 0022     		movs	r2, #0
+ 2711              	.LVL333:
+ 2712              		.loc 1 677 2 is_stmt 0 view .LVU585
+ 2713 0012 0821     		movs	r1, #8
+ 2714              	.LVL334:
+ 2715              		.loc 1 677 2 view .LVU586
+ 2716 0014 4948     		ldr	r0, .L164
+ 2717              	.LVL335:
+ 2718              		.loc 1 677 2 view .LVU587
+ 2719 0016 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2720              	.LVL336:
+ 678:Core/Src/st7789.c **** 	int16_t f = 1 - r;
+ 2721              		.loc 1 678 2 is_stmt 1 view .LVU588
+ 2722              		.loc 1 678 16 is_stmt 0 view .LVU589
+ 2723 001a A5B2     		uxth	r5, r4
+ 2724 001c C5F10104 		rsb	r4, r5, #1
+ 2725              		.loc 1 678 10 view .LVU590
+ 2726 0020 24B2     		sxth	r4, r4
+ 2727              	.LVL337:
+ 679:Core/Src/st7789.c **** 	int16_t ddF_x = 1;
+ 2728              		.loc 1 679 2 is_stmt 1 view .LVU591
+ 680:Core/Src/st7789.c **** 	int16_t ddF_y = -2 * r;
+ 2729              		.loc 1 680 2 view .LVU592
+ 2730              		.loc 1 680 21 is_stmt 0 view .LVU593
+ 2731 0022 C5EBC533 		rsb	r3, r5, r5, lsl #15
+ 2732 0026 5B00     		lsls	r3, r3, #1
+ 2733              		.loc 1 680 10 view .LVU594
+ 2734 0028 1BB2     		sxth	r3, r3
+ 2735 002a 0593     		str	r3, [sp, #20]
+ 2736              	.LVL338:
+ 681:Core/Src/st7789.c **** 	int16_t x = 0;
+ 2737              		.loc 1 681 2 is_stmt 1 view .LVU595
+ 682:Core/Src/st7789.c **** 	int16_t y = r;
+ 2738              		.loc 1 682 2 view .LVU596
+ 683:Core/Src/st7789.c **** 
+ 684:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0, y0 + r, color);
+ 2739              		.loc 1 684 2 view .LVU597
+ 2740 002c 1FFA88F8 		uxth	r8, r8
+ 2741 0030 BFB2     		uxth	r7, r7
+ 2742 0032 E919     		adds	r1, r5, r7
+ 2743 0034 5A46     		mov	r2, fp
+ 2744 0036 89B2     		uxth	r1, r1
+ 2745 0038 4046     		mov	r0, r8
+ 2746 003a FFF7FEFF 		bl	ST7789_DrawPixel
+ 2747              	.LVL339:
+ 685:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0, y0 - r, color);
+ 2748              		.loc 1 685 2 view .LVU598
+ 2749 003e 791B     		subs	r1, r7, r5
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 64
+
+
+ 2750 0040 5A46     		mov	r2, fp
+ 2751 0042 89B2     		uxth	r1, r1
+ 2752 0044 4046     		mov	r0, r8
+ 2753 0046 FFF7FEFF 		bl	ST7789_DrawPixel
+ 2754              	.LVL340:
+ 686:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0 + r, y0, color);
+ 2755              		.loc 1 686 2 view .LVU599
+ 2756 004a 05EB0806 		add	r6, r5, r8
+ 2757 004e B6B2     		uxth	r6, r6
+ 2758 0050 5A46     		mov	r2, fp
+ 2759 0052 3946     		mov	r1, r7
+ 2760 0054 3046     		mov	r0, r6
+ 2761 0056 FFF7FEFF 		bl	ST7789_DrawPixel
+ 2762              	.LVL341:
+ 687:Core/Src/st7789.c **** 	ST7789_DrawPixel(x0 - r, y0, color);
+ 2763              		.loc 1 687 2 view .LVU600
+ 2764 005a A8EB0505 		sub	r5, r8, r5
+ 2765 005e ADB2     		uxth	r5, r5
+ 2766 0060 5A46     		mov	r2, fp
+ 2767 0062 3946     		mov	r1, r7
+ 2768 0064 2846     		mov	r0, r5
+ 2769 0066 FFF7FEFF 		bl	ST7789_DrawPixel
+ 2770              	.LVL342:
+ 688:Core/Src/st7789.c **** 	ST7789_DrawLine(x0 - r, y0, x0 + r, y0, color);
+ 2771              		.loc 1 688 2 view .LVU601
+ 2772 006a CDF800B0 		str	fp, [sp]
+ 2773 006e 3B46     		mov	r3, r7
+ 2774 0070 3246     		mov	r2, r6
+ 2775 0072 3946     		mov	r1, r7
+ 2776 0074 2846     		mov	r0, r5
+ 2777 0076 FFF7FEFF 		bl	ST7789_DrawLine
+ 2778              	.LVL343:
+ 689:Core/Src/st7789.c **** 
+ 690:Core/Src/st7789.c **** 	while (x < y)
+ 2779              		.loc 1 690 2 view .LVU602
+ 681:Core/Src/st7789.c **** 	int16_t y = r;
+ 2780              		.loc 1 681 10 is_stmt 0 view .LVU603
+ 2781 007a 0023     		movs	r3, #0
+ 2782 007c 0393     		str	r3, [sp, #12]
+ 679:Core/Src/st7789.c **** 	int16_t ddF_y = -2 * r;
+ 2783              		.loc 1 679 10 view .LVU604
+ 2784 007e 0123     		movs	r3, #1
+ 2785 0080 0493     		str	r3, [sp, #16]
+ 2786              		.loc 1 690 8 view .LVU605
+ 2787 0082 4BE0     		b	.L158
+ 2788              	.LVL344:
+ 2789              	.L163:
+ 691:Core/Src/st7789.c **** 	{
+ 692:Core/Src/st7789.c **** 		if (f >= 0)
+ 693:Core/Src/st7789.c **** 		{
+ 694:Core/Src/st7789.c **** 			y--;
+ 2790              		.loc 1 694 4 is_stmt 1 view .LVU606
+ 2791              		.loc 1 694 5 is_stmt 0 view .LVU607
+ 2792 0084 029B     		ldr	r3, [sp, #8]
+ 2793 0086 013B     		subs	r3, r3, #1
+ 2794 0088 1BB2     		sxth	r3, r3
+ 2795 008a 0293     		str	r3, [sp, #8]
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 65
+
+
+ 2796              	.LVL345:
+ 695:Core/Src/st7789.c **** 			ddF_y += 2;
+ 2797              		.loc 1 695 4 is_stmt 1 view .LVU608
+ 2798              		.loc 1 695 10 is_stmt 0 view .LVU609
+ 2799 008c 059B     		ldr	r3, [sp, #20]
+ 2800 008e 0233     		adds	r3, r3, #2
+ 2801 0090 1AB2     		sxth	r2, r3
+ 2802 0092 0592     		str	r2, [sp, #20]
+ 2803              	.LVL346:
+ 696:Core/Src/st7789.c **** 			f += ddF_y;
+ 2804              		.loc 1 696 4 is_stmt 1 view .LVU610
+ 2805              		.loc 1 696 6 is_stmt 0 view .LVU611
+ 2806 0094 14FA83F4 		uxtah	r4, r4, r3
+ 2807              	.LVL347:
+ 2808              		.loc 1 696 6 view .LVU612
+ 2809 0098 24B2     		sxth	r4, r4
+ 2810              	.LVL348:
+ 2811              	.L159:
+ 697:Core/Src/st7789.c **** 		}
+ 698:Core/Src/st7789.c **** 		x++;
+ 2812              		.loc 1 698 3 is_stmt 1 view .LVU613
+ 2813              		.loc 1 698 4 is_stmt 0 view .LVU614
+ 2814 009a 039B     		ldr	r3, [sp, #12]
+ 2815 009c 0133     		adds	r3, r3, #1
+ 2816 009e 9DB2     		uxth	r5, r3
+ 2817 00a0 1BB2     		sxth	r3, r3
+ 2818 00a2 0393     		str	r3, [sp, #12]
+ 2819              	.LVL349:
+ 699:Core/Src/st7789.c **** 		ddF_x += 2;
+ 2820              		.loc 1 699 3 is_stmt 1 view .LVU615
+ 2821              		.loc 1 699 9 is_stmt 0 view .LVU616
+ 2822 00a4 049B     		ldr	r3, [sp, #16]
+ 2823 00a6 0233     		adds	r3, r3, #2
+ 2824 00a8 1AB2     		sxth	r2, r3
+ 2825 00aa 0492     		str	r2, [sp, #16]
+ 2826              	.LVL350:
+ 700:Core/Src/st7789.c **** 		f += ddF_x;
+ 2827              		.loc 1 700 3 is_stmt 1 view .LVU617
+ 2828              		.loc 1 700 5 is_stmt 0 view .LVU618
+ 2829 00ac 14FA83F4 		uxtah	r4, r4, r3
+ 2830              	.LVL351:
+ 2831              		.loc 1 700 5 view .LVU619
+ 2832 00b0 24B2     		sxth	r4, r4
+ 2833              	.LVL352:
+ 701:Core/Src/st7789.c **** 
+ 702:Core/Src/st7789.c **** 		ST7789_DrawLine(x0 - x, y0 + y, x0 + x, y0 + y, color);
+ 2834              		.loc 1 702 3 is_stmt 1 view .LVU620
+ 2835 00b2 A8EB050A 		sub	r10, r8, r5
+ 2836 00b6 1FFA8AFA 		uxth	r10, r10
+ 2837 00ba BDF80860 		ldrh	r6, [sp, #8]
+ 2838 00be B919     		adds	r1, r7, r6
+ 2839 00c0 89B2     		uxth	r1, r1
+ 2840 00c2 08EB0509 		add	r9, r8, r5
+ 2841 00c6 1FFA89F9 		uxth	r9, r9
+ 2842 00ca CDF800B0 		str	fp, [sp]
+ 2843 00ce 0B46     		mov	r3, r1
+ 2844 00d0 4A46     		mov	r2, r9
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 66
+
+
+ 2845 00d2 5046     		mov	r0, r10
+ 2846 00d4 FFF7FEFF 		bl	ST7789_DrawLine
+ 2847              	.LVL353:
+ 703:Core/Src/st7789.c **** 		ST7789_DrawLine(x0 + x, y0 - y, x0 - x, y0 - y, color);
+ 2848              		.loc 1 703 3 view .LVU621
+ 2849 00d8 B91B     		subs	r1, r7, r6
+ 2850 00da 89B2     		uxth	r1, r1
+ 2851 00dc CDF800B0 		str	fp, [sp]
+ 2852 00e0 0B46     		mov	r3, r1
+ 2853 00e2 5246     		mov	r2, r10
+ 2854 00e4 4846     		mov	r0, r9
+ 2855 00e6 FFF7FEFF 		bl	ST7789_DrawLine
+ 2856              	.LVL354:
+ 704:Core/Src/st7789.c **** 
+ 705:Core/Src/st7789.c **** 		ST7789_DrawLine(x0 + y, y0 + x, x0 - y, y0 + x, color);
+ 2857              		.loc 1 705 3 view .LVU622
+ 2858 00ea 08EB0609 		add	r9, r8, r6
+ 2859 00ee 1FFA89F9 		uxth	r9, r9
+ 2860 00f2 7919     		adds	r1, r7, r5
+ 2861 00f4 89B2     		uxth	r1, r1
+ 2862 00f6 A8EB0606 		sub	r6, r8, r6
+ 2863 00fa B6B2     		uxth	r6, r6
+ 2864 00fc CDF800B0 		str	fp, [sp]
+ 2865 0100 0B46     		mov	r3, r1
+ 2866 0102 3246     		mov	r2, r6
+ 2867 0104 4846     		mov	r0, r9
+ 2868 0106 FFF7FEFF 		bl	ST7789_DrawLine
+ 2869              	.LVL355:
+ 706:Core/Src/st7789.c **** 		ST7789_DrawLine(x0 + y, y0 - x, x0 - y, y0 - x, color);
+ 2870              		.loc 1 706 3 view .LVU623
+ 2871 010a 791B     		subs	r1, r7, r5
+ 2872 010c 89B2     		uxth	r1, r1
+ 2873 010e CDF800B0 		str	fp, [sp]
+ 2874 0112 0B46     		mov	r3, r1
+ 2875 0114 3246     		mov	r2, r6
+ 2876 0116 4846     		mov	r0, r9
+ 2877 0118 FFF7FEFF 		bl	ST7789_DrawLine
+ 2878              	.LVL356:
+ 2879              	.L158:
+ 690:Core/Src/st7789.c **** 	{
+ 2880              		.loc 1 690 8 view .LVU624
+ 2881 011c 039B     		ldr	r3, [sp, #12]
+ 2882 011e 029A     		ldr	r2, [sp, #8]
+ 2883 0120 9342     		cmp	r3, r2
+ 2884 0122 02DA     		bge	.L162
+ 692:Core/Src/st7789.c **** 		{
+ 2885              		.loc 1 692 3 view .LVU625
+ 692:Core/Src/st7789.c **** 		{
+ 2886              		.loc 1 692 6 is_stmt 0 view .LVU626
+ 2887 0124 002C     		cmp	r4, #0
+ 2888 0126 ADDA     		bge	.L163
+ 2889 0128 B7E7     		b	.L159
+ 2890              	.L162:
+ 707:Core/Src/st7789.c **** 	}
+ 708:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 2891              		.loc 1 708 2 is_stmt 1 view .LVU627
+ 2892 012a 0122     		movs	r2, #1
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 67
+
+
+ 2893 012c 0821     		movs	r1, #8
+ 2894 012e 0348     		ldr	r0, .L164
+ 2895 0130 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2896              	.LVL357:
+ 709:Core/Src/st7789.c **** }
+ 2897              		.loc 1 709 1 is_stmt 0 view .LVU628
+ 2898 0134 07B0     		add	sp, sp, #28
+ 2899              	.LCFI63:
+ 2900              		.cfi_def_cfa_offset 36
+ 2901              		@ sp needed
+ 2902 0136 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 2903              	.LVL358:
+ 2904              	.L165:
+ 2905              		.loc 1 709 1 view .LVU629
+ 2906 013a 00BF     		.align	2
+ 2907              	.L164:
+ 2908 013c 00040240 		.word	1073873920
+ 2909              		.cfi_endproc
+ 2910              	.LFE150:
+ 2912              		.section	.text.ST7789_TearEffect,"ax",%progbits
+ 2913              		.align	1
+ 2914              		.global	ST7789_TearEffect
+ 2915              		.syntax unified
+ 2916              		.thumb
+ 2917              		.thumb_func
+ 2919              	ST7789_TearEffect:
+ 2920              	.LVL359:
+ 2921              	.LFB151:
+ 710:Core/Src/st7789.c **** 
+ 711:Core/Src/st7789.c **** /**
+ 712:Core/Src/st7789.c ****  * @brief Open/Close tearing effect line
+ 713:Core/Src/st7789.c ****  * @param tear -> Whether to tear
+ 714:Core/Src/st7789.c ****  * @return none
+ 715:Core/Src/st7789.c ****  */
+ 716:Core/Src/st7789.c **** void ST7789_TearEffect(uint8_t tear)
+ 717:Core/Src/st7789.c **** {
+ 2922              		.loc 1 717 1 is_stmt 1 view -0
+ 2923              		.cfi_startproc
+ 2924              		@ args = 0, pretend = 0, frame = 0
+ 2925              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2926              		.loc 1 717 1 is_stmt 0 view .LVU631
+ 2927 0000 10B5     		push	{r4, lr}
+ 2928              	.LCFI64:
+ 2929              		.cfi_def_cfa_offset 8
+ 2930              		.cfi_offset 4, -8
+ 2931              		.cfi_offset 14, -4
+ 2932 0002 0446     		mov	r4, r0
+ 718:Core/Src/st7789.c **** 	ST7789_Select();
+ 2933              		.loc 1 718 2 is_stmt 1 view .LVU632
+ 2934 0004 0022     		movs	r2, #0
+ 2935 0006 0821     		movs	r1, #8
+ 2936 0008 0748     		ldr	r0, .L170
+ 2937              	.LVL360:
+ 2938              		.loc 1 718 2 is_stmt 0 view .LVU633
+ 2939 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2940              	.LVL361:
+ 719:Core/Src/st7789.c **** 	ST7789_WriteCommand(tear ? 0x35 /* TEON */ : 0x34 /* TEOFF */);
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 68
+
+
+ 2941              		.loc 1 719 2 is_stmt 1 view .LVU634
+ 2942 000e 44B1     		cbz	r4, .L168
+ 2943 0010 3520     		movs	r0, #53
+ 2944              	.L167:
+ 2945              		.loc 1 719 2 is_stmt 0 discriminator 4 view .LVU635
+ 2946 0012 FFF7FEFF 		bl	ST7789_WriteCommand
+ 2947              	.LVL362:
+ 720:Core/Src/st7789.c **** 	ST7789_UnSelect();
+ 2948              		.loc 1 720 2 is_stmt 1 discriminator 4 view .LVU636
+ 2949 0016 0122     		movs	r2, #1
+ 2950 0018 0821     		movs	r1, #8
+ 2951 001a 0348     		ldr	r0, .L170
+ 2952 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2953              	.LVL363:
+ 721:Core/Src/st7789.c **** }
+ 2954              		.loc 1 721 1 is_stmt 0 discriminator 4 view .LVU637
+ 2955 0020 10BD     		pop	{r4, pc}
+ 2956              	.L168:
+ 719:Core/Src/st7789.c **** 	ST7789_WriteCommand(tear ? 0x35 /* TEON */ : 0x34 /* TEOFF */);
+ 2957              		.loc 1 719 2 view .LVU638
+ 2958 0022 3420     		movs	r0, #52
+ 2959 0024 F5E7     		b	.L167
+ 2960              	.L171:
+ 2961 0026 00BF     		.align	2
+ 2962              	.L170:
+ 2963 0028 00040240 		.word	1073873920
+ 2964              		.cfi_endproc
+ 2965              	.LFE151:
+ 2967              		.section	.rodata.ST7789_Test.str1.4,"aMS",%progbits,1
+ 2968              		.align	2
+ 2969              	.LC0:
+ 2970 0000 53706565 		.ascii	"Speed Test\000"
+ 2970      64205465 
+ 2970      737400
+ 2971 000b 00       		.align	2
+ 2972              	.LC1:
+ 2973 000c 466F6E74 		.ascii	"Font test.\000"
+ 2973      20746573 
+ 2973      742E00
+ 2974 0017 00       		.align	2
+ 2975              	.LC2:
+ 2976 0018 48656C6C 		.ascii	"Hello Steve!\000"
+ 2976      6F205374 
+ 2976      65766521 
+ 2976      00
+ 2977 0025 000000   		.align	2
+ 2978              	.LC3:
+ 2979 0028 52656374 		.ascii	"Rect./Line.\000"
+ 2979      2E2F4C69 
+ 2979      6E652E00 
+ 2980              		.align	2
+ 2981              	.LC4:
+ 2982 0034 46696C6C 		.ascii	"Filled Rect.\000"
+ 2982      65642052 
+ 2982      6563742E 
+ 2982      00
+ 2983 0041 000000   		.align	2
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 69
+
+
+ 2984              	.LC5:
+ 2985 0044 43697263 		.ascii	"Circle.\000"
+ 2985      6C652E00 
+ 2986              		.align	2
+ 2987              	.LC6:
+ 2988 004c 46696C6C 		.ascii	"Filled Cir.\000"
+ 2988      65642043 
+ 2988      69722E00 
+ 2989              		.align	2
+ 2990              	.LC7:
+ 2991 0058 54726961 		.ascii	"Triangle\000"
+ 2991      6E676C65 
+ 2991      00
+ 2992 0061 000000   		.align	2
+ 2993              	.LC8:
+ 2994 0064 46696C6C 		.ascii	"Filled Tri\000"
+ 2994      65642054 
+ 2994      726900
+ 2995              		.section	.text.ST7789_Test,"ax",%progbits
+ 2996              		.align	1
+ 2997              		.global	ST7789_Test
+ 2998              		.syntax unified
+ 2999              		.thumb
+ 3000              		.thumb_func
+ 3002              	ST7789_Test:
+ 3003              	.LFB152:
+ 722:Core/Src/st7789.c **** 
+ 723:Core/Src/st7789.c **** /**
+ 724:Core/Src/st7789.c ****  * @brief A Simple test function for ST7789
+ 725:Core/Src/st7789.c ****  * @param  none
+ 726:Core/Src/st7789.c ****  * @return  none
+ 727:Core/Src/st7789.c ****  */
+ 728:Core/Src/st7789.c **** void ST7789_Test(void)
+ 729:Core/Src/st7789.c **** {
+ 3004              		.loc 1 729 1 is_stmt 1 view -0
+ 3005              		.cfi_startproc
+ 3006              		@ args = 0, pretend = 0, frame = 0
+ 3007              		@ frame_needed = 0, uses_anonymous_args = 0
+ 3008 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 3009              	.LCFI65:
+ 3010              		.cfi_def_cfa_offset 32
+ 3011              		.cfi_offset 4, -32
+ 3012              		.cfi_offset 5, -28
+ 3013              		.cfi_offset 6, -24
+ 3014              		.cfi_offset 7, -20
+ 3015              		.cfi_offset 8, -16
+ 3016              		.cfi_offset 9, -12
+ 3017              		.cfi_offset 10, -8
+ 3018              		.cfi_offset 14, -4
+ 3019 0004 84B0     		sub	sp, sp, #16
+ 3020              	.LCFI66:
+ 3021              		.cfi_def_cfa_offset 48
+ 730:Core/Src/st7789.c **** 	ST7789_Fill_Color(WHITE);
+ 3022              		.loc 1 730 2 view .LVU640
+ 3023 0006 4FF6FF70 		movw	r0, #65535
+ 3024 000a FFF7FEFF 		bl	ST7789_Fill_Color
+ 3025              	.LVL364:
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 70
+
+
+ 731:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3026              		.loc 1 731 2 view .LVU641
+ 3027 000e 4FF47A70 		mov	r0, #1000
+ 3028 0012 FFF7FEFF 		bl	HAL_Delay
+ 3029              	.LVL365:
+ 732:Core/Src/st7789.c **** 	ST7789_WriteString(10, 20, "Speed Test", Font_11x18, RED, WHITE);
+ 3030              		.loc 1 732 2 view .LVU642
+ 3031 0016 AD4C     		ldr	r4, .L174
+ 3032 0018 4FF6FF75 		movw	r5, #65535
+ 3033 001c 0295     		str	r5, [sp, #8]
+ 3034 001e 4FF47846 		mov	r6, #63488
+ 3035 0022 0196     		str	r6, [sp, #4]
+ 3036 0024 6368     		ldr	r3, [r4, #4]
+ 3037 0026 0093     		str	r3, [sp]
+ 3038 0028 2368     		ldr	r3, [r4]
+ 3039 002a A94A     		ldr	r2, .L174+4
+ 3040 002c 1421     		movs	r1, #20
+ 3041 002e 0A20     		movs	r0, #10
+ 3042 0030 FFF7FEFF 		bl	ST7789_WriteString
+ 3043              	.LVL366:
+ 733:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3044              		.loc 1 733 2 view .LVU643
+ 3045 0034 4FF47A70 		mov	r0, #1000
+ 3046 0038 FFF7FEFF 		bl	HAL_Delay
+ 3047              	.LVL367:
+ 734:Core/Src/st7789.c **** 	ST7789_Fill_Color(CYAN);
+ 3048              		.loc 1 734 2 view .LVU644
+ 3049 003c 47F6FF70 		movw	r0, #32767
+ 3050 0040 FFF7FEFF 		bl	ST7789_Fill_Color
+ 3051              	.LVL368:
+ 735:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3052              		.loc 1 735 2 view .LVU645
+ 3053 0044 4FF4FA70 		mov	r0, #500
+ 3054 0048 FFF7FEFF 		bl	HAL_Delay
+ 3055              	.LVL369:
+ 736:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3056              		.loc 1 736 2 view .LVU646
+ 3057 004c 3046     		mov	r0, r6
+ 3058 004e FFF7FEFF 		bl	ST7789_Fill_Color
+ 3059              	.LVL370:
+ 737:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3060              		.loc 1 737 2 view .LVU647
+ 3061 0052 4FF4FA70 		mov	r0, #500
+ 3062 0056 FFF7FEFF 		bl	HAL_Delay
+ 3063              	.LVL371:
+ 738:Core/Src/st7789.c **** 	ST7789_Fill_Color(BLUE);
+ 3064              		.loc 1 738 2 view .LVU648
+ 3065 005a 1F20     		movs	r0, #31
+ 3066 005c FFF7FEFF 		bl	ST7789_Fill_Color
+ 3067              	.LVL372:
+ 739:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3068              		.loc 1 739 2 view .LVU649
+ 3069 0060 4FF4FA70 		mov	r0, #500
+ 3070 0064 FFF7FEFF 		bl	HAL_Delay
+ 3071              	.LVL373:
+ 740:Core/Src/st7789.c **** 	ST7789_Fill_Color(GREEN);
+ 3072              		.loc 1 740 2 view .LVU650
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 71
+
+
+ 3073 0068 4FF4FC60 		mov	r0, #2016
+ 3074 006c FFF7FEFF 		bl	ST7789_Fill_Color
+ 3075              	.LVL374:
+ 741:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3076              		.loc 1 741 2 view .LVU651
+ 3077 0070 4FF4FA70 		mov	r0, #500
+ 3078 0074 FFF7FEFF 		bl	HAL_Delay
+ 3079              	.LVL375:
+ 742:Core/Src/st7789.c **** 	ST7789_Fill_Color(YELLOW);
+ 3080              		.loc 1 742 2 view .LVU652
+ 3081 0078 4FF6E070 		movw	r0, #65504
+ 3082 007c FFF7FEFF 		bl	ST7789_Fill_Color
+ 3083              	.LVL376:
+ 743:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3084              		.loc 1 743 2 view .LVU653
+ 3085 0080 4FF4FA70 		mov	r0, #500
+ 3086 0084 FFF7FEFF 		bl	HAL_Delay
+ 3087              	.LVL377:
+ 744:Core/Src/st7789.c **** 	ST7789_Fill_Color(BROWN);
+ 3088              		.loc 1 744 2 view .LVU654
+ 3089 0088 4BF64040 		movw	r0, #48192
+ 3090 008c FFF7FEFF 		bl	ST7789_Fill_Color
+ 3091              	.LVL378:
+ 745:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3092              		.loc 1 745 2 view .LVU655
+ 3093 0090 4FF4FA70 		mov	r0, #500
+ 3094 0094 FFF7FEFF 		bl	HAL_Delay
+ 3095              	.LVL379:
+ 746:Core/Src/st7789.c **** 	ST7789_Fill_Color(DARKBLUE);
+ 3096              		.loc 1 746 2 view .LVU656
+ 3097 0098 40F2CF10 		movw	r0, #463
+ 3098 009c FFF7FEFF 		bl	ST7789_Fill_Color
+ 3099              	.LVL380:
+ 747:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3100              		.loc 1 747 2 view .LVU657
+ 3101 00a0 4FF4FA70 		mov	r0, #500
+ 3102 00a4 FFF7FEFF 		bl	HAL_Delay
+ 3103              	.LVL381:
+ 748:Core/Src/st7789.c **** 	ST7789_Fill_Color(MAGENTA);
+ 3104              		.loc 1 748 2 view .LVU658
+ 3105 00a8 4FF61F00 		movw	r0, #63519
+ 3106 00ac FFF7FEFF 		bl	ST7789_Fill_Color
+ 3107              	.LVL382:
+ 749:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3108              		.loc 1 749 2 view .LVU659
+ 3109 00b0 4FF4FA70 		mov	r0, #500
+ 3110 00b4 FFF7FEFF 		bl	HAL_Delay
+ 3111              	.LVL383:
+ 750:Core/Src/st7789.c **** 	ST7789_Fill_Color(LIGHTGREEN);
+ 3112              		.loc 1 750 2 view .LVU660
+ 3113 00b8 48F21F40 		movw	r0, #33823
+ 3114 00bc FFF7FEFF 		bl	ST7789_Fill_Color
+ 3115              	.LVL384:
+ 751:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3116              		.loc 1 751 2 view .LVU661
+ 3117 00c0 4FF4FA70 		mov	r0, #500
+ 3118 00c4 FFF7FEFF 		bl	HAL_Delay
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 72
+
+
+ 3119              	.LVL385:
+ 752:Core/Src/st7789.c **** 	ST7789_Fill_Color(LGRAY);
+ 3120              		.loc 1 752 2 view .LVU662
+ 3121 00c8 4CF21860 		movw	r0, #50712
+ 3122 00cc FFF7FEFF 		bl	ST7789_Fill_Color
+ 3123              	.LVL386:
+ 753:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3124              		.loc 1 753 2 view .LVU663
+ 3125 00d0 4FF4FA70 		mov	r0, #500
+ 3126 00d4 FFF7FEFF 		bl	HAL_Delay
+ 3127              	.LVL387:
+ 754:Core/Src/st7789.c **** 	ST7789_Fill_Color(LBBLUE);
+ 3128              		.loc 1 754 2 view .LVU664
+ 3129 00d8 42F61230 		movw	r0, #11026
+ 3130 00dc FFF7FEFF 		bl	ST7789_Fill_Color
+ 3131              	.LVL388:
+ 755:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3132              		.loc 1 755 2 view .LVU665
+ 3133 00e0 4FF4FA70 		mov	r0, #500
+ 3134 00e4 FFF7FEFF 		bl	HAL_Delay
+ 3135              	.LVL389:
+ 756:Core/Src/st7789.c **** 	ST7789_Fill_Color(WHITE);
+ 3136              		.loc 1 756 2 view .LVU666
+ 3137 00e8 2846     		mov	r0, r5
+ 3138 00ea FFF7FEFF 		bl	ST7789_Fill_Color
+ 3139              	.LVL390:
+ 757:Core/Src/st7789.c **** 	HAL_Delay(500);
+ 3140              		.loc 1 757 2 view .LVU667
+ 3141 00ee 4FF4FA70 		mov	r0, #500
+ 3142 00f2 FFF7FEFF 		bl	HAL_Delay
+ 3143              	.LVL391:
+ 758:Core/Src/st7789.c **** 
+ 759:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Font test.", Font_16x26, GBLUE, WHITE);
+ 3144              		.loc 1 759 2 view .LVU668
+ 3145 00f6 774F     		ldr	r7, .L174+8
+ 3146 00f8 0295     		str	r5, [sp, #8]
+ 3147 00fa 40F2FF73 		movw	r3, #2047
+ 3148 00fe 0193     		str	r3, [sp, #4]
+ 3149 0100 7B68     		ldr	r3, [r7, #4]
+ 3150 0102 0093     		str	r3, [sp]
+ 3151 0104 3B68     		ldr	r3, [r7]
+ 3152 0106 744A     		ldr	r2, .L174+12
+ 3153 0108 0A21     		movs	r1, #10
+ 3154 010a 0846     		mov	r0, r1
+ 3155 010c FFF7FEFF 		bl	ST7789_WriteString
+ 3156              	.LVL392:
+ 760:Core/Src/st7789.c **** 	ST7789_WriteString(10, 50, "Hello Steve!", Font_7x10, RED, WHITE);
+ 3157              		.loc 1 760 2 view .LVU669
+ 3158 0110 724B     		ldr	r3, .L174+16
+ 3159 0112 DFF8E891 		ldr	r9, .L174+48
+ 3160 0116 0295     		str	r5, [sp, #8]
+ 3161 0118 0196     		str	r6, [sp, #4]
+ 3162 011a 5A68     		ldr	r2, [r3, #4]
+ 3163 011c 0092     		str	r2, [sp]
+ 3164 011e 1B68     		ldr	r3, [r3]
+ 3165 0120 4A46     		mov	r2, r9
+ 3166 0122 3221     		movs	r1, #50
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 73
+
+
+ 3167 0124 0A20     		movs	r0, #10
+ 3168 0126 FFF7FEFF 		bl	ST7789_WriteString
+ 3169              	.LVL393:
+ 761:Core/Src/st7789.c **** 	ST7789_WriteString(10, 75, "Hello Steve!", Font_11x18, YELLOW, WHITE);
+ 3170              		.loc 1 761 2 view .LVU670
+ 3171 012a 0295     		str	r5, [sp, #8]
+ 3172 012c 4FF6E078 		movw	r8, #65504
+ 3173 0130 CDF80480 		str	r8, [sp, #4]
+ 3174 0134 6368     		ldr	r3, [r4, #4]
+ 3175 0136 0093     		str	r3, [sp]
+ 3176 0138 2368     		ldr	r3, [r4]
+ 3177 013a 4A46     		mov	r2, r9
+ 3178 013c 4B21     		movs	r1, #75
+ 3179 013e 0A20     		movs	r0, #10
+ 3180 0140 FFF7FEFF 		bl	ST7789_WriteString
+ 3181              	.LVL394:
+ 762:Core/Src/st7789.c **** 	ST7789_WriteString(10, 100, "Hello Steve!", Font_16x26, MAGENTA, WHITE);
+ 3182              		.loc 1 762 2 view .LVU671
+ 3183 0144 0295     		str	r5, [sp, #8]
+ 3184 0146 4FF61F03 		movw	r3, #63519
+ 3185 014a 0193     		str	r3, [sp, #4]
+ 3186 014c 7B68     		ldr	r3, [r7, #4]
+ 3187 014e 0093     		str	r3, [sp]
+ 3188 0150 3B68     		ldr	r3, [r7]
+ 3189 0152 4A46     		mov	r2, r9
+ 3190 0154 6421     		movs	r1, #100
+ 3191 0156 0A20     		movs	r0, #10
+ 3192 0158 FFF7FEFF 		bl	ST7789_WriteString
+ 3193              	.LVL395:
+ 763:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3194              		.loc 1 763 2 view .LVU672
+ 3195 015c 4FF47A70 		mov	r0, #1000
+ 3196 0160 FFF7FEFF 		bl	HAL_Delay
+ 3197              	.LVL396:
+ 764:Core/Src/st7789.c **** 
+ 765:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3198              		.loc 1 765 2 view .LVU673
+ 3199 0164 3046     		mov	r0, r6
+ 3200 0166 FFF7FEFF 		bl	ST7789_Fill_Color
+ 3201              	.LVL397:
+ 766:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Rect./Line.", Font_11x18, YELLOW, BLACK);
+ 3202              		.loc 1 766 2 view .LVU674
+ 3203 016a 0027     		movs	r7, #0
+ 3204 016c 0297     		str	r7, [sp, #8]
+ 3205 016e CDF80480 		str	r8, [sp, #4]
+ 3206 0172 6368     		ldr	r3, [r4, #4]
+ 3207 0174 0093     		str	r3, [sp]
+ 3208 0176 2368     		ldr	r3, [r4]
+ 3209 0178 594A     		ldr	r2, .L174+20
+ 3210 017a 0A21     		movs	r1, #10
+ 3211 017c 0846     		mov	r0, r1
+ 3212 017e FFF7FEFF 		bl	ST7789_WriteString
+ 3213              	.LVL398:
+ 767:Core/Src/st7789.c **** 	ST7789_DrawRectangle(30, 30, 100, 100, WHITE);
+ 3214              		.loc 1 767 2 view .LVU675
+ 3215 0182 0095     		str	r5, [sp]
+ 3216 0184 6423     		movs	r3, #100
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 74
+
+
+ 3217 0186 1A46     		mov	r2, r3
+ 3218 0188 1E21     		movs	r1, #30
+ 3219 018a 0846     		mov	r0, r1
+ 3220 018c FFF7FEFF 		bl	ST7789_DrawRectangle
+ 3221              	.LVL399:
+ 768:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3222              		.loc 1 768 2 view .LVU676
+ 3223 0190 4FF47A70 		mov	r0, #1000
+ 3224 0194 FFF7FEFF 		bl	HAL_Delay
+ 3225              	.LVL400:
+ 769:Core/Src/st7789.c **** 
+ 770:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3226              		.loc 1 770 2 view .LVU677
+ 3227 0198 3046     		mov	r0, r6
+ 3228 019a FFF7FEFF 		bl	ST7789_Fill_Color
+ 3229              	.LVL401:
+ 771:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Filled Rect.", Font_11x18, YELLOW, BLACK);
+ 3230              		.loc 1 771 2 view .LVU678
+ 3231 019e 0297     		str	r7, [sp, #8]
+ 3232 01a0 CDF80480 		str	r8, [sp, #4]
+ 3233 01a4 6368     		ldr	r3, [r4, #4]
+ 3234 01a6 0093     		str	r3, [sp]
+ 3235 01a8 2368     		ldr	r3, [r4]
+ 3236 01aa 4E4A     		ldr	r2, .L174+24
+ 3237 01ac 0A21     		movs	r1, #10
+ 3238 01ae 0846     		mov	r0, r1
+ 3239 01b0 FFF7FEFF 		bl	ST7789_WriteString
+ 3240              	.LVL402:
+ 772:Core/Src/st7789.c **** 	ST7789_DrawFilledRectangle(30, 30, 50, 50, WHITE);
+ 3241              		.loc 1 772 2 view .LVU679
+ 3242 01b4 0095     		str	r5, [sp]
+ 3243 01b6 3223     		movs	r3, #50
+ 3244 01b8 1A46     		mov	r2, r3
+ 3245 01ba 1E21     		movs	r1, #30
+ 3246 01bc 0846     		mov	r0, r1
+ 3247 01be FFF7FEFF 		bl	ST7789_DrawFilledRectangle
+ 3248              	.LVL403:
+ 773:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3249              		.loc 1 773 2 view .LVU680
+ 3250 01c2 4FF47A70 		mov	r0, #1000
+ 3251 01c6 FFF7FEFF 		bl	HAL_Delay
+ 3252              	.LVL404:
+ 774:Core/Src/st7789.c **** 
+ 775:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3253              		.loc 1 775 2 view .LVU681
+ 3254 01ca 3046     		mov	r0, r6
+ 3255 01cc FFF7FEFF 		bl	ST7789_Fill_Color
+ 3256              	.LVL405:
+ 776:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Circle.", Font_11x18, YELLOW, BLACK);
+ 3257              		.loc 1 776 2 view .LVU682
+ 3258 01d0 0297     		str	r7, [sp, #8]
+ 3259 01d2 CDF80480 		str	r8, [sp, #4]
+ 3260 01d6 6368     		ldr	r3, [r4, #4]
+ 3261 01d8 0093     		str	r3, [sp]
+ 3262 01da 2368     		ldr	r3, [r4]
+ 3263 01dc 424A     		ldr	r2, .L174+28
+ 3264 01de 0A21     		movs	r1, #10
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 75
+
+
+ 3265 01e0 0846     		mov	r0, r1
+ 3266 01e2 FFF7FEFF 		bl	ST7789_WriteString
+ 3267              	.LVL406:
+ 777:Core/Src/st7789.c **** 	ST7789_DrawCircle(60, 60, 25, WHITE);
+ 3268              		.loc 1 777 2 view .LVU683
+ 3269 01e6 2B46     		mov	r3, r5
+ 3270 01e8 1922     		movs	r2, #25
+ 3271 01ea 3C21     		movs	r1, #60
+ 3272 01ec 0846     		mov	r0, r1
+ 3273 01ee FFF7FEFF 		bl	ST7789_DrawCircle
+ 3274              	.LVL407:
+ 778:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3275              		.loc 1 778 2 view .LVU684
+ 3276 01f2 4FF47A70 		mov	r0, #1000
+ 3277 01f6 FFF7FEFF 		bl	HAL_Delay
+ 3278              	.LVL408:
+ 779:Core/Src/st7789.c **** 
+ 780:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3279              		.loc 1 780 2 view .LVU685
+ 3280 01fa 3046     		mov	r0, r6
+ 3281 01fc FFF7FEFF 		bl	ST7789_Fill_Color
+ 3282              	.LVL409:
+ 781:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Filled Cir.", Font_11x18, YELLOW, BLACK);
+ 3283              		.loc 1 781 2 view .LVU686
+ 3284 0200 0297     		str	r7, [sp, #8]
+ 3285 0202 CDF80480 		str	r8, [sp, #4]
+ 3286 0206 6368     		ldr	r3, [r4, #4]
+ 3287 0208 0093     		str	r3, [sp]
+ 3288 020a 2368     		ldr	r3, [r4]
+ 3289 020c 374A     		ldr	r2, .L174+32
+ 3290 020e 0A21     		movs	r1, #10
+ 3291 0210 0846     		mov	r0, r1
+ 3292 0212 FFF7FEFF 		bl	ST7789_WriteString
+ 3293              	.LVL410:
+ 782:Core/Src/st7789.c **** 	ST7789_DrawFilledCircle(60, 60, 25, WHITE);
+ 3294              		.loc 1 782 2 view .LVU687
+ 3295 0216 2B46     		mov	r3, r5
+ 3296 0218 1922     		movs	r2, #25
+ 3297 021a 3C21     		movs	r1, #60
+ 3298 021c 0846     		mov	r0, r1
+ 3299 021e FFF7FEFF 		bl	ST7789_DrawFilledCircle
+ 3300              	.LVL411:
+ 783:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3301              		.loc 1 783 2 view .LVU688
+ 3302 0222 4FF47A70 		mov	r0, #1000
+ 3303 0226 FFF7FEFF 		bl	HAL_Delay
+ 3304              	.LVL412:
+ 784:Core/Src/st7789.c **** 
+ 785:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3305              		.loc 1 785 2 view .LVU689
+ 3306 022a 3046     		mov	r0, r6
+ 3307 022c FFF7FEFF 		bl	ST7789_Fill_Color
+ 3308              	.LVL413:
+ 786:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Triangle", Font_11x18, YELLOW, BLACK);
+ 3309              		.loc 1 786 2 view .LVU690
+ 3310 0230 0297     		str	r7, [sp, #8]
+ 3311 0232 CDF80480 		str	r8, [sp, #4]
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 76
+
+
+ 3312 0236 6368     		ldr	r3, [r4, #4]
+ 3313 0238 0093     		str	r3, [sp]
+ 3314 023a 2368     		ldr	r3, [r4]
+ 3315 023c 2C4A     		ldr	r2, .L174+36
+ 3316 023e 0A21     		movs	r1, #10
+ 3317 0240 0846     		mov	r0, r1
+ 3318 0242 FFF7FEFF 		bl	ST7789_WriteString
+ 3319              	.LVL414:
+ 787:Core/Src/st7789.c **** 	ST7789_DrawTriangle(30, 30, 30, 70, 60, 40, WHITE);
+ 3320              		.loc 1 787 2 view .LVU691
+ 3321 0246 0295     		str	r5, [sp, #8]
+ 3322 0248 4FF0280A 		mov	r10, #40
+ 3323 024c CDF804A0 		str	r10, [sp, #4]
+ 3324 0250 4FF03C09 		mov	r9, #60
+ 3325 0254 CDF80090 		str	r9, [sp]
+ 3326 0258 4623     		movs	r3, #70
+ 3327 025a 1E22     		movs	r2, #30
+ 3328 025c 1146     		mov	r1, r2
+ 3329 025e 1046     		mov	r0, r2
+ 3330 0260 FFF7FEFF 		bl	ST7789_DrawTriangle
+ 3331              	.LVL415:
+ 788:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3332              		.loc 1 788 2 view .LVU692
+ 3333 0264 4FF47A70 		mov	r0, #1000
+ 3334 0268 FFF7FEFF 		bl	HAL_Delay
+ 3335              	.LVL416:
+ 789:Core/Src/st7789.c **** 
+ 790:Core/Src/st7789.c **** 	ST7789_Fill_Color(RED);
+ 3336              		.loc 1 790 2 view .LVU693
+ 3337 026c 3046     		mov	r0, r6
+ 3338 026e FFF7FEFF 		bl	ST7789_Fill_Color
+ 3339              	.LVL417:
+ 791:Core/Src/st7789.c **** 	ST7789_WriteString(10, 10, "Filled Tri", Font_11x18, YELLOW, BLACK);
+ 3340              		.loc 1 791 2 view .LVU694
+ 3341 0272 0297     		str	r7, [sp, #8]
+ 3342 0274 CDF80480 		str	r8, [sp, #4]
+ 3343 0278 6368     		ldr	r3, [r4, #4]
+ 3344 027a 0093     		str	r3, [sp]
+ 3345 027c 2368     		ldr	r3, [r4]
+ 3346 027e 1D4A     		ldr	r2, .L174+40
+ 3347 0280 0A21     		movs	r1, #10
+ 3348 0282 0846     		mov	r0, r1
+ 3349 0284 FFF7FEFF 		bl	ST7789_WriteString
+ 3350              	.LVL418:
+ 792:Core/Src/st7789.c **** 	ST7789_DrawFilledTriangle(30, 30, 30, 70, 60, 40, WHITE);
+ 3351              		.loc 1 792 2 view .LVU695
+ 3352 0288 0295     		str	r5, [sp, #8]
+ 3353 028a CDF804A0 		str	r10, [sp, #4]
+ 3354 028e CDF80090 		str	r9, [sp]
+ 3355 0292 4623     		movs	r3, #70
+ 3356 0294 1E22     		movs	r2, #30
+ 3357 0296 1146     		mov	r1, r2
+ 3358 0298 1046     		mov	r0, r2
+ 3359 029a FFF7FEFF 		bl	ST7789_DrawFilledTriangle
+ 3360              	.LVL419:
+ 793:Core/Src/st7789.c **** 	HAL_Delay(1000);
+ 3361              		.loc 1 793 2 view .LVU696
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 77
+
+
+ 3362 029e 4FF47A70 		mov	r0, #1000
+ 3363 02a2 FFF7FEFF 		bl	HAL_Delay
+ 3364              	.LVL420:
+ 794:Core/Src/st7789.c **** 
+ 795:Core/Src/st7789.c **** 	//	If FLASH cannot storage anymore datas, please delete codes below.
+ 796:Core/Src/st7789.c **** 	ST7789_Fill_Color(WHITE);
+ 3365              		.loc 1 796 2 view .LVU697
+ 3366 02a6 2846     		mov	r0, r5
+ 3367 02a8 FFF7FEFF 		bl	ST7789_Fill_Color
+ 3368              	.LVL421:
+ 797:Core/Src/st7789.c **** 	ST7789_DrawImage(0, 0, 128, 128, (uint16_t *)saber);
+ 3369              		.loc 1 797 2 view .LVU698
+ 3370 02ac 124B     		ldr	r3, .L174+44
+ 3371 02ae 0093     		str	r3, [sp]
+ 3372 02b0 8023     		movs	r3, #128
+ 3373 02b2 1A46     		mov	r2, r3
+ 3374 02b4 3946     		mov	r1, r7
+ 3375 02b6 3846     		mov	r0, r7
+ 3376 02b8 FFF7FEFF 		bl	ST7789_DrawImage
+ 3377              	.LVL422:
+ 798:Core/Src/st7789.c **** 	HAL_Delay(3000);
+ 3378              		.loc 1 798 2 view .LVU699
+ 3379 02bc 40F6B830 		movw	r0, #3000
+ 3380 02c0 FFF7FEFF 		bl	HAL_Delay
+ 3381              	.LVL423:
+ 799:Core/Src/st7789.c **** }...
+ 3382              		.loc 1 799 1 is_stmt 0 view .LVU700
+ 3383 02c4 04B0     		add	sp, sp, #16
+ 3384              	.LCFI67:
+ 3385              		.cfi_def_cfa_offset 32
+ 3386              		@ sp needed
+ 3387 02c6 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 3388              	.L175:
+ 3389 02ca 00BF     		.align	2
+ 3390              	.L174:
+ 3391 02cc 00000000 		.word	Font_11x18
+ 3392 02d0 00000000 		.word	.LC0
+ 3393 02d4 00000000 		.word	Font_16x26
+ 3394 02d8 0C000000 		.word	.LC1
+ 3395 02dc 00000000 		.word	Font_7x10
+ 3396 02e0 28000000 		.word	.LC3
+ 3397 02e4 34000000 		.word	.LC4
+ 3398 02e8 44000000 		.word	.LC5
+ 3399 02ec 4C000000 		.word	.LC6
+ 3400 02f0 58000000 		.word	.LC7
+ 3401 02f4 64000000 		.word	.LC8
+ 3402 02f8 00000000 		.word	saber
+ 3403 02fc 18000000 		.word	.LC2
+ 3404              		.cfi_endproc
+ 3405              	.LFE152:
+ 3407              		.text
+ 3408              	.Letext0:
+ 3409              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 3410              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 3411              		.file 4 "Core/Inc/fonts.h"
+ 3412              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
+ 3413              		.file 6 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\lib\\gcc\\arm-none-eabi\
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 78
+
+
+ 3414              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 3415              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 3416              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 3417              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h"
+ 3418              		.file 11 "Core/Inc/st7789.h"
+ 3419              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 79
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 st7789.c
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:20     .text.ST7789_WriteCommand:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:25     .text.ST7789_WriteCommand:00000000 ST7789_WriteCommand
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:80     .text.ST7789_WriteCommand:0000003c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:86     .text.ST7789_WriteSmallData:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:91     .text.ST7789_WriteSmallData:00000000 ST7789_WriteSmallData
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:145    .text.ST7789_WriteSmallData:0000003c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:151    .text.ST7789_WriteData:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:156    .text.ST7789_WriteData:00000000 ST7789_WriteData
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:238    .text.ST7789_WriteData:0000004c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:244    .text.ST7789_SetAddressWindow:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:249    .text.ST7789_SetAddressWindow:00000000 ST7789_SetAddressWindow
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:347    .text.ST7789_SetAddressWindow:0000007c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:352    .text.ST7789_SetRotation:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:358    .text.ST7789_SetRotation:00000000 ST7789_SetRotation
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:383    .text.ST7789_SetRotation:00000012 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:387    .text.ST7789_SetRotation:00000016 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:423    .text.ST7789_Init:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:429    .text.ST7789_Init:00000000 ST7789_Init
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:702    .text.ST7789_Fill_Color:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:708    .text.ST7789_Fill_Color:00000000 ST7789_Fill_Color
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:808    .text.ST7789_Fill_Color:00000058 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:813    .text.ST7789_DrawPixel:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:819    .text.ST7789_DrawPixel:00000000 ST7789_DrawPixel
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:898    .text.ST7789_DrawPixel:00000048 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:903    .text.ST7789_Fill:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:909    .text.ST7789_Fill:00000000 ST7789_Fill
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1030   .text.ST7789_Fill:00000070 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1035   .text.ST7789_DrawPixel_4px:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1041   .text.ST7789_DrawPixel_4px:00000000 ST7789_DrawPixel_4px
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1123   .text.ST7789_DrawPixel_4px:00000050 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1128   .text.ST7789_DrawLine:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1134   .text.ST7789_DrawLine:00000000 ST7789_DrawLine
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1316   .text.ST7789_DrawRectangle:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1322   .text.ST7789_DrawRectangle:00000000 ST7789_DrawRectangle
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1410   .text.ST7789_DrawRectangle:00000070 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1415   .text.ST7789_DrawCircle:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1421   .text.ST7789_DrawCircle:00000000 ST7789_DrawCircle
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1659   .text.ST7789_DrawCircle:0000014c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1664   .text.ST7789_DrawImage:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1670   .text.ST7789_DrawImage:00000000 ST7789_DrawImage
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1776   .text.ST7789_DrawImage:00000068 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1781   .text.ST7789_InvertColors:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1787   .text.ST7789_InvertColors:00000000 ST7789_InvertColors
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1831   .text.ST7789_InvertColors:00000028 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1836   .text.ST7789_WriteChar:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:1842   .text.ST7789_WriteChar:00000000 ST7789_WriteChar
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2014   .text.ST7789_WriteChar:000000b0 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2019   .text.ST7789_WriteString:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2025   .text.ST7789_WriteString:00000000 ST7789_WriteString
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2172   .text.ST7789_WriteString:00000080 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2177   .text.ST7789_DrawFilledRectangle:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2183   .text.ST7789_DrawFilledRectangle:00000000 ST7789_DrawFilledRectangle
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2302   .text.ST7789_DrawFilledRectangle:0000007c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2307   .text.ST7789_DrawTriangle:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2313   .text.ST7789_DrawTriangle:00000000 ST7789_DrawTriangle
+ARM GAS  C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s 			page 80
+
+
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2397   .text.ST7789_DrawTriangle:00000068 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2402   .text.ST7789_DrawFilledTriangle:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2408   .text.ST7789_DrawFilledTriangle:00000000 ST7789_DrawFilledTriangle
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2670   .text.ST7789_DrawFilledTriangle:00000104 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2675   .text.ST7789_DrawFilledCircle:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2681   .text.ST7789_DrawFilledCircle:00000000 ST7789_DrawFilledCircle
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2908   .text.ST7789_DrawFilledCircle:0000013c $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2913   .text.ST7789_TearEffect:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2919   .text.ST7789_TearEffect:00000000 ST7789_TearEffect
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2963   .text.ST7789_TearEffect:00000028 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2968   .rodata.ST7789_Test.str1.4:00000000 $d
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:2996   .text.ST7789_Test:00000000 $t
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:3002   .text.ST7789_Test:00000000 ST7789_Test
+C:\Users\ma32k\AppData\Local\Temp\ccxsv9zV.s:3391   .text.ST7789_Test:000002cc $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_SPI_Transmit
+hspi1
+HAL_Delay
+Font_11x18
+Font_16x26
+Font_7x10
+saber
